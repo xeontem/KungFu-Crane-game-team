@@ -2,6 +2,6 @@
 
 ## Staff: ##
 * Artsiom Kukharev (Артем Кухарев) xeontem@gmail.com
-* Sasha Kazakevich (Саша Казакевич) 
+* Sasha Kazakevich (Саша Казакевич) kazakevich.alexsander@gmail.com
 * Bogdan Kutas (Богдан Кутас) wendor48@gmail.com
 * Dzmitry Aliaksandrau (Дмитрий Александров) qarz@tut.by
