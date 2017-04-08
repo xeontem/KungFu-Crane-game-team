@@ -4,4 +4,5 @@ export default {
   limit: 1000,
   bosstime: false,
   bosskilled: false,
+  level: 0
 };
