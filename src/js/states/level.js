@@ -47,7 +47,7 @@ export default class extends Phaser.State {
 
     // ----------------------MainPlayerBullets-----------------------------------------
     weaponOn.apply(this);
-
+    
     // -------------------------statusBar---------------------------------
     this.scoreText = this.add.text(
       config.gameWidth - 200,
