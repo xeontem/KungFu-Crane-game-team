@@ -2,32 +2,28 @@ import Phaser from 'phaser-ce';
 
 import currentGameState from '../currentGameState';
 import Firstboss from '../objects/firstboss';
+import config from '../config';
 
-
-export default function (that) {
-  if (that.boss) {
-    that.bossWeapon = that.game.add.weapon(30, 'bullet');
-    that.bossWeapon.bulletSpeed = 600;
-    that.bossWeapon.fireRate = 100;
-    that.bossWeapon.fireAngle = 180;
-    that.bossWeapon.autofire = true;
-    that.bossWeapon.trackSprite(that.boss, 0, 0, false);
-    that.game.physics.enable(that.bossWeapon, Phaser.Physics.ARCADE);
+export default function () {
+  if (this.boss && !this.bossWeapon) {
+    this.bossWeapon = this.game.add.weapon(10, 'bullet');
+    this.bossWeapon.bulletSpeed = 600;
+    this.bossWeapon.fireRate = 100;
+    this.bossWeapon.fireAngle = 180;
+    this.bossWeapon.autofire = true;
+    this.bossWeapon.trackSprite(this.boss, 0, 0, false);
+    this.game.physics.enable(this.bossWeapon, Phaser.Physics.ARCADE);
     //--------------------------------------------------------------
-    that.boss.HPinfo.text = `BOSS HP: ${that.boss.HP}`;
   }
-  if (!that.boss && currentGameState.bosstime) {
-    that.boss = new Firstboss({
-      game: that,
-      parent: null,
-      name: 'enem',
-      addToStage: true,
-      enableBody: true,
-      physicsBodyType: Phaser.Physics.ARCADE,
+  if (!this.boss && currentGameState.bosstime) {
+    this.boss = new Firstboss({
+      game: this,
+      x: config.gameWidth,
+      y: this.game.world.centerY,
+      asset: 'enemy',
     });
-    that.game.add.existing(that.boss);
-    that.boss.spawn();
-    const tween = that.add.tween(that.boss).to(
+    this.game.add.existing(this.boss);
+    const tween = this.add.tween(this.boss).to(
                                     { y: 200 },
                                     2000,
                                     Phaser.Easing.Linear.None,
@@ -35,17 +31,6 @@ export default function (that) {
                                     0,
                                     100,
                                     true);
-
-
-        // ---------------------------check hit the boss-----------------------------
   }
-  if (that.boss) {
-    that.physics.arcade.overlap(
-                                    that.bullets,
-                                    that.boss,
-                                    that.boss.bossKiller.bind(that, that),
-                                    null,
-                                    that,
-        );
-  }
+    if(this.boss)this.boss.HPinfo.text = `BOSS HP: ${this.boss.HP}`;
 }
