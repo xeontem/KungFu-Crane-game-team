@@ -9,6 +9,7 @@ import BulletBoss from '../objects/bulletBoss';
 import enemiesloader from '../loaders/enemiesloader';
 import bossloader from '../loaders/bossloader';
 import { keysOn, setKeys, mouseOn } from '../controls/controls';
+import { weaponOn, bossWeaponOn } from '../objects/weapon';
 
 export default class extends Phaser.State {
 
@@ -41,15 +42,7 @@ export default class extends Phaser.State {
     this.game.add.existing(this.mainPlayer);
 
         // ----------------------MainPlayerBullets-----------------------------------------
-    this.bullets = new Bullets({
-      game: this,
-      parent: null,
-      name: 'bull',
-      addToStage: true,
-      enableBody: true,
-      physicsBodyType: Phaser.Physics.ARCADE,
-    });
-    this.game.add.existing(this.bullets);
+    weaponOn.apply(this);
 
         // ------------------------bossBullets-----------------------------------------
     this.bulletBoss = new BulletBoss({
@@ -61,6 +54,7 @@ export default class extends Phaser.State {
       physicsBodyType: Phaser.Physics.ARCADE,
     });
     this.game.add.existing(this.bulletBoss);
+
         // -------------------------statusBar---------------------------------
     this.scoreText = this.add.text(
       config.gameWidth - 200,

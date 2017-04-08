@@ -8,7 +8,8 @@ import config from '../config';
 export function setKeys() {
   this.cursors = this.input.keyboard.createCursorKeys();
   this.fireButton = this.game.input.keyboard.addKey(Phaser.Keyboard.SPACEBAR);
-  this.game.canvas.addEventListener('mousedown', mouseIn);
+  let canvas = document.getElementsByTagName('canvas');
+  canvas[0].addEventListener('click', mouseIn);
 }
 
 export function keysOn() {
@@ -25,8 +26,8 @@ export function keysOn() {
     this.mainPlayer.body.velocity.y = 350;
   }
   if (this.fireButton.isDown) {
-    this.bullets.fireBullet.call(this);
-        // invokeSound(this);
+     this.weapon.fire();
+     // invokeSound(this);
   }
 }
 
