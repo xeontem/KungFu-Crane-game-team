@@ -29,21 +29,13 @@ export default class extends Phaser.State {
     });
     this.game.add.existing(this.background);
 
-    const text = this.add.text(this.world.centerX, this.world.centerY - 100, 'KungFu-Crane-game-team ', { font: '32px Arial', fill: '#dddddd' });
+    const text = this.add.text(this.world.centerX, this.world.height - 16, 'press space to start ', { font: 'Bangers', fontSize: '16px', fill: '#dddddd' });
     text.anchor.setTo(0.5);
     text.font = 'Bangers';
 
-    const text2 = this.add.text(this.world.centerX, this.world.height - 16, 'press space to start ', { font: 'Bangers', fontSize: '16px', fill: '#dddddd' });
+    const text2 = this.add.text(this.world.centerX, this.world.centerY-100, 'Hawking Revenge    ', { font: '72px Arial', fill: '#ff0' });
     text2.anchor.setTo(0.5);
-        // text2.font = 'Bangers';
-
-    const text3 = this.add.text(this.world.centerX, this.world.centerY - 60, 'PRESENT          ', { font: '16px Arial', fill: '#dddddd' });
-    text3.anchor.setTo(0.5);
-    text3.font = 'Bangers';
-
-    const text4 = this.add.text(this.world.centerX, this.world.centerY, 'Hawking Revenge', { font: '72px Arial', fill: '#ff0' });
-    text4.anchor.setTo(0.5);
-    text4.font = 'Bangers';
+    text2.font = 'Bangers';
 
     applyMusic.apply(this);
 

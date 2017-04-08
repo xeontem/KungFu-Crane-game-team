@@ -2,6 +2,7 @@ import 'pixi';
 import 'p2';
 import Phaser from 'phaser-ce';
 
+import intro from './states/intro';
 import mainMenu from './states/mainMenu';
 import firstLevel from './states/firstLevel';
 import secondLevel from './states/secondLevel';
@@ -17,13 +18,14 @@ class Game extends Phaser.Game {
 
     super(config.gameWidth, config.gameHeight, Phaser.CANVAS, 'content', null);
 
+    this.state.add('intro', intro, false);
     this.state.add('mainMenu', mainMenu, false);
     this.state.add('firstLevel', firstLevel, false);
     this.state.add('secondLevel', secondLevel, false);
     this.state.add('thirdLevel', thirdLevel, false);
     this.state.add('score', score, false);
 
-    this.state.start('mainMenu');
+    this.state.start('intro');
   }
 }
 
