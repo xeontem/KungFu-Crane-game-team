@@ -10,6 +10,7 @@ export default class extends Phaser.Group {
     this.move = game.rnd.integerInRange(1, 4);
     this.a = 0;
     this.b = 50;
+    game.physics.enable(this, Phaser.Physics.ARCADE);
   }
 
   update() {
@@ -31,6 +32,10 @@ export default class extends Phaser.Group {
       xPos += 100;
       const enemy = this.create(xPos, yPos, 'enemy');
       enemy.anchor.setTo(0.5);
+      game.physics.enable(enemy, Phaser.Physics.ARCADE);
+      enemy.body.checkCollision.right = false;
+      enemy.checkWorldBounds = true;
+      enemy.events.onOutOfBounds.add(this.boundsHandler, game);
     }
   }
 
@@ -44,6 +49,10 @@ export default class extends Phaser.Group {
       else yPos = tempY;
       const enemy = this.create(xPos, yPos, 'enemy');
       enemy.anchor.setTo(0.5);
+      game.physics.enable(enemy, Phaser.Physics.ARCADE);
+      enemy.body.checkCollision.right = false;
+      enemy.checkWorldBounds = true;
+      enemy.events.onOutOfBounds.add(this.boundsHandler, game);
     }
   }
 
@@ -55,8 +64,12 @@ export default class extends Phaser.Group {
         yPos = 50;
         xPos += 100;
       }
-      this.create(xPos, yPos, 'enemy');
-            // enemy.anchor.setTo(0.5);
+      const enemy = this.create(xPos, yPos, 'enemy');
+      enemy.anchor.setTo(0.5);
+      game.physics.enable(enemy, Phaser.Physics.ARCADE);
+      enemy.body.checkCollision.right = false;
+      enemy.checkWorldBounds = true;
+      enemy.events.onOutOfBounds.add(this.boundsHandler, game);
       yPos += 50;
     }
   }
@@ -70,6 +83,10 @@ export default class extends Phaser.Group {
       xPos += 100;
       const enemy = this.create(xPos, yPos, 'enemy');
       enemy.anchor.setTo(0.5);
+      game.physics.enable(enemy, Phaser.Physics.ARCADE);
+      enemy.body.checkCollision.right = false;
+      enemy.checkWorldBounds = true;
+      enemy.events.onOutOfBounds.add(this.boundsHandler, game);
     }
   }
     // ----------------------not working correct-----------------------
@@ -82,6 +99,10 @@ export default class extends Phaser.Group {
       xPos -= 100;
       const enemy = this.create(xPos, yPos, 'enemy');
       enemy.anchor.setTo(0.5);
+      game.physics.enable(enemy, Phaser.Physics.ARCADE);
+      enemy.body.checkCollision.right = false;
+      enemy.checkWorldBounds = true;
+      enemy.events.onOutOfBounds.add(this.boundsHandler, game);
     }
   }
 
@@ -95,6 +116,10 @@ export default class extends Phaser.Group {
       else xPos += 100;
       const enemy = this.create(xPos, yPos, 'enemy');
       enemy.anchor.setTo(0.5);
+      game.physics.enable(enemy, Phaser.Physics.ARCADE);
+      enemy.body.checkCollision.right = false;
+      enemy.checkWorldBounds = true;
+      enemy.events.onOutOfBounds.add(this.boundsHandler, game);
     }
   }
 
@@ -105,6 +130,10 @@ export default class extends Phaser.Group {
       xPos += 100;
       const enemy = this.create(xPos, yPos, 'enemy');
       enemy.anchor.setTo(0.5);
+      game.physics.enable(enemy, Phaser.Physics.ARCADE);
+      enemy.body.checkCollision.right = false;
+      enemy.checkWorldBounds = true;
+      enemy.events.onOutOfBounds.add(this.boundsHandler, game);
     }
   }
 
@@ -119,7 +148,16 @@ export default class extends Phaser.Group {
       else yPos = tempY;
       const enemy = this.create(xPos, yPos, 'enemy');
       enemy.anchor.setTo(0.5);
+      game.physics.enable(enemy, Phaser.Physics.ARCADE);
+      enemy.body.checkCollision.right = false;
+      enemy.checkWorldBounds = true;
+      enemy.events.onOutOfBounds.add(this.boundsHandler, game);
     }
+  }
+
+  boundsHandler(enemies){
+    enemies.kill();
+    if (currentGameState.levelscore > currentGameState.limit) currentGameState.bosstime = true;
   }
     // -----------------------enemies movement------------------------------------------------
 

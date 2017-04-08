@@ -2,10 +2,9 @@ import Phaser from 'phaser-ce';
 import config from '../config';
 import currentGameState from '../currentGameState';
 import BackgroundMainGame from '../objects/backgroundFirstlevel';
-import Bullets from '../objects/bullets';
-import BulletBoss from '../objects/bulletBoss';
 import enemiesloader from '../loaders/enemiesloader';
 import bossloader from '../loaders/bossloader';
+import collisionloader from '../loaders/collisionloader';
 import resetter from '../loaders/resetter';
 import { keysOn, setKeys, mouseOn } from '../controls/controls';
 import { loadMusic, applyMusic } from '../sound/bgmusic';
@@ -56,23 +55,9 @@ export default class extends Phaser.State {
     this.exhaust2.animations.play('exh', 5, true);
 
 
-        // ----------------------MainPlayerBullets-----------------------------------------
+    // ----------------------MainPlayerBullets-----------------------------------------
     weaponOn.apply(this);
 
-
-
-        // ------------------------bossBullets-----------------------------------------
-    this.bulletBoss = new BulletBoss({
-        game: this,
-        parent: null,
-        name: 'bull2',
-        addToStage: true,
-        enableBody: true,
-        physicsBodyType: Phaser.Physics.ARCADE,
-    });
-    this.game.add.existing(this.bulletBoss);
-
-        // -------------------------statusBar---------------------------------
     this.scoreText = this.add.text(
       config.gameWidth - 200,
       config.gameHeight - 50,
@@ -98,8 +83,14 @@ export default class extends Phaser.State {
                             'Level 1: Throw The Universe',
                             { font: '32px Arial', fill: '#dddddd' });
     this.levelName.anchor.setTo(0.5);
+    //-----------------------------winCase-----------------------------------------
+    this.winText = this.add.text(
+                            config.gameWidth / 2,
+                            (config.gameHeight / 2) - 50,
+                            '',
+                            { font: '32px Arial', fill: '#dddddd' });
         // --------------------reset to defaults-----------------------------------
-    resetter(this);
+    resetter.apply(this);
   }
 
   update() {
@@ -110,7 +101,7 @@ export default class extends Phaser.State {
     } else {
       this.levelName.text = '';
 
-
+      collisionloader.apply(this);
         // --------------------------update statusBar------------------------------
       this.mainPlayerHP.text = `HP: ${this.mainPlayer.HP}`;
       this.scoreText.text = `score: ${currentGameState.score}`;
@@ -122,16 +113,17 @@ export default class extends Phaser.State {
         // -------------------------boss alive-------------------------------------------------
       if (!currentGameState.bosskilled) {
         // ------------------------spawn enemies-------------------------------------
-        enemiesloader(this);
+        enemiesloader.apply(this);
 
         // ---------------------spawn boss------------------------------------------
-        bossloader(this);
+        bossloader.apply(this);
       } else {
-        if (this.winText) this.winText.text = 'Well done!';
+        this.winText.text = 'Well done!';
         this.mainPlayer.x += 20;
         if (this.boss.endLevel && this.time.now > this.boss.endLevel + 4000) {
           this.state.start('secondLevel');
         }
+
       }
         // ---------------------controls----------------------------------------
       keysOn.apply(this);
@@ -139,5 +131,4 @@ export default class extends Phaser.State {
       mouseOn.apply(this);
     }
   }
-
 }
