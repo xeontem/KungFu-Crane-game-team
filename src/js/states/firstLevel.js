@@ -41,7 +41,6 @@ export default class extends Phaser.State {
     this.game.physics.enable(this.mainPlayer, Phaser.Physics.ARCADE);
     let fly = this.mainPlayer.animations.add('fly');
     this.mainPlayer.animations.play('fly', 10, true);
-    this.mainPlayer.addChild()
 
         // ----------------------MainPlayerBullets-----------------------------------------
     this.bullets = new Bullets({
