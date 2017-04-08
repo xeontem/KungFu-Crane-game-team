@@ -8,11 +8,12 @@ export function loadMusic() {
 
 export function applyMusic() {
   if (this.game.state.current === 'mainMenu') {
-    const music = this.game.add.audio('main2', 1, true, true);
-    music.play();
+    this.music = this.game.add.audio('main2', 1, true, true);
+    this.music.play();
   } else {
     this.game.cache.removeSound('main2');
-    const music = this.game.add.audio('level', 0.3, true, true);
-    music.play();
+    // this.music.pause();
+    this.music = this.game.add.audio('level', 0.3, true, true);
+    this.music.play();
   }
 }

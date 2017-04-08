@@ -15,7 +15,6 @@ import conf from '../levelsConfig';
 export default class extends Phaser.State {
 
   preload() {
-    console.log(currentGameState.level)
     this.load.image('background', conf[currentGameState.level].bg);
     this.load.image('mainPlayer', './img/player/player.png');
     this.load.image('bullet', './img/player/shot.png');
@@ -82,7 +81,7 @@ export default class extends Phaser.State {
                             '',
                             { font: '32px Arial', fill: '#dddddd' });
         // --------------------reset to defaults-----------------------------------
-    resetter.apply(this);
+    // resetter.apply(this);
   }
 
   update() {
@@ -113,7 +112,11 @@ export default class extends Phaser.State {
         this.winText.text = 'Well done!';
         this.mainPlayer.x += 20;
         if (this.boss.endLevel && this.time.now > this.boss.endLevel + 4000) {
-          currentGameState.level += 1
+          currentGameState.level += 1;
+          currentGameState.bosskilled = false;
+          currentGameState.bosstime = false;
+          currentGameState.levelscore = 0;
+          this.boss = null;
           this.state.start('level');
         }
 
