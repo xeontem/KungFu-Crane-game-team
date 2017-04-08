@@ -16,6 +16,7 @@ export default class extends Phaser.State {
     this.load.image('background', './img/states/bgLevel1.jpeg');
     this.load.image('bullet', './img/player/shot.png');
     this.load.image('enemy', './img/enemy/enemy.png');
+    this.load.image('boss_1', './img/bosses/boss_1.png');
     this.load.spritesheet('mainPlayerSprite', './img/player/main_sprite.png', 95, 50);
     this.load.spritesheet('exhaust', './img/player/exhaust.png', 23, 84);
     loadMusic.apply(this);
