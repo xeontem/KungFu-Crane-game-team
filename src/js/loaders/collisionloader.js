@@ -1,8 +1,18 @@
 import Phaser from 'phaser-ce';
 import currentGameState from '../currentGameState';
+import { enemyExplode, bossExplode } from '../sound/explosures';
+
+function invokeSound(that, target) {
+  if(target == 'enemy') {
+      enemyExplode.apply(that);
+  } else if(target == 'boss') {
+      bossExplode.apply(that);
+  }
+}
 
 function killEnemies(bullet, enemy) {
-  this.enemies.remove(enemy, true);
+  enemy.kill();
+  invokeSound(this, 'enemy');
   bullet.kill();
   currentGameState.score += 100;
   currentGameState.levelscore += 100;
@@ -13,9 +23,10 @@ function killBoss(boss, bullet) {
   if(boss.HP)boss.HP--;
   if(boss.HP == 0){
     boss.kill();
+    invokeSound(this, 'boss');
     boss.endLevel = this.time.now;
     currentGameState.bosskilled = true;
-    this.bossWeapon.autofire = false;
+    this.bossWeapon.bullets.destroy();
     currentGameState.score += 1000;
     currentGameState.levelscore += 1000;
   }
@@ -34,6 +45,7 @@ function overlapEnemies(player, enemy) {
 
 function killPlayer(player, bullet) {
   bullet.kill();
+  invokeSound(this, 'enemy');
   player.HP--;
   if(!player.HP){
     player.kill();
