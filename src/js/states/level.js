@@ -1,26 +1,31 @@
 import Phaser from 'phaser-ce';
-
 import config from '../config';
 import currentGameState from '../currentGameState';
 import BackgroundMainGame from '../objects/backgroundFirstlevel';
-import MainPlayer from '../objects/mainPlayer';
-import Bullets from '../objects/bullets';
-import BulletBoss from '../objects/bulletBoss';
 import enemiesloader from '../loaders/enemiesloader';
 import bossloader from '../loaders/bossloader';
+import collisionloader from '../loaders/collisionloader';
+import resetter from '../loaders/resetter';
 import { keysOn, setKeys, mouseOn } from '../controls/controls';
+import { loadMusic, applyMusic } from '../sound/bgmusic';
 import { weaponOn } from '../objects/weapon';
+import conf from '../levelsConfig';
 
 export default class extends Phaser.State {
 
   preload() {
-    this.load.image('background', './img/states/bgLevel2.jpg');
-    this.load.image('mainPlayer', './img/player/player.png');
+    this.load.image('background', conf[currentGameState.level].bg);
     this.load.image('bullet', './img/player/shot.png');
     this.load.image('enemy', './img/enemy/enemy.png');
+    this.load.image('boss_1', './img/bosses/boss_1.png');
+    this.load.spritesheet('mainPlayerSprite', './img/player/main_sprite.png', 95, 50);
+    this.load.spritesheet('exhaust', './img/player/exhaust.png', 23, 84);
+    loadMusic.apply(this);
   }
 
   create() {
+        // -----------------music-----------------------------------------
+    applyMusic.apply(this);
         //---------------------------------------------------------------
     this.background = new BackgroundMainGame({
       game: this,
@@ -32,30 +37,31 @@ export default class extends Phaser.State {
     });
     this.game.add.existing(this.background);
 
-        //---------------------------------------------------------------
-    this.mainPlayer = new MainPlayer({
-      game: this,
-      x: -1800,
-      y: this.game.world.centerY,
-      asset: 'mainPlayer',
-    });
-    this.game.add.existing(this.mainPlayer);
+        //---------------------------MainPlayer---------------------------------------
 
-        // ----------------------MainPlayerBullets-----------------------------------------
+    this.mainPlayer = this.game.add.sprite(-1800, this.game.world.centerY, 'mainPlayerSprite');
+    this.mainPlayer.HP = 3;
+    this.game.add.existing(this.mainPlayer);
+    this.game.physics.enable(this.mainPlayer, Phaser.Physics.ARCADE);
+    let fly = this.mainPlayer.animations.add('fly');
+    this.mainPlayer.animations.play('fly', 10, true);
+
+    this.exhaust1 = this.mainPlayer.addChild(this.game.make.sprite(4, 6, 'exhaust'));
+    this.exhaust1.scale.setTo(0.2, 0.2);
+    this.exhaust1.angle = 90;
+    this.exhaust2 = this.mainPlayer.addChild(this.game.make.sprite(4, 37, 'exhaust'));
+    this.exhaust2.scale.setTo(0.2, 0.2);
+    this.exhaust2.angle = 90;
+    this.exhaust1.animations.add('exh');
+    this.exhaust2.animations.add('exh');
+    this.exhaust1.animations.play('exh', 5, true);
+    this.exhaust2.animations.play('exh', 5, true);
+
+
+    // ----------------------MainPlayerBullets-----------------------------------------
     weaponOn.apply(this);
 
-        // ------------------------bossBullets-----------------------------------------
-    this.bulletBoss = new BulletBoss({
-      game: this,
-      parent: null,
-      name: 'bull2',
-      addToStage: true,
-      enableBody: true,
-      physicsBodyType: Phaser.Physics.ARCADE,
-    });
-    this.game.add.existing(this.bulletBoss);
-
-        // -------------------------statusBar---------------------------------
+    // -------------------------statusBar---------------------------------
     this.scoreText = this.add.text(
       config.gameWidth - 200,
       config.gameHeight - 50,
@@ -77,13 +83,18 @@ export default class extends Phaser.State {
     this.countdown = this.time.now;
     this.levelName = this.add.text(
                             config.gameWidth / 2,
-                            config.gameHeight / 2 - 50,
-                            'Level 2: Over The Galaxy',
+                            (config.gameHeight / 2) - 50,
+                            conf[currentGameState.level].levelName,
                             { font: '32px Arial', fill: '#dddddd' });
     this.levelName.anchor.setTo(0.5);
+    //-----------------------------winCase-----------------------------------------
+    this.winText = this.add.text(
+                            config.gameWidth / 2,
+                            (config.gameHeight / 2) - 50,
+                            '',
+                            { font: '32px Arial', fill: '#dddddd' });
         // --------------------reset to defaults-----------------------------------
-    currentGameState.bosskilled = false;
-    currentGameState.bosstime = false;
+    // resetter.apply(this);
   }
 
   update() {
@@ -94,7 +105,7 @@ export default class extends Phaser.State {
     } else {
       this.levelName.text = '';
 
-
+      collisionloader.apply(this);
         // --------------------------update statusBar------------------------------
       this.mainPlayerHP.text = `HP: ${this.mainPlayer.HP}`;
       this.scoreText.text = `score: ${currentGameState.score}`;
@@ -103,25 +114,30 @@ export default class extends Phaser.State {
       this.mainPlayer.body.velocity.x = 0;
       this.mainPlayer.body.velocity.y = 0;
 
-        // ----------------------------boss alive-------------------------------------------------
+        // -------------------------boss alive-------------------------------------------------
       if (!currentGameState.bosskilled) {
         // ------------------------spawn enemies-------------------------------------
-        enemiesloader(this);
+        enemiesloader.apply(this);
 
         // ---------------------spawn boss------------------------------------------
-        bossloader(this);
+        bossloader.apply(this);
       } else {
-        if (this.winText) this.winText.text = 'Well done!';
+        this.winText.text = 'Well done!';
         this.mainPlayer.x += 20;
         if (this.boss.endLevel && this.time.now > this.boss.endLevel + 4000) {
-          this.state.start('thirdLevel');
+          currentGameState.level += 1;
+          currentGameState.bosskilled = false;
+          currentGameState.bosstime = false;
+          currentGameState.levelscore = 0;
+          this.boss = null;
+          this.state.start('level');
         }
+
       }
-        // -------------------------controls----------------------------------------
+        // ---------------------controls----------------------------------------
       keysOn.apply(this);
         //-------------------------------------------------------------------------
       mouseOn.apply(this);
     }
   }
-
 }

@@ -4,9 +4,7 @@ import Phaser from 'phaser-ce';
 
 import intro from './states/intro';
 import mainMenu from './states/mainMenu';
-import firstLevel from './states/firstLevel';
-import secondLevel from './states/secondLevel';
-import thirdLevel from './states/thirdLevel';
+import level from './states/level';
 import score from './states/score';
 import config from './config';
 
@@ -20,12 +18,10 @@ class Game extends Phaser.Game {
 
     this.state.add('intro', intro, false);
     this.state.add('mainMenu', mainMenu, false);
-    this.state.add('firstLevel', firstLevel, false);
-    //this.state.add('secondLevel', secondLevel, false);
-    //this.state.add('thirdLevel', thirdLevel, false);
-    //this.state.add('score', score, false);
+    this.state.add('level', level, false);
+    this.state.add('score', score, false);
 
-    this.state.start('firstLevel');
+    this.state.start('level');
   }
 }
 
