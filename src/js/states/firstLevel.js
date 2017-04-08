@@ -9,6 +9,7 @@ import bossloader from '../loaders/bossloader';
 import resetter from '../loaders/resetter';
 import { keysOn, setKeys, mouseOn } from '../controls/controls';
 import { loadMusic, applyMusic } from '../sound/bgmusic';
+import { weaponOn } from '../objects/weapon';
 
 export default class extends Phaser.State {
 
@@ -43,15 +44,7 @@ export default class extends Phaser.State {
     this.mainPlayer.animations.play('fly', 10, true);
 
         // ----------------------MainPlayerBullets-----------------------------------------
-    this.bullets = new Bullets({
-      game: this,
-      parent: null,
-      name: 'bull',
-      addToStage: true,
-      enableBody: true,
-      physicsBodyType: Phaser.Physics.ARCADE,
-    });
-    this.game.add.existing(this.bullets);
+    weaponOn.apply(this);
 
 
 
@@ -83,6 +76,7 @@ export default class extends Phaser.State {
 
         // -----------------------------input----------------------------------
     setKeys.apply(this);
+    
         // -----------------------------countdown---------------------------------
     this.countdown = this.time.now;
     this.levelName = this.add.text(

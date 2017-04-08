@@ -6,7 +6,14 @@ import Firstboss from '../objects/firstboss';
 
 export default function (that) {
   if (that.boss) {
-    that.bulletBoss.fireBullet.call(that);
+    that.bossWeapon = that.game.add.weapon(30, 'bullet');
+    that.bossWeapon.bulletSpeed = 600;
+    that.bossWeapon.fireRate = 100;
+    that.bossWeapon.fireAngle = 180;
+    that.bossWeapon.autofire = true;
+    that.bossWeapon.trackSprite(that.boss, 0, 0, false);
+    that.game.physics.enable(that.bossWeapon, Phaser.Physics.ARCADE);
+    //--------------------------------------------------------------
     that.boss.HPinfo.text = `BOSS HP: ${that.boss.HP}`;
   }
   if (!that.boss && currentGameState.bosstime) {
