@@ -17,12 +17,12 @@ export default class extends Phaser.Group {
     this[`move${this.move}`]();// this works
   }
 
-  enemyKiller(game, bullet, enemy) {
-    bullet.kill();
-    enemy.kill();
-    currentGameState.score += 100;
-    currentGameState.levelscore += 100;
-  }
+  // enemyKiller(game, bullet, enemy) {
+  //   bullet.kill();
+  //   enemy.kill();
+  //   currentGameState.score += 100;
+  //   currentGameState.levelscore += 100;
+  // }
     // --------------------enemies position---------------------------------------------------
 
   position1() { // bottomOneRow
