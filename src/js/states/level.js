@@ -2,7 +2,6 @@ import Phaser from 'phaser-ce';
 import config from '../config';
 import currentGameState from '../currentGameState';
 import BackgroundMainGame from '../objects/backgroundFirstlevel';
-import MainPlayer from '../objects/mainPlayer';
 import enemiesloader from '../loaders/enemiesloader';
 import bossloader from '../loaders/bossloader';
 import collisionloader from '../loaders/collisionloader';
@@ -16,9 +15,11 @@ export default class extends Phaser.State {
 
   preload() {
     this.load.image('background', conf[currentGameState.level].bg);
-    this.load.image('mainPlayer', './img/player/player.png');
     this.load.image('bullet', './img/player/shot.png');
     this.load.image('enemy', './img/enemy/enemy.png');
+    this.load.image('boss_1', './img/bosses/boss_1.png');
+    this.load.spritesheet('mainPlayerSprite', './img/player/main_sprite.png', 95, 50);
+    this.load.spritesheet('exhaust', './img/player/exhaust.png', 23, 84);
     loadMusic.apply(this);
   }
 
@@ -36,18 +37,30 @@ export default class extends Phaser.State {
     });
     this.game.add.existing(this.background);
 
-        //---------------------------------------------------------------
-    this.mainPlayer = new MainPlayer({
-      game: this,
-      x: -1800,
-      y: this.game.world.centerY,
-      asset: 'mainPlayer',
-    });
+        //---------------------------MainPlayer---------------------------------------
+
+    this.mainPlayer = this.game.add.sprite(-1800, this.game.world.centerY, 'mainPlayerSprite');
+    this.mainPlayer.HP = 3;
     this.game.add.existing(this.mainPlayer);
+    this.game.physics.enable(this.mainPlayer, Phaser.Physics.ARCADE);
+    let fly = this.mainPlayer.animations.add('fly');
+    this.mainPlayer.animations.play('fly', 10, true);
+
+    this.exhaust1 = this.mainPlayer.addChild(this.game.make.sprite(4, 6, 'exhaust'));
+    this.exhaust1.scale.setTo(0.2, 0.2);
+    this.exhaust1.angle = 90;
+    this.exhaust2 = this.mainPlayer.addChild(this.game.make.sprite(4, 37, 'exhaust'));
+    this.exhaust2.scale.setTo(0.2, 0.2);
+    this.exhaust2.angle = 90;
+    this.exhaust1.animations.add('exh');
+    this.exhaust2.animations.add('exh');
+    this.exhaust1.animations.play('exh', 5, true);
+    this.exhaust2.animations.play('exh', 5, true);
+
 
     // ----------------------MainPlayerBullets-----------------------------------------
     weaponOn.apply(this);
-    
+
     // -------------------------statusBar---------------------------------
     this.scoreText = this.add.text(
       config.gameWidth - 200,

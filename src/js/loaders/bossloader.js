@@ -11,16 +11,16 @@ export default function () {
     this.bossWeapon.fireRate = 100;
     this.bossWeapon.fireAngle = 180;
     this.bossWeapon.autofire = true;
-    this.bossWeapon.trackSprite(this.boss, 0, 0, false);
+    this.bossWeapon.trackSprite(this.boss, -80, 0, false);
     this.game.physics.enable(this.bossWeapon, Phaser.Physics.ARCADE);
     //--------------------------------------------------------------
   }
   if (!this.boss && currentGameState.bosstime) {
     this.boss = new Firstboss({
       game: this,
-      x: config.gameWidth,
+      x: config.gameWidth - 200,
       y: this.game.world.centerY,
-      asset: 'enemy',
+      asset: 'boss_1',
     });
     this.game.add.existing(this.boss);
     const tween = this.add.tween(this.boss).to(

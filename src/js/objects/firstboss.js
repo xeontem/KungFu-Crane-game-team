@@ -7,7 +7,7 @@ export default class extends Phaser.Sprite {
     super(game, x, y, asset);
     this.anchor.setTo(0.5);
     this.outOfBoundsKill = true;
-    this.scale.setTo(2, 5);// scale
+    this.scale.setTo(0.35);// scale
     this.HP = config.firstBossHP;
     this.HPinfo = game.add.text(
                             400,
@@ -22,5 +22,5 @@ export default class extends Phaser.Sprite {
 
   }
 
-  
+
 }
