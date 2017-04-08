@@ -13,11 +13,32 @@ export function setKeys() {
 }
 
 export function keysOn() {
+
+  if (this.cursors.left.isUp) {
+    this.exhaust1.scale.setTo(0.2);
+    this.exhaust2.scale.setTo(0.2);
+    this.exhaust1.y = 7;
+    this.exhaust2.y = 38;
+  }
+  if (this.cursors.right.isUp) {
+    this.exhaust1.scale.setTo(0.2);
+    this.exhaust2.scale.setTo(0.2);
+    this.exhaust1.y = 7;
+    this.exhaust2.y = 38;
+  }
   if (this.cursors.left.isDown) {
     this.mainPlayer.body.velocity.x = -350;
+    this.exhaust1.scale.setTo(0.1);
+    this.exhaust2.scale.setTo(0.1);
+    this.exhaust1.y = 8;
+    this.exhaust2.y = 39;
   }
   if (this.cursors.right.isDown) {
     this.mainPlayer.body.velocity.x = 350;
+    this.exhaust1.scale.setTo(0.3);
+    this.exhaust2.scale.setTo(0.3);
+    this.exhaust1.y = 6;
+    this.exhaust2.y = 37;
   }
   if (this.cursors.up.isDown) {
     this.mainPlayer.body.velocity.y = -350;
@@ -27,6 +48,7 @@ export function keysOn() {
   }
   if (this.fireButton.isDown) {
      this.weapon.fire();
+     //this.weapon2.fire();
      // invokeSound(this);
   }
 }

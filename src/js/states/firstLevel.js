@@ -17,7 +17,8 @@ export default class extends Phaser.State {
     this.load.image('background', './img/states/bgLevel1.jpeg');
     this.load.image('bullet', './img/player/shot.png');
     this.load.image('enemy', './img/enemy/enemy.png');
-    this.sprite = this.load.spritesheet('mainPlayerSprite', './img/player/main_sprite.png', 95, 50);
+    this.load.spritesheet('mainPlayerSprite', './img/player/main_sprite.png', 95, 50);
+    this.load.spritesheet('exhaust', './img/player/exhaust.png', 23, 84);
     loadMusic.apply(this);
   }
 
@@ -42,6 +43,18 @@ export default class extends Phaser.State {
     this.game.physics.enable(this.mainPlayer, Phaser.Physics.ARCADE);
     let fly = this.mainPlayer.animations.add('fly');
     this.mainPlayer.animations.play('fly', 10, true);
+
+    this.exhaust1 = this.mainPlayer.addChild(this.game.make.sprite(4, 6, 'exhaust'));
+    this.exhaust1.scale.setTo(0.2, 0.2);
+    this.exhaust1.angle = 90;
+    this.exhaust2 = this.mainPlayer.addChild(this.game.make.sprite(4, 37, 'exhaust'));
+    this.exhaust2.scale.setTo(0.2, 0.2);
+    this.exhaust2.angle = 90;
+    this.exhaust1.animations.add('exh');
+    this.exhaust2.animations.add('exh');
+    this.exhaust1.animations.play('exh', 5, true);
+    this.exhaust2.animations.play('exh', 5, true);
+
 
         // ----------------------MainPlayerBullets-----------------------------------------
     weaponOn.apply(this);
@@ -76,7 +89,7 @@ export default class extends Phaser.State {
 
         // -----------------------------input----------------------------------
     setKeys.apply(this);
-    
+
         // -----------------------------countdown---------------------------------
     this.countdown = this.time.now;
     this.levelName = this.add.text(
