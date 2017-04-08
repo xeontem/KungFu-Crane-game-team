@@ -20,7 +20,7 @@ export default class extends Phaser.Group {
       this.bullet = this.bullets.getFirstExists(false);
 
       if (this.bullet) {
-        this.bullet.reset(this.mainPlayer.x + 60, this.mainPlayer.y + 2);
+        this.bullet.reset(this.mainPlayer.x + 60, this.mainPlayer.y + 28);
         this.bullet.body.velocity.x = 800;
         this.bullets.bulletTime = this.time.now + 200;
       }

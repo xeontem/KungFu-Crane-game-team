@@ -2,7 +2,6 @@ import Phaser from 'phaser-ce';
 import config from '../config';
 import currentGameState from '../currentGameState';
 import BackgroundMainGame from '../objects/backgroundFirstlevel';
-import MainPlayer from '../objects/mainPlayer';
 import Bullets from '../objects/bullets';
 import BulletBoss from '../objects/bulletBoss';
 import enemiesloader from '../loaders/enemiesloader';
@@ -15,9 +14,9 @@ export default class extends Phaser.State {
 
   preload() {
     this.load.image('background', './img/states/bgLevel1.jpeg');
-    this.load.image('mainPlayer', './img/player/player.png');
     this.load.image('bullet', './img/player/shot.png');
     this.load.image('enemy', './img/enemy/enemy.png');
+    this.sprite = this.load.spritesheet('mainPlayerSprite', './img/player/main_sprite.png', 95, 50);
     loadMusic.apply(this);
   }
 
@@ -35,14 +34,14 @@ export default class extends Phaser.State {
     });
     this.game.add.existing(this.background);
 
-        //---------------------------------------------------------------
-    this.mainPlayer = new MainPlayer({
-      game: this,
-      x: -1800,
-      y: this.game.world.centerY,
-      asset: 'mainPlayer',
-    });
+        //---------------------------MainPlayer---------------------------------------
+
+    this.mainPlayer = this.game.add.sprite(-1800, this.game.world.centerY, 'mainPlayerSprite');
     this.game.add.existing(this.mainPlayer);
+    this.game.physics.enable(this.mainPlayer, Phaser.Physics.ARCADE);
+    let fly = this.mainPlayer.animations.add('fly');
+    this.mainPlayer.animations.play('fly', 10, true);
+    this.mainPlayer.addChild()
 
         // ----------------------MainPlayerBullets-----------------------------------------
     this.bullets = new Bullets({
@@ -55,14 +54,16 @@ export default class extends Phaser.State {
     });
     this.game.add.existing(this.bullets);
 
+
+
         // ------------------------bossBullets-----------------------------------------
     this.bulletBoss = new BulletBoss({
-      game: this,
-      parent: null,
-      name: 'bull2',
-      addToStage: true,
-      enableBody: true,
-      physicsBodyType: Phaser.Physics.ARCADE,
+        game: this,
+        parent: null,
+        name: 'bull2',
+        addToStage: true,
+        enableBody: true,
+        physicsBodyType: Phaser.Physics.ARCADE,
     });
     this.game.add.existing(this.bulletBoss);
 
