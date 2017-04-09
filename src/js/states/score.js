@@ -51,7 +51,7 @@ export default class extends Phaser.State {
 
   update() {
     if (this.fireButton.isDown) {
-      this.state.start('firstLevel');
+      this.state.start('level');
     }
   }
 }
