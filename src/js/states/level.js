@@ -27,6 +27,8 @@ export default class extends Phaser.State {
 		this.load.image('shield', './img/player/shield.png');
 		this.load.image('shieldOn', './img/player/shieldOn.png');
         this.load.image('burst', './img/player/burst.png');
+		this.load.image('ammo', './img/player/ammo.png');
+
 		//-----------------------------------------------------------------------
 		this.load.spritesheet('mainPlayerSprite', './img/player/main_sprite.png', 95, 50);
 		this.load.spritesheet('exhaust', './img/player/exhaust.png', 23, 84);
@@ -35,9 +37,9 @@ export default class extends Phaser.State {
 
 	create() {
 		resetter.apply(this);
-//-----------------music-----------------------------------------
+		//-----------------music-----------------------------------------
 		applyMusic.apply(this);
-//---------------------------------------------------------------
+		//---------------------------------------------------------------
 		this.background = new BackgroundMainGame({
 			game: this,
 			x: 0,
@@ -48,7 +50,7 @@ export default class extends Phaser.State {
 		});
 		this.game.add.existing(this.background);
 
-//---------------------------MainPlayer---------------------------------------
+		//---------------------------MainPlayer---------------------------------------
 
 		this.mainPlayer = this.game.add.sprite(-1800, this.game.world.centerY, 'mainPlayerSprite');
 		this.mainPlayer.anchor.setTo(0.5);
@@ -69,17 +71,16 @@ export default class extends Phaser.State {
 		this.exhaust1.animations.play('exh', 5, true);
 		this.exhaust2.animations.play('exh', 5, true);
 
-// ----------------------MainPlayerBullets-----------------------------------------
+		// ----------------------MainPlayerBullets-----------------------------------------
 
 		this.weapon1 = weaponOn.apply(this);
-		this.weapon2 = threeWayWeapon.apply(this);
-		this.weapon3 = spreadWeapon.apply(this);
+		this.weapon2 = spreadWeapon.apply(this);
+		this.weapon3 = threeWayWeapon.apply(this);
 		config.weapons.push(this.weapon1);
 		config.weapons.push(this.weapon2);
 		config.weapons.push(this.weapon3);
-		this.currentWeapon = this.weapon1;
 
-// -------------------------statusBar---------------------------------
+		// -------------------------statusBar---------------------------------
 
 		this.scoreText = this.add.text(
 			config.gameWidth - 200,
@@ -94,11 +95,11 @@ export default class extends Phaser.State {
 							{ font: '32px Arial', fill: '#dddddd' });
 		this.mainPlayerHP.anchor.setTo(0.5);
 
-//-----------------------------input----------------------------------
+		//-----------------------------input----------------------------------
 
 		setKeys.apply(this);
 
-// -----------------------------countdown---------------------------------
+		// -----------------------------countdown---------------------------------
 		this.countdown = this.time.now;
 		this.levelName = this.add.text(
 							config.gameWidth / 2,
@@ -106,7 +107,7 @@ export default class extends Phaser.State {
 							conf[currentGameState.level].levelName,
 							{ font: '32px Arial', fill: '#dddddd' });
 		this.levelName.anchor.setTo(0.5);
-//-----------------------------winCase-----------------------------------------
+		//-----------------------------winCase-----------------------------------------
 		this.winText = this.add.text(
 							config.gameWidth / 2,
 							(config.gameHeight / 2) - 50,
@@ -115,7 +116,8 @@ export default class extends Phaser.State {
 	}
 
 	update() {
-// --------------------------countDown-------------------------------------
+		this.currentWeapon = this[`weapon${currentGameState.mainPlayerWeapon}`];
+		// --------------------------countDown-------------------------------------
 
 		if (this.time.now < this.countdown + 4000) {
 			this.mainPlayer.x += 8;
@@ -123,20 +125,20 @@ export default class extends Phaser.State {
 			this.levelName.text = '';
 
 			collisionloader.apply(this);
-//--------------------------update statusBar------------------------------
+			//--------------------------update statusBar------------------------------
 			this.mainPlayerHP.text = `HP: ${config.mainPlayerHP}`;
 			this.scoreText.text = `score: ${currentGameState.score}`;
 
-//--------------------------if press nothing stop the ship------------
+			//--------------------------if press nothing stop the ship------------
 			this.mainPlayer.body.velocity.x = 0;
 			this.mainPlayer.body.velocity.y = 0;
 
-//-------------------------boss alive-------------------------------------------------
+			//-------------------------boss alive-------------------------------------------------
 			if (!currentGameState.bosskilled) {
-//------------------------spawn enemies-------------------------------------
+			//------------------------spawn enemies-------------------------------------
 			enemiesloader.apply(this);
 
-//---------------------spawn boss------------------------------------------
+			//---------------------spawn boss------------------------------------------
 			bossloader.apply(this);
 		} else {
 			this.winText.text = 'Well done!';
@@ -146,11 +148,11 @@ export default class extends Phaser.State {
 				this.state.start('level');
 			}
 		}
-//-----------------------if mainPlayer dies-----------------------------------
+		//-----------------------if mainPlayer dies-----------------------------------
 		gameOverloader.apply(this);
-// ---------------------controls----------------------------------------
+		// ---------------------controls----------------------------------------
 		keysOn.apply(this);
-//-------------------------------------------------------------------------
+		//-------------------------------------------------------------------------
 		mouseOn.apply(this);
 		}
 	}

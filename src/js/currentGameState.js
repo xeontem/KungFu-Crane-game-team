@@ -5,5 +5,6 @@ export default {
 	bosstime: false,
 	bosskilled: false,
 	mainPlayerKilled: false,
+	mainPlayerWeapon: 1,
 	level: 0
 };
