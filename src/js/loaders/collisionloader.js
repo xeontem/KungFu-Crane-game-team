@@ -1,6 +1,11 @@
 import Phaser from 'phaser-ce';
 import currentGameState from '../currentGameState';
 import { enemyExplode, bossExplode } from '../sound/explosures';
+import { Benefit } from '../objects/benefits';
+
+function randBenefit(){
+  return game.rnd.integerInRange(1, 2);
+}
 
 function invokeSound(that, target) {
   if(target == 'enemy') {
@@ -11,11 +16,37 @@ function invokeSound(that, target) {
 }
 
 function killEnemies(bullet, enemy) {
+  let enemX = enemy.body.center.x;
+  let enemY = enemy.body.center.y;
   enemy.kill();
   invokeSound(this, 'enemy');
   bullet.kill();
   currentGameState.score += 100;
   currentGameState.levelscore += 100;
+  //------------------------benefit health----------------------------
+  if(!this.benefitHealth && randBenefit() == 1 && !this.benefitScore){
+    this.benefitHealth = new Benefit({
+      game: this,
+      x: enemX,
+      y: enemY,
+      asset: 'health',
+    });
+    this.game.add.existing(this.benefitHealth);
+  }
+  //------------------------benefit ammo----------------------------
+
+  //------------------------benefit shield----------------------------
+
+  //------------------------benefit score----------------------------
+  if(!this.benefitScore && randBenefit() == 2 && !this.benefitHealth){
+    this.benefitScore = new Benefit({
+      game: this,
+      x: enemX,
+      y: enemY,
+      asset: 'score',
+    });
+    this.game.add.existing(this.benefitScore);
+  }
 }
 
 function killBoss(boss, bullet) {
@@ -60,5 +91,15 @@ export default function () {
   if(this.bossWeapon){
     this.physics.arcade.collide(this.bossWeapon.bullets, this.mainPlayer, killPlayer);
   }  
+  //-------------------------------Benefits Collisions----------------------------------------------------------  
+  if(this.benefitHealth){
+    this.physics.arcade.collide(this.mainPlayer, this.benefitHealth, this.benefitHealth.getHealth, null, this);
+    if(this.benefitHealth && this.benefitHealth.x < 0)this.benefitHealth = null;
+  }
+
+  if(this.benefitScore){
+    this.physics.arcade.collide(this.mainPlayer, this.benefitScore, this.benefitScore.getScore, null, this);
+    if(this.benefitScore && this.benefitScore.x < 0)this.benefitScore = null;
+  }
 }
 
