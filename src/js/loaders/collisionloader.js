@@ -5,7 +5,7 @@ import { Benefit } from '../objects/benefits';
 import config from '../config';
 
 function randBenefit(){
-    return game.rnd.integerInRange(1, 3);
+    return game.rnd.integerInRange(1, 4);
 }
 
 function invokeSound(that, target) {
@@ -25,7 +25,7 @@ function killEnemies(bullet, enemy) {
     currentGameState.score += 100;
     currentGameState.levelscore += 100;
     //------------------------benefit health----------------------------
-    if(!this.benefitHealth && !this.benefitScore && !this.benefitShield && randBenefit() == 1){
+    if(!this.benefitHealth && !this.benefitScore && !this.benefitShield && !this.benefitBurst && randBenefit() == 1){
         this.benefitHealth = new Benefit({
             game: this,
             x: enemX,
@@ -35,7 +35,7 @@ function killEnemies(bullet, enemy) {
         this.game.add.existing(this.benefitHealth);
     }
     //------------------------benefit score----------------------------
-    if(!this.benefitHealth && !this.benefitScore && !this.benefitShield && randBenefit() == 2){
+    if(!this.benefitHealth && !this.benefitScore && !this.benefitShield && !this.benefitBurst && randBenefit() == 2){
         this.benefitScore = new Benefit({
             game: this,
             x: enemX,
@@ -45,7 +45,7 @@ function killEnemies(bullet, enemy) {
         this.game.add.existing(this.benefitScore);
     }
     //------------------------benefit shield----------------------------
-    if(!this.benefitHealth && !this.benefitScore && !this.benefitShield && !this.mainPlayerShield && randBenefit() == 3){
+    if(!this.benefitHealth && !this.benefitScore && !this.benefitShield && !this.mainPlayerShield && !this.benefitBurst && randBenefit() == 3){
         this.benefitShield = new Benefit({
             game: this,
             x: enemX,
@@ -53,6 +53,15 @@ function killEnemies(bullet, enemy) {
             asset: 'shield',
         });
         this.game.add.existing(this.benefitShield);
+    }
+    if(!this.benefitHealth && !this.benefitScore && !this.benefitShield && !this.mainPlayerShield && !this.benefitBurst && randBenefit() == 4){
+        this.benefitBurst = new Benefit({
+            game: this,
+            x: enemX,
+            y: enemY,
+            asset: 'burst',
+        });
+        this.game.add.existing(this.benefitBurst);
     }
     //------------------------benefit ammo----------------------------
 }
@@ -85,7 +94,7 @@ function overlapEnemies(player, enemy) {
 
 function killPlayer(player, bullet) {
     bullet.kill();
-    //invokeSound(this, 'enemy');//----------------------------------need to fix----------------
+    invokeSound(this, 'enemy');
     if(player != this.mainPlayerShield){
         if(config.mainPlayerHP)config.mainPlayerHP--;
         if(!config.mainPlayerHP){
@@ -93,12 +102,12 @@ function killPlayer(player, bullet) {
             currentGameState.mainPlayerKilled = true;
             this.countdown = this.time.now;
         }
-    }  
+    }
 }
 
 
 export default function () {
-//------------------------------------weaponsStandart-------------------------------------------------------------------  
+//------------------------------------weaponsStandart-------------------------------------------------------------------
     this.physics.arcade.overlap(this.weapon.bullets, this.enemies, killEnemies, null, this);
     this.physics.arcade.overlap(this.weapon.bullets, this.boss, killBoss, null, this);
 //------------------------------------weaponsTriple----------------------------------------------------------
@@ -115,8 +124,8 @@ export default function () {
     this.physics.arcade.overlap(this.mainPlayer, this.enemies, overlapEnemies, null, this);
     if(this.bossWeapon){
         this.physics.arcade.overlap(this.bossWeapon.bullets, this.mainPlayer, killPlayer, null, this);
-    }  
-//-------------------------------Benefits Collisions----------------------------------------------------------  
+    }
+//-------------------------------Benefits Collisions----------------------------------------------------------
     if(this.benefitHealth){
         this.physics.arcade.overlap(this.mainPlayer, this.benefitHealth, this.benefitHealth.getHealth, null, this);
         if(this.benefitHealth && this.benefitHealth.x < 0)this.benefitHealth = null;
@@ -130,6 +139,10 @@ export default function () {
         this.physics.arcade.overlap(this.mainPlayer, this.benefitShield, this.benefitShield.getShield, null, this);
         if(this.benefitShield && this.benefitShield.x < 0)this.benefitShield = null;
     }
+    if(this.benefitBurst){
+        this.physics.arcade.overlap(this.mainPlayer, this.benefitBurst, this.benefitBurst.getBurst, null, this);
+        if(this.benefitBurst && this.benefitBurst.x < 0)this.benefitBurst = null;
+    }
 //---------------------------------------------shieldOn---------------------------------------------------------
     if(this.mainPlayerShield){
         this.mainPlayerShield.x = this.mainPlayer.x;
@@ -139,7 +152,6 @@ export default function () {
         if(this.time.now > this.mainPlayerShield.countdown + config.shieldDuration || currentGameState.bosskilled){
             this.mainPlayerShield.kill();
             this.mainPlayerShield = null;
-        } 
+        }
     }
 }
-

@@ -9,13 +9,20 @@ export function loadMusic() {
 }
 
 export function applyMusic() {
-	if (this.game.state.current === 'mainMenu') {
-		this.music = this.game.add.audio('main2', 1, true, true);
-		this.music.play();
-	} else {
-		this.game.cache.removeSound('main2');
-		// this.music.pause();
-		this.music = this.game.add.audio('level', 0.3, true, true);
-		this.music.play();
-	}
+    if(!this.mainMenuMusic) this.mainMenuMusic = this.game.add.audio('main2', 1, true, true);
+    if(!this.levelMusic) this.levelMusic = this.game.add.audio('level', 0.3, true, true);
+
+    switch(this.game.state.current) {
+        case 'mainMenu':
+            if(!this.mainMenuMusic.isPlaying) {
+                this.mainMenuMusic.play();
+            }
+        break;
+        case 'level':
+            if(!this.levelMusic.isPlaying) {
+                this.levelMusic.play();
+            }
+        break;
+    }
+
 }

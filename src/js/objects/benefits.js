@@ -38,9 +38,15 @@ export class Benefit extends Phaser.Sprite {
         benefit.kill();
         this.mainPlayerShield = this.add.sprite(this.mainPlayer.x, this.mainPlayer.y, 'shieldOn');
         this.mainPlayerShield.anchor.setTo(0.5);
+        this.mainPlayerShield.scale.setTo(1.3);
         this.mainPlayerShield.countdown = this.time.now;
         this.game.add.existing(this.mainPlayerShield);
         game.physics.enable(this.mainPlayerShield, Phaser.Physics.ARCADE);
         this.benefitShield = null;
+    }
+    getBurst(player, benefit){
+        benefit.kill();
+        config.mainPlayerSpeed += 120;
+        this.benefitBurst = null;
     }
 }
