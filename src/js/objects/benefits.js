@@ -26,15 +26,19 @@ export class Benefit extends Phaser.Sprite {
     this.mainPlayer.HP++;
     this.benefitHealth = null;
   }
-  getShield(player, benefit){
-    benefit.kill();
-    this.mainPlayer.HP++;
-    this.health = null;
-  }
   getScore(player, benefit){
     benefit.kill();
     currentGameState.score += 1000;
     currentGameState.levelscore += 1000;
     this.benefitScore = null;
+  }
+  getShield(player, benefit){
+    benefit.kill();
+    this.mainPlayerShield = this.add.sprite(this.mainPlayer.x, this.mainPlayer.y, 'shieldOn');
+    this.mainPlayerShield.anchor.setTo(0.5);
+    this.mainPlayerShield.countdown = this.time.now;
+    this.game.add.existing(this.mainPlayerShield);
+    game.physics.enable(this.mainPlayerShield, Phaser.Physics.ARCADE);
+    this.benefitShield = null;
   }
 }

@@ -28,6 +28,8 @@ export default class extends Phaser.State {
     this.text.font = 'Bangers';
 
     this.countdown = this.time.now;
+    //---------------------------------------skip--------------------------
+    this.fireButton = this.game.input.keyboard.addKey(Phaser.Keyboard.SPACEBAR);
   }
 
   update() {
@@ -98,6 +100,11 @@ export default class extends Phaser.State {
     if(this.time.now > this.countdown + 34011) {
       this.music.pause();
       this.state.start('mainMenu');
+    }
+    //----------------------------skip------------------------------
+    if(this.fireButton.isDown){
+      this.state.start('level');
+      this.music.pause();
     }
   }
 }

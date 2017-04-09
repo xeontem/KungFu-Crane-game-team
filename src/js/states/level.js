@@ -3,12 +3,13 @@ import config from '../config';
 import currentGameState from '../currentGameState';
 import BackgroundMainGame from '../objects/backgroundFirstlevel';
 import enemiesloader from '../loaders/enemiesloader';
+import gameOverloader from '../loaders/gameOverloader';
 import bossloader from '../loaders/bossloader';
 import collisionloader from '../loaders/collisionloader';
 import resetter from '../loaders/resetter';
 import { keysOn, setKeys, mouseOn } from '../controls/controls';
 import { loadMusic, applyMusic } from '../sound/bgmusic';
-import { weaponOn } from '../objects/weapon';
+import { weaponOn, spreadWeapon, threeWayWeapon } from '../objects/weapon';
 import conf from '../levelsConfig';
 
 export default class extends Phaser.State {
@@ -23,6 +24,8 @@ export default class extends Phaser.State {
     //-----------------------benefits image----------------------------------
     this.load.image('health', './img/player/health.png');
     this.load.image('score', './img/player/score.png');
+    this.load.image('shield', './img/player/shield.png');
+    this.load.image('shieldOn', './img/player/shieldOn.png');
     //-----------------------------------------------------------------------
     this.load.spritesheet('mainPlayerSprite', './img/player/main_sprite.png', 95, 50);
     this.load.spritesheet('exhaust', './img/player/exhaust.png', 23, 84);
@@ -30,6 +33,7 @@ export default class extends Phaser.State {
   }
 
   create() {
+    resetter.apply(this);
         // -----------------music-----------------------------------------
     applyMusic.apply(this);
         //---------------------------------------------------------------
@@ -46,16 +50,19 @@ export default class extends Phaser.State {
         //---------------------------MainPlayer---------------------------------------
 
     this.mainPlayer = this.game.add.sprite(-1800, this.game.world.centerY, 'mainPlayerSprite');
-    this.mainPlayer.HP = 3;
+    this.mainPlayer.anchor.setTo(0.5);
+    this.mainPlayer.HP = config.mainPlayerHP;
     this.game.add.existing(this.mainPlayer);
     this.game.physics.enable(this.mainPlayer, Phaser.Physics.ARCADE);
     let fly = this.mainPlayer.animations.add('fly');
     this.mainPlayer.animations.play('fly', 10, true);
 
-    this.exhaust1 = this.mainPlayer.addChild(this.game.make.sprite(4, 6, 'exhaust'));
+    this.exhaust1 = this.mainPlayer.addChild(this.game.make.sprite(-51.5, -19, 'exhaust'));
+    this.exhaust1.anchor.setTo(0.5);
     this.exhaust1.scale.setTo(0.2, 0.2);
     this.exhaust1.angle = 90;
-    this.exhaust2 = this.mainPlayer.addChild(this.game.make.sprite(4, 37, 'exhaust'));
+    this.exhaust2 = this.mainPlayer.addChild(this.game.make.sprite(-51.5, 12, 'exhaust'));
+    this.exhaust2.anchor.setTo(0.5);
     this.exhaust2.scale.setTo(0.2, 0.2);
     this.exhaust2.angle = 90;
     this.exhaust1.animations.add('exh');
@@ -65,8 +72,13 @@ export default class extends Phaser.State {
 
 
     // ----------------------MainPlayerBullets-----------------------------------------
-    weaponOn.apply(this);
-
+    this.weapon1 = weaponOn.apply(this);
+    this.weapon2 = threeWayWeapon.apply(this);
+    this.weapon3 = spreadWeapon.apply(this);
+    config.weapons.push(this.weapon1);
+    config.weapons.push(this.weapon2);
+    config.weapons.push(this.weapon3);
+    this.currentWeapon = this.weapon1;
     // -------------------------statusBar---------------------------------
     this.scoreText = this.add.text(
       config.gameWidth - 200,
@@ -100,7 +112,7 @@ export default class extends Phaser.State {
                             '',
                             { font: '32px Arial', fill: '#dddddd' });
         // --------------------reset to defaults-----------------------------------
-    // resetter.apply(this);
+
   }
 
   update() {
@@ -130,19 +142,17 @@ export default class extends Phaser.State {
       } else {
         this.winText.text = 'Well done!';
         this.mainPlayer.x += 20;
-        if (this.boss.endLevel && this.time.now > this.boss.endLevel + 4000) {
+        if (this.time.now > this.countdown + 4000) {
           currentGameState.level += 1;
-          currentGameState.bosskilled = false;
-          currentGameState.bosstime = false;
-          currentGameState.levelscore = 0;
-          this.boss = null;
           this.state.start('level');
         }
 
       }
-        // ---------------------controls----------------------------------------
+      //-----------------------if mainPlayer dies-----------------------------------
+      gameOverloader.apply(this);
+      // ---------------------controls----------------------------------------
       keysOn.apply(this);
-        //-------------------------------------------------------------------------
+      //-------------------------------------------------------------------------
       mouseOn.apply(this);
     }
   }
