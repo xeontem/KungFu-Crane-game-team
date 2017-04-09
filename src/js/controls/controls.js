@@ -27,6 +27,14 @@ export function keysOn() {
     this.exhaust1.y = -16;
     this.exhaust2.y = 15;
   }
+  if (this.cursors.up.isUp) {
+      this.mainPlayer.animations.play('upBack', 30, false);
+      this.mainPlayer.frame = 1;
+  }
+  if (this.cursors.down.isUp) {
+      this.mainPlayer.animations.play('downBack', 30, false);
+      this.mainPlayer.frame = 10;
+  }
   if (this.cursors.left.isDown) {
     this.mainPlayer.body.velocity.x = -350;
     this.exhaust1.scale.setTo(0.1);
@@ -43,9 +51,13 @@ export function keysOn() {
   }
   if (this.cursors.up.isDown) {
     this.mainPlayer.body.velocity.y = -350;
+    this.mainPlayer.animations.play('up', 30, false);
+    this.mainPlayer.frame = 9;
   }
   if (this.cursors.down.isDown) {
     this.mainPlayer.body.velocity.y = 350;
+    this.mainPlayer.animations.play('down', 30, false);
+    this.mainPlayer.frame = 18;
   }
   if (this.changeWeapon.isDown) {
       if(config.weapons) {
