@@ -30,7 +30,7 @@ export default class extends Phaser.State {
 		this.load.image('ammo', './img/player/ammo.png');
 
 		//-----------------------------------------------------------------------
-		this.load.spritesheet('mainPlayerSprite', './img/player/main_sprite.png', 95, 50);
+		this.load.spritesheet('mainPlayerSprite', './img/player/spriteTrimmedMin.png', 95, 58);
 		this.load.spritesheet('exhaust', './img/player/exhaust.png', 23, 84);
 		loadMusic.apply(this);
 	}
@@ -56,8 +56,11 @@ export default class extends Phaser.State {
 		this.mainPlayer.anchor.setTo(0.5);
 		this.game.add.existing(this.mainPlayer);
 		this.game.physics.enable(this.mainPlayer, Phaser.Physics.ARCADE);
-		let fly = this.mainPlayer.animations.add('fly');
-		this.mainPlayer.animations.play('fly', 10, true);
+		this.mainPlayer.frame = 0;
+		this.mainPlayer.animations.add('up', [1, 2, 3, 4, 5, 6, 7, 8, 9]);
+		this.mainPlayer.animations.add('upBack', [9, 8, 7, 6, 5, 4, 3, 2, 1]);
+		this.mainPlayer.animations.add('down', [10, 11, 12, 13, 14, 15, 16, 17, 18]);
+		this.mainPlayer.animations.add('downBack', [18, 17, 16, 15, 14, 13, 12, 11, 10]);
 		this.exhaust1 = this.mainPlayer.addChild(this.game.make.sprite(-51.5, -19, 'exhaust'));
 		this.exhaust1.anchor.setTo(0.5);
 		this.exhaust1.scale.setTo(0.2, 0.2);
