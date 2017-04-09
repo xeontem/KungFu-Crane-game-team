@@ -76,32 +76,32 @@ export function keysOn() {
       this.currentWeapon.weapon.forEach(function(gun) {
          gun.fire();
       });
+        }
     }
-  }
 }
 
 export function mouseOn() {
-  if (config.onOff) {
-    this.game.canvas.addEventListener(onpointermove, move(this));
-  }
+    if (config.onOff) {
+        this.game.canvas.addEventListener(onpointermove, move(this));
+    }
 }
 
 let move = function move(that) {
-  if (that.game.physics.arcade.distanceToPointer(that.mainPlayer) > 14) {
-    that.game.physics.arcade.moveToPointer(that.mainPlayer, 350);
-  } else {
-    that.mainPlayer.body.velocity.setTo(0, 0);
-  }
+    if (that.game.physics.arcade.distanceToPointer(that.mainPlayer) > 14) {
+        that.game.physics.arcade.moveToPointer(that.mainPlayer, config.mainPlayerSpeed);
+    } else {
+        that.mainPlayer.body.velocity.setTo(0, 0);
+    }
 };
 
 function mouseIn() {
-  if (config.onOff === false) {
-    config.onOff = true;
-    document.getElementById('game').style.cursor = 'none';
-  } else {
-    config.onOff = false;
-    document.getElementById('game').style.cursor = 'default';
-  }
+    if (config.onOff === false) {
+        config.onOff = true;
+        document.getElementById('game').style.cursor = 'none';
+    } else {
+        config.onOff = false;
+        document.getElementById('game').style.cursor = 'default';
+    }
 }
 
 function invokeSound(that) {

@@ -1,5 +1,6 @@
 import Phaser from 'phaser-ce';
 import config from '../config';
+import { getCollectable } from '../sound/explosures';
 import currentGameState from '../currentGameState';
 
 export class Benefit extends Phaser.Sprite {
@@ -21,31 +22,41 @@ export class Benefit extends Phaser.Sprite {
         currentGameState.score += 10000;
     }
 //-----------------------------------------------------------
-    getHealth(player, benefit){
+    getHealth(player, benefit) {
         benefit.kill();
+        getCollectable.apply(this);
         config.mainPlayerHP++;
         this.benefitHealth = null;
     }
 
-    getScore(player, benefit){
+    getScore(player, benefit) {
         benefit.kill();
+        getCollectable.apply(this);
         currentGameState.score += 1000;
         currentGameState.levelscore += 1000;
         this.benefitScore = null;
     }
 
-    getShield(player, benefit){
+    getShield(player, benefit) {
         benefit.kill();
+        getCollectable.apply(this);
         this.mainPlayerShield = this.add.sprite(this.mainPlayer.x, this.mainPlayer.y, 'shieldOn');
         this.mainPlayerShield.anchor.setTo(0.5);
+        this.mainPlayerShield.scale.setTo(1.3);
         this.mainPlayerShield.countdown = this.time.now;
         this.game.add.existing(this.mainPlayerShield);
         game.physics.enable(this.mainPlayerShield, Phaser.Physics.ARCADE);
         this.benefitShield = null;
     }
-
-    getAmmo(player, benefit){
+    getBurst(player, benefit) {
         benefit.kill();
+        getCollectable.apply(this);
+        config.mainPlayerSpeed += 120;
+        this.benefitBurst = null;
+    }
+    getAmmo(player, benefit) {
+        benefit.kill();
+        getCollectable.apply(this);
         this.ammoCountdown = this.time.now;
         currentGameState.mainPlayerWeapon = game.rnd.integerInRange(2, 3);
     }
