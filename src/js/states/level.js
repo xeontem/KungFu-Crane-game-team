@@ -9,7 +9,7 @@ import collisionloader from '../loaders/collisionloader';
 import resetter from '../loaders/resetter';
 import { keysOn, setKeys, mouseOn } from '../controls/controls';
 import { loadMusic, applyMusic } from '../sound/bgmusic';
-import { weaponOn } from '../objects/weapon';
+import { weaponOn, spreadWeapon, threeWayWeapon } from '../objects/weapon';
 import conf from '../levelsConfig';
 
 export default class extends Phaser.State {
@@ -70,8 +70,13 @@ export default class extends Phaser.State {
 
 
     // ----------------------MainPlayerBullets-----------------------------------------
-    weaponOn.apply(this);
-
+    this.weapon1 = weaponOn.apply(this);
+    this.weapon2 = threeWayWeapon.apply(this);
+    this.weapon3 = spreadWeapon.apply(this);
+    config.weapons.push(this.weapon1);
+    config.weapons.push(this.weapon2);
+    config.weapons.push(this.weapon3);
+    this.currentWeapon = this.weapon1;
     // -------------------------statusBar---------------------------------
     this.scoreText = this.add.text(
       config.gameWidth - 200,

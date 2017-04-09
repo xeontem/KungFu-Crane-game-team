@@ -6,4 +6,6 @@ export default {
   firstBossHP: 50,
   shieldDuration: 5000,
   onOff: false,
+  weapons: [],
+  currentWeapon: 0,
 };

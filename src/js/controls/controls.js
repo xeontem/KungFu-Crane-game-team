@@ -8,6 +8,7 @@ import config from '../config';
 export function setKeys() {
   this.cursors = this.input.keyboard.createCursorKeys();
   this.fireButton = this.game.input.keyboard.addKey(Phaser.Keyboard.SPACEBAR);
+  this.changeWeapon = this.game.input.keyboard.addKey(Phaser.Keyboard.SHIFT);
   let canvas = document.getElementsByTagName('canvas');
   canvas[0].addEventListener('click', mouseIn);
 }
@@ -46,10 +47,24 @@ export function keysOn() {
   if (this.cursors.down.isDown) {
     this.mainPlayer.body.velocity.y = 350;
   }
+  if (this.changeWeapon.isDown) {
+      if(config.weapons) {
+          if(config.currentWeapon < config.weapons.length) {
+            this.currentWeapon = config.weapons[config.currentWeapon++];
+          } else {
+            config.currentWeapon = 0;
+            this.currentWeapon = config.weapons[config.currentWeapon];
+          }
+      }
+  }
   if (this.fireButton.isDown) {
-     this.weapon.fire();
-     //this.weapon2.fire();
-     // invokeSound(this);
+    if(this.currentWeapon.multiple === false) {
+      this.currentWeapon.weapon.fire();
+    } else if (this.currentWeapon.multiple === true) {
+      this.currentWeapon.weapon.forEach(function(gun) {
+         gun.fire();
+      });
+    }
   }
 }
 
