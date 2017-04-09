@@ -21,7 +21,7 @@ class Game extends Phaser.Game {
     this.state.add('level', level, false);
     this.state.add('score', score, false);
 
-    this.state.start('level');
+    this.state.start('intro');
   }
 }
 
