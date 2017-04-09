@@ -41,7 +41,7 @@ export default class extends Phaser.State {
 
 		this.scoreText = this.add.text(this.world.centerX, this.world.height - 125, 'Press S to Score', { font: '16px Bangers', fill: 'red' });
 		this.scoreText.anchor.setTo(0.5);
-		
+
 		this.startGame = false;
 		this.startScore = false;
 
@@ -53,7 +53,7 @@ export default class extends Phaser.State {
 	update() {
 		if (this.fireButton.isDown) {
 			this.countdown = this.time.now;
-			this.startGame = true;  
+			this.startGame = true;
 		}
 		if(this.startGame || this.startScore){
 			this.text.y += 7;
@@ -61,14 +61,17 @@ export default class extends Phaser.State {
 			if(this.scoreText.y > 520)this.text2.y += 7;
 			if(this.text2.y > 520 && this.background.alpha > 0.1) this.background.alpha -= 0.01;
 			if(this.time.now > this.countdown + 4000){
-				if(this.startGame) this.state.start('level');
+				if(this.startGame) {
+                    this.mainMenuMusic.pause();
+                    this.state.start('level');
+                }
 				if(this.startScore) this.state.start('score');
-			}  
+			}
 		}
 
 		if (this.score.isDown) {
 			this.countdown = this.time.now;
-			this.startScore = true;  
+			this.startScore = true;
 		}
 
 		if (this.end.isDown) {

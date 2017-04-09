@@ -17,3 +17,9 @@ export function bossExplode() {
 	music.allowMultiple = false;
 	music.play();
 }
+
+export function getCollectable() {
+    const music = this.game.add.audio('benefit', 1, false, true);
+    music.allowMultiple = false;
+    music.play();
+}
