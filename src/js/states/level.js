@@ -17,7 +17,7 @@ export default class extends Phaser.State {
     this.load.image('background', conf[currentGameState.level].bg);
     this.load.image('bullet', './img/player/shot.png');
     this.load.image('enemy', './img/enemy/enemy.png');
-    this.load.image('boss_1', './img/bosses/boss_1.png');
+    this.load.image('boss', conf[currentGameState.level].boss);
     //-----------------------benefits image----------------------------------
     this.load.image('health', './img/player/health.png');
     this.load.image('score', './img/player/score.png');
