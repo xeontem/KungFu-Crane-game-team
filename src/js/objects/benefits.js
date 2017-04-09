@@ -43,4 +43,10 @@ export class Benefit extends Phaser.Sprite {
         game.physics.enable(this.mainPlayerShield, Phaser.Physics.ARCADE);
         this.benefitShield = null;
     }
+
+    getAmmo(player, benefit){
+        benefit.kill();
+        this.ammoCountdown = this.time.now;
+        currentGameState.mainPlayerWeapon = game.rnd.integerInRange(2, 3);
+    }
 }

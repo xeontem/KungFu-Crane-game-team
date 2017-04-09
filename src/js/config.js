@@ -5,6 +5,7 @@ export default {
 	mainPlayerHP: 3,
 	firstBossHP: 50,
 	shieldDuration: 5000,
+	ammoDuration: 5000,
 	onOff: false,
 	weapons: [],
 	currentWeapon: 0,
