@@ -20,7 +20,7 @@ export default function () {
       game: this,
       x: config.gameWidth - 200,
       y: this.game.world.centerY,
-      asset: 'boss_1',
+      asset: 'boss',
     });
     this.game.add.existing(this.boss);
     const tween = this.add.tween(this.boss).to(

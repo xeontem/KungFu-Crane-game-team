@@ -17,8 +17,10 @@ export default class extends Phaser.State {
   preload() {
     this.load.image('background', conf[currentGameState.level].bg);
     this.load.image('bullet', './img/player/shot.png');
-    this.load.image('enemy', './img/enemy/enemy.png');
-    this.load.image('boss_1', './img/bosses/boss_1.png');
+    this.load.image('enemy_1', './img/enemy/enemy_1.png');
+    this.load.image('enemy_2', './img/enemy/enemy_2.png');
+    this.load.image('enemy_3', './img/enemy/enemy_3.png');
+    this.load.image('boss', conf[currentGameState.level].boss);
     //-----------------------benefits image----------------------------------
     this.load.image('health', './img/player/health.png');
     this.load.image('score', './img/player/score.png');
@@ -55,11 +57,11 @@ export default class extends Phaser.State {
     let fly = this.mainPlayer.animations.add('fly');
     this.mainPlayer.animations.play('fly', 10, true);
 
-    this.exhaust1 = this.mainPlayer.addChild(this.game.make.sprite(4, 6, 'exhaust'));
+    this.exhaust1 = this.mainPlayer.addChild(this.game.make.sprite(-51.5, -19, 'exhaust'));
     this.exhaust1.anchor.setTo(0.5);
     this.exhaust1.scale.setTo(0.2, 0.2);
     this.exhaust1.angle = 90;
-    this.exhaust2 = this.mainPlayer.addChild(this.game.make.sprite(4, 37, 'exhaust'));
+    this.exhaust2 = this.mainPlayer.addChild(this.game.make.sprite(-51.5, 12, 'exhaust'));
     this.exhaust2.anchor.setTo(0.5);
     this.exhaust2.scale.setTo(0.2, 0.2);
     this.exhaust2.angle = 90;
@@ -110,7 +112,7 @@ export default class extends Phaser.State {
                             '',
                             { font: '32px Arial', fill: '#dddddd' });
         // --------------------reset to defaults-----------------------------------
-    
+
   }
 
   update() {

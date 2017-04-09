@@ -18,28 +18,28 @@ export function keysOn() {
   if (this.cursors.left.isUp) {
     this.exhaust1.scale.setTo(0.2);
     this.exhaust2.scale.setTo(0.2);
-    this.exhaust1.y = 7;
-    this.exhaust2.y = 38;
+    this.exhaust1.y = -15;
+    this.exhaust2.y = 16;
   }
   if (this.cursors.right.isUp) {
     this.exhaust1.scale.setTo(0.2);
     this.exhaust2.scale.setTo(0.2);
-    this.exhaust1.y = 7;
-    this.exhaust2.y = 38;
+    this.exhaust1.y = -16;
+    this.exhaust2.y = 15;
   }
   if (this.cursors.left.isDown) {
     this.mainPlayer.body.velocity.x = -350;
     this.exhaust1.scale.setTo(0.1);
     this.exhaust2.scale.setTo(0.1);
-    this.exhaust1.y = 8;
-    this.exhaust2.y = 39;
+    this.exhaust1.y = -17;
+    this.exhaust2.y = 14;
   }
   if (this.cursors.right.isDown) {
     this.mainPlayer.body.velocity.x = 350;
     this.exhaust1.scale.setTo(0.3);
     this.exhaust2.scale.setTo(0.3);
-    this.exhaust1.y = 6;
-    this.exhaust2.y = 37;
+    this.exhaust1.y = -17;
+    this.exhaust2.y = 15;
   }
   if (this.cursors.up.isDown) {
     this.mainPlayer.body.velocity.y = -350;
