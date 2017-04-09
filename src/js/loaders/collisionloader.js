@@ -76,7 +76,7 @@ function overlapEnemies(player, enemy) {
 
 function killPlayer(player, bullet) {
   bullet.kill();
-  invokeSound(this, 'enemy');
+ // invokeSound(this, 'enemy');
   player.HP--;
   if(!player.HP){
     player.kill();
@@ -87,6 +87,18 @@ function killPlayer(player, bullet) {
 export default function () {
   this.physics.arcade.overlap(this.weapon.bullets, this.enemies, killEnemies, null, this);
   this.physics.arcade.overlap(this.weapon.bullets, this.boss, killBoss, null, this);
+//--------------------------------------------------------------------------------------------------------------
+  this.physics.arcade.overlap(this.gun1.bullets, this.enemies, killEnemies, null, this);
+  this.physics.arcade.overlap(this.gun1.bullets, this.boss, killBoss, null, this);
+  this.physics.arcade.overlap(this.gun2.bullets, this.enemies, killEnemies, null, this);
+  this.physics.arcade.overlap(this.gun2.bullets, this.boss, killBoss, null, this);
+  this.physics.arcade.overlap(this.gun3.bullets, this.enemies, killEnemies, null, this);
+  this.physics.arcade.overlap(this.gun3.bullets, this.boss, killBoss, null, this);
+//--------------------------------------------------------------------------------------------------------------
+  this.physics.arcade.overlap(this.spreadWeapon.bullets, this.enemies, killEnemies, null, this);
+  this.physics.arcade.overlap(this.spreadWeapon.bullets, this.boss, killBoss, null, this);
+//--------------------------------------------------------------------------------------------------------------
+
   this.physics.arcade.overlap(this.mainPlayer, this.enemies, overlapEnemies, null, this);
   if(this.bossWeapon){
     this.physics.arcade.collide(this.bossWeapon.bullets, this.mainPlayer, killPlayer);

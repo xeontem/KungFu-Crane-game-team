@@ -4,4 +4,6 @@ export default {
   enemiesSpeed: 7,
   firstBossHP: 50,
   onOff: false,
+  weapons: [],
+  currentWeapon: 0,
 };
