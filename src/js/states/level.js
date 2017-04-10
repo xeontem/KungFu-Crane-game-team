@@ -15,24 +15,27 @@ import conf from '../levelsConfig';
 export default class extends Phaser.State {
 
 preload() {
-  this.load.image('background', conf[currentGameState.level].bg);
-  this.load.image('bullet', './img/player/shot.png');
-  this.load.image('enemy_1', './img/enemy/enemy_1.png');
-  this.load.image('enemy_2', './img/enemy/enemy_2.png');
-  this.load.image('enemy_3', './img/enemy/enemy_3.png');
-  this.load.image('boss', conf[currentGameState.level].boss);
-  //-----------------------benefits image----------------------------------
-  this.load.image('health', './img/player/health.png');
-  this.load.image('score', './img/player/score.png');
-  this.load.image('shield', './img/player/shield.png');
-  this.load.image('shieldOn', './img/player/shieldOn.png');
-  this.load.image('burst', './img/player/burst.png');
-  this.load.image('ammo', './img/player/ammo.png');
-
-  //-----------------------------------------------------------------------
-  this.load.spritesheet('mainPlayerSprite', './img/player/spriteTrimmedMin.png', 95, 58);
-  this.load.spritesheet('exhaust', './img/player/exhaust.png', 23, 84);
-  loadMusic.apply(this);
+    this.load.image('background', conf[currentGameState.level].bg);
+    this.load.image('bullet', './img/player/shot.png');
+    this.load.image('enemy_1', './img/enemy/enemy_1.png');
+    this.load.image('enemy_2', './img/enemy/enemy_2.png');
+    this.load.image('enemy_3', './img/enemy/enemy_3.png');
+    this.load.image('boss', conf[currentGameState.level].boss);
+    //-----------------------benefits image----------------------------------
+    this.load.image('health', './img/player/health.png');
+    this.load.image('score', './img/player/score.png');
+    this.load.image('shield', './img/player/shield.png');
+    this.load.image('shieldOn', './img/player/shieldOn.png');
+    this.load.image('burst', './img/player/burst.png');
+    this.load.image('ammo', './img/player/ammo.png');
+    //-----------------------------------------------------------------------
+    this.load.spritesheet('button', './img/pause/Buttons.png', 300, 80);
+    this.load.spritesheet('menuButton', './img/pause/mainMenuButton.png', 300, 80);
+    this.load.spritesheet('reload', './img/pause/reloadButton.png', 300, 80);
+    //-----------------------------------------------------------------------
+    this.load.spritesheet('mainPlayerSprite', './img/player/spriteTrimmedMin.png', 95, 58);
+    this.load.spritesheet('exhaust', './img/player/exhaust.png', 23, 84);
+    loadMusic.apply(this);
 }
 
   create() {
@@ -157,7 +160,7 @@ preload() {
       }
       //--------------------if mainPlayer dies-----------------------------------
       if (currentGameState.mainPlayerKilled) {
-        gameOverloader.apply(this);
+          gameOverloader.apply(this);
       }
       // ---------------------controls----------------------------------------
       keysOn.apply(this);
