@@ -22,8 +22,8 @@ export default class extends Phaser.State {
       game: this,
       x: 0,
       y: 0,
-      width: 1000,
-      height: 1000,
+      width: 1024,
+      height: 512,
       asset: 'loaderBg',
     });
 
