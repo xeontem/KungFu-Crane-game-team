@@ -15,27 +15,27 @@ export function weaponOn() {
     };
 }
 export function threeWayWeapon() {
-    this.gun1 = this.game.add.weapon(30, 'bullet');
+    this.gun1 = this.game.add.weapon(30, 'missile');
     this.gun1.bulletSpeed = 600;
-    this.gun1.fireRate = 60;
+    this.gun1.fireRate = 200;
     this.gun1.fireAngle = 0;
     this.gun1.trackSprite(this.mainPlayer, 65, 0, false);
     this.gun1.onFire.add(invokeSoundOnFire, this);
     this.game.physics.enable(this.gun1, Phaser.Physics.ARCADE);
     //---------------------------------------------------------
-    this.gun2 = this.game.add.weapon(30, 'bullet');
+    this.gun2 = this.game.add.weapon(30, 'missile');
     this.gun2.bulletSpeed = 600;
-    this.gun2.fireRate = 60;
-    this.gun2.fireAngle = 45;
-    this.gun2.trackSprite(this.mainPlayer, 65, 0, false);
+    this.gun2.fireRate = 200;
+    this.gun2.fireAngle = 27;
+    this.gun2.trackSprite(this.mainPlayer, 45, 30, false);
     this.gun2.onFire.add(invokeSoundOnFire, this);
     this.game.physics.enable(this.gun2, Phaser.Physics.ARCADE);
     //---------------------------------------------------------
-    this.gun3 = this.game.add.weapon(30, 'bullet');
+    this.gun3 = this.game.add.weapon(30, 'missile');
     this.gun3.bulletSpeed = 600;
-    this.gun3.fireRate = 60;
-    this.gun3.fireAngle = 315;
-    this.gun3.trackSprite(this.mainPlayer, 65, 0, false);
+    this.gun3.fireRate = 200;
+    this.gun3.fireAngle = 333;
+    this.gun3.trackSprite(this.mainPlayer, 45, -30, false);
     this.gun3.onFire.add(invokeSoundOnFire, this);
     this.game.physics.enable(this.gun3, Phaser.Physics.ARCADE);
 
@@ -45,7 +45,9 @@ export function threeWayWeapon() {
 }
 
 export function spreadWeapon() {
-    this.spreadWeapon = this.game.add.weapon(30, 'bullet');
+    this.spreadWeapon = this.game.add.weapon(30, 'missile2');
+    this.spreadWeapon.setBulletFrames(0, 1, true, true);
+    this.spreadWeapon.addBulletAnimation('missile2', [0, 1], true, true);
     this.spreadWeapon.bulletSpeed = 600;
     this.spreadWeapon.fireRate = 60;
     this.spreadWeapon.fireAngle = 0;
