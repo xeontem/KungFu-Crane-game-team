@@ -8,7 +8,7 @@ export class Benefit extends Phaser.Sprite {
     super(game, x, y, asset);
     this.anchor.setTo(0.5);
     this.outOfBoundsKill = true;
-    this.scale.setTo(0.3);// scale
+    this.scale.setTo(0.4);// scale
     game.physics.enable(this, Phaser.Physics.ARCADE);
     this.events.onOutOfBounds.add(this.out, game);
     }
