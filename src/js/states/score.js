@@ -2,7 +2,6 @@ import Phaser from 'phaser-ce';
 
 import WebFont from 'webfontloader';
 import BackgroundScore from '../objects/backgroundScore';
-import createInput from '../loaders/inputloader';
 
 export default class extends Phaser.State {
   preload() {
@@ -16,9 +15,8 @@ export default class extends Phaser.State {
     this.load.image('loaderBg', './img/states/bgScore.jpg');
   }
 
-
   create() {
-    let score = JSON.parse(window.localStorage.getItem('score'));
+    const score = JSON.parse(window.localStorage.getItem('score'));
 
     this.background = new BackgroundScore({
       game: this,

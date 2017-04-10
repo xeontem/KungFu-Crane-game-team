@@ -64,7 +64,10 @@ export default class extends Phaser.State {
       if(this.scoreText.y > 520)this.text2.y += 7;
       if(this.text2.y > 520 && this.background.alpha > 0.1) this.background.alpha -= 0.01;
       if(this.time.now > this.countdown + 4000){
-        if(this.startGame) this.state.start('createName');
+        if(this.startGame) {
+                    this.mainMenuMusic.pause();
+                    this.state.start('createName');
+                }
         if(this.startScore) this.state.start('score');
       }
     }

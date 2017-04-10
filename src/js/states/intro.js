@@ -107,7 +107,6 @@ export default class extends Phaser.State {
     if (this.fireButton.isDown){
       this.music.pause();
       this.state.start('mainMenu');
-
     }
   }
 }

@@ -10,8 +10,4 @@ export default class extends Phaser.Sprite {
     this.HP = 3;
     game.physics.enable(this, Phaser.Physics.ARCADE);
   }
-
-  update() {
-
-  }
 }

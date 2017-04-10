@@ -14,21 +14,26 @@ import conf from '../levelsConfig';
 
 export default class extends Phaser.State {
 
-  preload() {
-    this.load.image('background', conf[currentGameState.level].bg);
-    this.load.image('bullet', './img/player/shot.png');
-    this.load.image('enemy', './img/enemy/enemy.png');
-    this.load.image('boss_1', './img/bosses/boss_1.png');
-    //-----------------------benefits image----------------------------------
-    this.load.image('health', './img/player/health.png');
-    this.load.image('score', './img/player/score.png');
-    this.load.image('shield', './img/player/shield.png');
-    this.load.image('shieldOn', './img/player/shieldOn.png');
-    //-----------------------------------------------------------------------
-    this.load.spritesheet('mainPlayerSprite', './img/player/main_sprite.png', 95, 50);
-    this.load.spritesheet('exhaust', './img/player/exhaust.png', 23, 84);
-    loadMusic.apply(this);
-  }
+preload() {
+  this.load.image('background', conf[currentGameState.level].bg);
+  this.load.image('bullet', './img/player/shot.png');
+  this.load.image('enemy_1', './img/enemy/enemy_1.png');
+  this.load.image('enemy_2', './img/enemy/enemy_2.png');
+  this.load.image('enemy_3', './img/enemy/enemy_3.png');
+  this.load.image('boss', conf[currentGameState.level].boss);
+  //-----------------------benefits image----------------------------------
+  this.load.image('health', './img/player/health.png');
+  this.load.image('score', './img/player/score.png');
+  this.load.image('shield', './img/player/shield.png');
+  this.load.image('shieldOn', './img/player/shieldOn.png');
+  this.load.image('burst', './img/player/burst.png');
+  this.load.image('ammo', './img/player/ammo.png');
+
+  //-----------------------------------------------------------------------
+  this.load.spritesheet('mainPlayerSprite', './img/player/spriteTrimmedMin.png', 95, 58);
+  this.load.spritesheet('exhaust', './img/player/exhaust.png', 23, 84);
+  loadMusic.apply(this);
+}
 
   create() {
     resetter.apply(this);
@@ -45,21 +50,22 @@ export default class extends Phaser.State {
     });
     this.game.add.existing(this.background);
 
-        //---------------------------MainPlayer---------------------------------------
+    //---------------------------MainPlayer---------------------------------------
 
     this.mainPlayer = this.game.add.sprite(-1800, this.game.world.centerY, 'mainPlayerSprite');
     this.mainPlayer.anchor.setTo(0.5);
-    this.mainPlayer.HP = config.mainPlayerHP;
     this.game.add.existing(this.mainPlayer);
     this.game.physics.enable(this.mainPlayer, Phaser.Physics.ARCADE);
-    let fly = this.mainPlayer.animations.add('fly');
-    this.mainPlayer.animations.play('fly', 10, true);
-
-    this.exhaust1 = this.mainPlayer.addChild(this.game.make.sprite(4, 6, 'exhaust'));
+    this.mainPlayer.frame = 0;
+    this.mainPlayer.animations.add('up', [1, 2, 3, 4, 5, 6, 7, 8, 9]);
+    this.mainPlayer.animations.add('upBack', [9, 8, 7, 6, 5, 4, 3, 2, 1]);
+    this.mainPlayer.animations.add('down', [10, 11, 12, 13, 14, 15, 16, 17, 18]);
+    this.mainPlayer.animations.add('downBack', [18, 17, 16, 15, 14, 13, 12, 11, 10]);
+    this.exhaust1 = this.mainPlayer.addChild(this.game.make.sprite(-51.5, -19, 'exhaust'));
     this.exhaust1.anchor.setTo(0.5);
     this.exhaust1.scale.setTo(0.2, 0.2);
     this.exhaust1.angle = 90;
-    this.exhaust2 = this.mainPlayer.addChild(this.game.make.sprite(4, 37, 'exhaust'));
+    this.exhaust2 = this.mainPlayer.addChild(this.game.make.sprite(-51.5, 12, 'exhaust'));
     this.exhaust2.anchor.setTo(0.5);
     this.exhaust2.scale.setTo(0.2, 0.2);
     this.exhaust2.angle = 90;
@@ -70,13 +76,14 @@ export default class extends Phaser.State {
 
 
     // ----------------------MainPlayerBullets-----------------------------------------
+
     this.weapon1 = weaponOn.apply(this);
-    this.weapon2 = threeWayWeapon.apply(this);
-    this.weapon3 = spreadWeapon.apply(this);
+    this.weapon2 = spreadWeapon.apply(this);
+    this.weapon3 = threeWayWeapon.apply(this);
     config.weapons.push(this.weapon1);
     config.weapons.push(this.weapon2);
     config.weapons.push(this.weapon3);
-    this.currentWeapon = this.weapon1;
+
     // -------------------------statusBar---------------------------------
     this.scoreText = this.add.text(
       config.gameWidth - 200,
@@ -88,7 +95,7 @@ export default class extends Phaser.State {
     this.mainPlayerHP = this.add.text(
                             200,
                             config.gameHeight - 50,
-                            `HP: ${this.mainPlayer.HP}`,
+                            `HP: ${config.mainPlayerHP}`,
                             { font: '32px Arial', fill: '#dddddd' });
     this.mainPlayerHP.anchor.setTo(0.5);
 
@@ -109,12 +116,11 @@ export default class extends Phaser.State {
                             (config.gameHeight / 2) - 50,
                             '',
                             { font: '32px Arial', fill: '#dddddd' });
-        // --------------------reset to defaults-----------------------------------
-
   }
 
   update() {
-        // --------------------------countDown-------------------------------------
+    this.currentWeapon = this[`weapon${currentGameState.mainPlayerWeapon}`];
+    // --------------------------countDown-------------------------------------
 
     if (this.time.now < this.countdown + 4000) {
       this.mainPlayer.x += 8;
@@ -123,7 +129,7 @@ export default class extends Phaser.State {
 
       collisionloader.apply(this);
         // --------------------------update statusBar------------------------------
-      this.mainPlayerHP.text = `HP: ${this.mainPlayer.HP}`;
+      this.mainPlayerHP.text = `HP: ${config.mainPlayerHP}`;
       this.scoreText.text = `score: ${currentGameState.score}`;
 
         // --------------------------if press nothing stop the ship------------
@@ -148,10 +154,9 @@ export default class extends Phaser.State {
             this.state.start('level');
           }
         }
-
       }
       //--------------------if mainPlayer dies-----------------------------------
-      if(currentGameState.mainPlayerKilled){
+      if (currentGameState.mainPlayerKilled) {
         gameOverloader.apply(this);
       }
       // ---------------------controls----------------------------------------

@@ -5,25 +5,48 @@ import Firstboss from '../objects/firstboss';
 import config from '../config';
 
 export default function () {
-  if (this.boss && !this.bossWeapon) {
-    this.bossWeapon = this.game.add.weapon(10, 'bullet');
-    this.bossWeapon.bulletSpeed = 600;
-    this.bossWeapon.fireRate = 100;
-    this.bossWeapon.fireAngle = 180;
-    this.bossWeapon.autofire = true;
-    this.bossWeapon.trackSprite(this.boss, -80, 0, false);
-    this.game.physics.enable(this.bossWeapon, Phaser.Physics.ARCADE);
-    //--------------------------------------------------------------
-  }
-  if (!this.boss && currentGameState.bosstime) {
-    this.boss = new Firstboss({
-      game: this,
-      x: config.gameWidth - 200,
-      y: this.game.world.centerY,
-      asset: 'boss_1',
-    });
-    this.game.add.existing(this.boss);
-    const tween = this.add.tween(this.boss).to(
+    if (this.boss) {
+        if(currentGameState.level == 0){
+            if(!this.bossWeapon11){
+                this.bossWeapon11 = this.game.add.weapon(10, 'bullet');
+                this.bossWeapon11.bulletSpeed = 600;
+                this.bossWeapon11.fireRate = 100;
+                this.bossWeapon11.fireAngle = 180;
+                this.bossWeapon11.autofire = true;
+                this.bossWeapon11.trackSprite(this.boss, -80, 0, false);
+                this.game.physics.enable(this.bossWeapon11, Phaser.Physics.ARCADE);
+            }
+        }
+        if(currentGameState.level == 1 || currentGameState.level == 2){
+            if(!this.bossWeapon21){
+                //----------------------------------first gun------------------------------
+                this.bossWeapon21 = this.game.add.weapon(5, 'bullet');
+                this.bossWeapon21.bulletSpeed = 600;
+                this.bossWeapon21.fireRate = 100;
+                this.bossWeapon21.fireAngle = 180;
+                this.bossWeapon21.autofire = true;
+                this.bossWeapon21.trackSprite(this.boss, -80, -40, false);
+                this.game.physics.enable(this.bossWeapon21, Phaser.Physics.ARCADE);
+                //----------------------------------second gun-----------------------------
+                this.bossWeapon22 = this.game.add.weapon(5, 'bullet');
+                this.bossWeapon22.bulletSpeed = 600;
+                this.bossWeapon22.fireRate = 100;
+                this.bossWeapon22.fireAngle = 180;
+                this.bossWeapon22.autofire = true;
+                this.bossWeapon22.trackSprite(this.boss, -80, 40, false);
+                this.game.physics.enable(this.bossWeapon22, Phaser.Physics.ARCADE);
+            }
+        }
+    }
+    if (!this.boss && currentGameState.bosstime) {
+        this.boss = new Firstboss({
+            game: this,
+            x: config.gameWidth - 200,
+            y: this.game.world.centerY,
+            asset: 'boss',
+        });
+        this.game.add.existing(this.boss);
+        const tween = this.add.tween(this.boss).to(
                                     { y: 200 },
                                     2000,
                                     Phaser.Easing.Linear.None,
@@ -31,6 +54,6 @@ export default function () {
                                     0,
                                     100,
                                     true);
-  }
+    }
     if(this.boss)this.boss.HPinfo.text = `BOSS HP: ${this.boss.HP}`;
 }

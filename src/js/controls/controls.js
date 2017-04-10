@@ -18,34 +18,46 @@ export function keysOn() {
   if (this.cursors.left.isUp) {
     this.exhaust1.scale.setTo(0.2);
     this.exhaust2.scale.setTo(0.2);
-    this.exhaust1.y = 7;
-    this.exhaust2.y = 38;
+    this.exhaust1.y = -15;
+    this.exhaust2.y = 16;
   }
   if (this.cursors.right.isUp) {
     this.exhaust1.scale.setTo(0.2);
     this.exhaust2.scale.setTo(0.2);
-    this.exhaust1.y = 7;
-    this.exhaust2.y = 38;
+    this.exhaust1.y = -16;
+    this.exhaust2.y = 15;
+  }
+  if (this.cursors.up.isUp) {
+      this.mainPlayer.animations.play('upBack', 30, false);
+      this.mainPlayer.frame = 1;
+  }
+  if (this.cursors.down.isUp) {
+      this.mainPlayer.animations.play('downBack', 30, false);
+      this.mainPlayer.frame = 10;
   }
   if (this.cursors.left.isDown) {
     this.mainPlayer.body.velocity.x = -350;
     this.exhaust1.scale.setTo(0.1);
     this.exhaust2.scale.setTo(0.1);
-    this.exhaust1.y = 8;
-    this.exhaust2.y = 39;
+    this.exhaust1.y = -17;
+    this.exhaust2.y = 14;
   }
   if (this.cursors.right.isDown) {
     this.mainPlayer.body.velocity.x = 350;
     this.exhaust1.scale.setTo(0.3);
     this.exhaust2.scale.setTo(0.3);
-    this.exhaust1.y = 6;
-    this.exhaust2.y = 37;
+    this.exhaust1.y = -17;
+    this.exhaust2.y = 15;
   }
   if (this.cursors.up.isDown) {
     this.mainPlayer.body.velocity.y = -350;
+    this.mainPlayer.animations.play('up', 30, false);
+    this.mainPlayer.frame = 9;
   }
   if (this.cursors.down.isDown) {
     this.mainPlayer.body.velocity.y = 350;
+    this.mainPlayer.animations.play('down', 30, false);
+    this.mainPlayer.frame = 18;
   }
   if (this.changeWeapon.isDown) {
       if(config.weapons) {
@@ -64,32 +76,32 @@ export function keysOn() {
       this.currentWeapon.weapon.forEach(function(gun) {
          gun.fire();
       });
+        }
     }
-  }
 }
 
 export function mouseOn() {
-  if (config.onOff) {
-    this.game.canvas.addEventListener(onpointermove, move(this));
-  }
+    if (config.onOff) {
+        this.game.canvas.addEventListener(onpointermove, move(this));
+    }
 }
 
 let move = function move(that) {
-  if (that.game.physics.arcade.distanceToPointer(that.mainPlayer) > 14) {
-    that.game.physics.arcade.moveToPointer(that.mainPlayer, 350);
-  } else {
-    that.mainPlayer.body.velocity.setTo(0, 0);
-  }
+    if (that.game.physics.arcade.distanceToPointer(that.mainPlayer) > 14) {
+        that.game.physics.arcade.moveToPointer(that.mainPlayer, config.mainPlayerSpeed);
+    } else {
+        that.mainPlayer.body.velocity.setTo(0, 0);
+    }
 };
 
 function mouseIn() {
-  if (config.onOff === false) {
-    config.onOff = true;
-    document.getElementById('game').style.cursor = 'none';
-  } else {
-    config.onOff = false;
-    document.getElementById('game').style.cursor = 'default';
-  }
+    if (config.onOff === false) {
+        config.onOff = true;
+        document.getElementById('game').style.cursor = 'none';
+    } else {
+        config.onOff = false;
+        document.getElementById('game').style.cursor = 'default';
+    }
 }
 
 function invokeSound(that) {

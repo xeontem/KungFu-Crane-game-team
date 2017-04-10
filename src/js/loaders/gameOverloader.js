@@ -15,10 +15,10 @@ export default function () {
 
       if (flag) {
         localStorage(currentGameState.score, currentGameState.name)
-        this.music.pause();
+        this.levelMusic.pause();
         this.state.start('score');
       } else {
-            this.music.pause();
+            this.levelMusic.pause();
             this.state.start('mainMenu');
           }
     }

@@ -5,19 +5,15 @@ import config from '../config';
 
 export default class extends Phaser.Group {
   constructor({ game, parent, name, addToStage, enableBody, physicsBodyType }) {
-    super(game, parent, name, addToStage, enableBody, physicsBodyType);
+  super(game, parent, name, addToStage, enableBody, physicsBodyType);
     this.y = -200;
     this.HPinfo = game.add.text(
-                            400,
-                            config.gameHeight - 50,
-                            `BOSS HP: ${this.HPinfo}`,
-                            { font: '32px Arial', fill: '#dddddd' });
+      400,
+      config.gameHeight - 50,
+      `BOSS HP: ${this.HPinfo}`,
+      { font: '32px Arial', fill: '#dddddd' });
     this.HPinfo.anchor.setTo(0.5);
     this.HP = config.firstBossHP;
-  }
-
-  update() {
-
   }
 
   spawn() {
@@ -37,10 +33,10 @@ export default class extends Phaser.Group {
       currentGameState.bosstime = false;
       currentGameState.bosskilled = true;
       game.winText = game.add.text(
-                            game.world.centerX,
-                            game.world.centerY,
-                            'Well Done!',
-                            { font: '32px Arial', fill: '#dddddd' });
+        game.world.centerX,
+        game.world.centerY,
+        'Well Done!',
+        { font: '32px Arial', fill: '#dddddd' });
       game.winText.anchor.setTo(0.5);
       game.boss.endLevel = game.time.now;
       game.winText.text = `${this.time.now}`;
