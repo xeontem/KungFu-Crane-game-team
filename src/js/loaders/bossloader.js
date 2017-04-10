@@ -13,7 +13,7 @@ export default function () {
                 this.bossWeapon11.fireRate = 100;
                 this.bossWeapon11.fireAngle = 180;
                 this.bossWeapon11.autofire = true;
-                this.bossWeapon11.trackSprite(this.boss, -80, 0, false);
+                this.bossWeapon11.trackSprite(this.boss, 80, 0, true);
                 this.game.physics.enable(this.bossWeapon11, Phaser.Physics.ARCADE);
             }
         }
@@ -25,7 +25,7 @@ export default function () {
                 this.bossWeapon21.fireRate = 100;
                 this.bossWeapon21.fireAngle = 180;
                 this.bossWeapon21.autofire = true;
-                this.bossWeapon21.trackSprite(this.boss, -80, -40, false);
+                this.bossWeapon21.trackSprite(this.boss, 80, -40, true);
                 this.game.physics.enable(this.bossWeapon21, Phaser.Physics.ARCADE);
                 //----------------------------------second gun-----------------------------
                 this.bossWeapon22 = this.game.add.weapon(5, 'bullet');
@@ -33,7 +33,7 @@ export default function () {
                 this.bossWeapon22.fireRate = 100;
                 this.bossWeapon22.fireAngle = 180;
                 this.bossWeapon22.autofire = true;
-                this.bossWeapon22.trackSprite(this.boss, -80, 40, false);
+                this.bossWeapon22.trackSprite(this.boss, 80, 40, true);
                 this.game.physics.enable(this.bossWeapon22, Phaser.Physics.ARCADE);
             }
         }
@@ -55,5 +55,8 @@ export default function () {
                                     100,
                                     true);
     }
-    if(this.boss)this.boss.HPinfo.text = `BOSS HP: ${this.boss.HP}`;
+    if(this.boss){
+        this.boss.HPinfo.text = `BOSS HP: ${this.boss.HP}`;
+        this.boss.rotation = game.physics.arcade.angleBetween(this.boss, this.mainPlayer);
+    }    
 }

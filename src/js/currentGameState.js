@@ -1,7 +1,7 @@
 export default {
     score: 0,
     levelscore: 0,
-    limit: 10000,
+    limit: 1000,
     bosstime: false,
     bosskilled: false,
     mainPlayerKilled: false,
@@ -11,7 +11,7 @@ export default {
     reset: function() {
         this.score = 0,
         this.levelscore = 0,
-        this.limit = 10000,
+        this.limit = 1000,
         this.bosstime = false,
         this.bosskilled = false,
         this.mainPlayerKilled = false,

@@ -70,7 +70,7 @@ export function keysOn() {
             }
         }
     }
-    if (this.fireButton.isDown) {
+    if (this.fireButton.isDown && !currentGameState.mainPlayerKilled) {
         if(this.currentWeapon.multiple === false) {
         this.currentWeapon.weapon.fire();
         } else if (this.currentWeapon.multiple === true) {
