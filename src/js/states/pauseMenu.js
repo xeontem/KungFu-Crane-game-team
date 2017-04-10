@@ -32,7 +32,7 @@ function toMainMenu() {
     this.game.world.remove(this.pauseMenuGroup);
     this.pauseMenuGroup.destroy();
     this.game.paused = false;
-    gameOverloader.apply(this);
+    this.state.start('mainMenu');
 }
 function reload() {
     this.game.world.remove(this.pauseMenuGroup);

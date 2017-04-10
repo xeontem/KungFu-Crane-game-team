@@ -5,6 +5,7 @@ import BackgroundMainMenu from '../objects/backgroundMainMenu';
 import { loadMusic, applyMusic } from '../sound/bgmusic';
 
 import currentGameState from '../currentGameState';
+import config from '../config';
 
 export default class extends Phaser.State {
 
@@ -22,13 +23,14 @@ export default class extends Phaser.State {
 
   create() {
     currentGameState.reset();
+    config.reset();
 
     this.background = new BackgroundMainMenu({
       game: this,
       x: 0,
       y: 0,
-      width: 1000,
-      height: 1000,
+      width: 1024,
+      height: 512,
       asset: 'loaderBg',
     });
     this.game.add.existing(this.background);
