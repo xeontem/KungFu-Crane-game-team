@@ -5,6 +5,7 @@ import Phaser from 'phaser-ce';
 import intro from './states/intro';
 import mainMenu from './states/mainMenu';
 import level from './states/level';
+import createName from './states/createName';
 import score from './states/score';
 import config from './config';
 
@@ -19,6 +20,7 @@ class Game extends Phaser.Game {
     this.state.add('intro', intro, false);
     this.state.add('mainMenu', mainMenu, false);
     this.state.add('level', level, false);
+    this.state.add('createName', createName, false)
     this.state.add('score', score, false);
 
     this.state.start('intro');

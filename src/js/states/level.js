@@ -110,7 +110,7 @@ export default class extends Phaser.State {
                             '',
                             { font: '32px Arial', fill: '#dddddd' });
         // --------------------reset to defaults-----------------------------------
-    
+
   }
 
   update() {
@@ -142,12 +142,18 @@ export default class extends Phaser.State {
         this.mainPlayer.x += 20;
         if (this.time.now > this.countdown + 4000) {
           currentGameState.level += 1;
-          this.state.start('level');
+          if (currentGameState.level > conf.length - 1) {
+            gameOverloader.apply(this);
+          } else {
+            this.state.start('level');
+          }
         }
 
       }
-      //-----------------------if mainPlayer dies-----------------------------------
-      gameOverloader.apply(this);
+      //--------------------if mainPlayer dies-----------------------------------
+      if(currentGameState.mainPlayerKilled){
+        gameOverloader.apply(this);
+      }
       // ---------------------controls----------------------------------------
       keysOn.apply(this);
       //-------------------------------------------------------------------------
