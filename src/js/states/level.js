@@ -21,6 +21,8 @@ preload() {
     this.load.image('enemy_2', './img/enemy/enemy_2.png');
     this.load.image('enemy_3', './img/enemy/enemy_3.png');
     this.load.image('boss', conf[currentGameState.level].boss);
+    //-----------------------particle----------------------------------------
+    game.load.spritesheet('stars', './img/states/rain.png', 17, 17);
     //-----------------------benefits image----------------------------------
     this.load.image('health', './img/player/health.png');
     this.load.image('score', './img/player/score.png');
@@ -52,7 +54,25 @@ preload() {
       asset: 'background',
     });
     this.game.add.existing(this.background);
+    //---------------------------particles----------------------------------------
+    this.emitter = game.add.emitter(game.world.centerX, -1024, 600);
 
+	this.emitter.width = game.world.width;
+	this.emitter.height = game.world.height;
+	this.emitter.angle = 90; // uncomment to set an angle for the stars.
+
+	this.emitter.makeParticles('stars');
+
+	this.emitter.minParticleScale = 0.1;
+	this.emitter.maxParticleScale = 0.5;
+
+	this.emitter.setYSpeed(300, 500);
+	this.emitter.setXSpeed(-5, 5);
+
+	this.emitter.minRotation = 0;
+	this.emitter.maxRotation = 0;
+
+	this.emitter.start(false, 1600, 5, 0);
     //---------------------------MainPlayer---------------------------------------
     this.mainPlayer = this.game.add.sprite(-1800, this.game.world.centerY, 'mainPlayerSprite');
     this.mainPlayer.anchor.setTo(0.5);

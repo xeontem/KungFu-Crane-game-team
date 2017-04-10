@@ -21,7 +21,7 @@ export default class extends Phaser.State {
 
   create() {
     localStorage();
-    this.music = this.game.add.audio('intro', 1, true, true);
+    this.music = this.game.add.audio('intro', 1, false, true);
     this.music.play();
 
     this.text = this.add.text(this.world.centerX, this.world.centerY - 100, 'KungFu-Crane-Game-Team      ', { font: '32px Arial', fill: '#dddddd' });
