@@ -8,7 +8,10 @@ export default class extends Phaser.TileSprite {
   }
 
   update() {
-    if (!currentGameState.bosstime) this.tilePosition.x -= 1;
-    else this.tilePosition.x -= 5;
+    if (!currentGameState.bosstime) {
+        this.tilePosition.x -= 1;
+    } else if(currentGameState.bosskilled === true) {
+        this.tilePosition.x -= 15;
+    } else this.tilePosition.x -= 5;
   }
 }

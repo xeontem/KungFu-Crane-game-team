@@ -40,9 +40,9 @@ preload() {
 
   create() {
     resetter.apply(this);
-        // -----------------music-----------------------------------------
+    // -----------------music-----------------------------------------
     applyMusic.apply(this);
-        //---------------------------------------------------------------
+    //---------------------------------------------------------------
     this.background = new BackgroundMainGame({
       game: this,
       x: 0,
@@ -54,7 +54,6 @@ preload() {
     this.game.add.existing(this.background);
 
     //---------------------------MainPlayer---------------------------------------
-
     this.mainPlayer = this.game.add.sprite(-1800, this.game.world.centerY, 'mainPlayerSprite');
     this.mainPlayer.anchor.setTo(0.5);
     this.game.add.existing(this.mainPlayer);
@@ -64,6 +63,7 @@ preload() {
     this.mainPlayer.animations.add('upBack', [9, 8, 7, 6, 5, 4, 3, 2, 1]);
     this.mainPlayer.animations.add('down', [10, 11, 12, 13, 14, 15, 16, 17, 18]);
     this.mainPlayer.animations.add('downBack', [18, 17, 16, 15, 14, 13, 12, 11, 10]);
+    this.mainPlayer.body.collideWorldBounds = true;
     this.exhaust1 = this.mainPlayer.addChild(this.game.make.sprite(-51.5, -19, 'exhaust'));
     this.exhaust1.anchor.setTo(0.5);
     this.exhaust1.scale.setTo(0.2, 0.2);
@@ -89,10 +89,10 @@ preload() {
 
     // -------------------------statusBar---------------------------------
     this.scoreText = this.add.text(
-      config.gameWidth - 200,
-      config.gameHeight - 50,
-      `score: ${currentGameState.score}`,
-      { font: '32px Arial', fill: '#dddddd' });
+        config.gameWidth - 200,
+        config.gameHeight - 50,
+        `score: ${currentGameState.score}`,
+        { font: '32px Arial', fill: '#dddddd' });
     this.scoreText.anchor.setTo(0.5);
 
     this.mainPlayerHP = this.add.text(
@@ -125,8 +125,8 @@ preload() {
     this.currentWeapon = this[`weapon${currentGameState.mainPlayerWeapon}`];
     // --------------------------countDown-------------------------------------
 
-    if (this.time.now < this.countdown + 4000) {
-      this.mainPlayer.x += 8;
+    if (this.time.now < this.countdown + 500) {
+        this.mainPlayer.x += 8;
     } else {
       this.levelName.text = '';
 
@@ -148,7 +148,7 @@ preload() {
         bossloader.apply(this);
       } else {
         this.winText.text = 'Well done!';
-        this.mainPlayer.x += 20;
+        ///this.mainPlayer.x += 20; TODO!!!!
         if (this.time.now > this.countdown + 4000) {
           currentGameState.level += 1;
           if (currentGameState.level > conf.length - 1) {
