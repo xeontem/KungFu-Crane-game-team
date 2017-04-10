@@ -30,11 +30,25 @@ export function keysOn() {
     }
     if (this.cursors.up.isUp) {
         this.mainPlayer.animations.play('upBack', 30, false);
-        this.mainPlayer.frame = 1;
+        if (config.mainPlayerHP <= 1) {
+            this.mainPlayer.frame = 38;
+        }
+        else if (config.mainPlayerHP <= 2) {
+            this.mainPlayer.frame = 19;
+        }
+        else
+            this.mainPlayer.frame = 0;
     }
     if (this.cursors.down.isUp) {
         this.mainPlayer.animations.play('downBack', 30, false);
-        this.mainPlayer.frame = 10;
+        if (config.mainPlayerHP <= 1) {
+            this.mainPlayer.frame = 38;
+        }
+        else if (config.mainPlayerHP <= 2) {
+            this.mainPlayer.frame = 19;
+        }
+        else
+            this.mainPlayer.frame = 0;
     }
     if (this.cursors.left.isDown) {
         this.mainPlayer.body.velocity.x = -350;
@@ -53,12 +67,26 @@ export function keysOn() {
     if (this.cursors.up.isDown) {
         this.mainPlayer.body.velocity.y = -350;
         this.mainPlayer.animations.play('up', 30, false);
-        this.mainPlayer.frame = 9;
+        if (config.mainPlayerHP <= 1) {
+            this.mainPlayer.frame = 47;
+        }
+        else if (config.mainPlayerHP <= 2) {
+            this.mainPlayer.frame = 28;
+        }
+        else
+            this.mainPlayer.frame = 9;
     }
     if (this.cursors.down.isDown) {
         this.mainPlayer.body.velocity.y = 350;
         this.mainPlayer.animations.play('down', 30, false);
-        this.mainPlayer.frame = 18;
+        if (config.mainPlayerHP <= 1) {
+            this.mainPlayer.frame = 56;
+        }
+        else if (config.mainPlayerHP <= 2) {
+            this.mainPlayer.frame = 37;
+        }
+        else
+            this.mainPlayer.frame = 18;
     }
     if (this.changeWeapon.isDown) {
         if(config.weapons) {
