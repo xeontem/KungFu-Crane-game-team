@@ -180,7 +180,7 @@ export default class extends Phaser.Group {
         this.x -= config.enemiesSpeed;
         this.y -= 0.003 * this.x;
     }
-    
+
     move4() { // parabulous
         this.x -= config.enemiesSpeed;
         this.y += 0.003 * this.x;

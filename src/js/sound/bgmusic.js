@@ -1,12 +1,12 @@
 // import Phaser from 'phaser-ce';
 
 export function loadMusic() {
-	this.game.load.audio('main2', './sounds/mainMenu.ogg');
-	this.game.load.audio('level', './sounds/levels.ogg');
-	this.game.load.audio('fire', './sounds/fire.ogg');
-	this.game.load.audio('explode', './sounds/explode.ogg');
-	this.game.load.audio('explode2', './sounds/explode2.ogg');
-    this.game.load.audio('benefit', './sounds/benefit.ogg');
+  this.game.load.audio('main2', './sounds/mainMenu.ogg');
+  this.game.load.audio('level', './sounds/levels.ogg');
+  this.game.load.audio('fire', './sounds/fire.ogg');
+  this.game.load.audio('explode', './sounds/explode.ogg');
+  this.game.load.audio('explode2', './sounds/explode2.ogg');
+  this.game.load.audio('benefit', './sounds/benefit.ogg');
 }
 
 export function applyMusic() {
