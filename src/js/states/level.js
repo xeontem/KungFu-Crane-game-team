@@ -43,6 +43,7 @@ preload() {
 }
 
   create() {
+  	//this.particleStorm = this.plugins.add(Phaser.ParticleStorm);
     resetter.apply(this);
     // -----------------music-----------------------------------------
     applyMusic.apply(this);
@@ -51,11 +52,13 @@ preload() {
       game: this,
       x: 0,
       y: 0,
-      width: 1024,
-      height: 768,
+      width: game.width,
+      height: game.height,
       asset: 'background',
     });
     this.game.add.existing(this.background);
+    // this.background.height = game.height;
+    // this.background.width = game.width;
     //---------------------------particles----------------------------------------
     this.emitter = game.add.emitter(game.world.centerX, -1024, 600);
 
