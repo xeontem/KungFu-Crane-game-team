@@ -10,9 +10,10 @@ export default function () {
             if(!this.bossWeapon11){
                 this.bossWeapon11 = this.game.add.weapon(10, 'bullet');
                 this.bossWeapon11.bulletSpeed = 600;
-                this.bossWeapon11.fireRate = 100;
+                this.bossWeapon11.fireRate = 300;
                 this.bossWeapon11.fireAngle = 180;
                 this.bossWeapon11.autofire = true;
+                this.bossWeapon11.bulletAngleVariance = 20;
                 this.bossWeapon11.trackSprite(this.boss, 80, 0, true);
                 this.game.physics.enable(this.bossWeapon11, Phaser.Physics.ARCADE);
             }
@@ -58,5 +59,5 @@ export default function () {
     if(this.boss){
         this.boss.HPinfo.text = `BOSS HP: ${this.boss.HP}`;
         this.boss.rotation = game.physics.arcade.angleBetween(this.boss, this.mainPlayer);
-    }    
+    }
 }
