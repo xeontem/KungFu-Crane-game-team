@@ -2,6 +2,7 @@ import Phaser from 'phaser-ce';
 
 import WebFont from 'webfontloader';
 import BackgroundScore from '../objects/backgroundScore';
+import config from '../config';
 
 export default class extends Phaser.State {
   preload() {
@@ -22,11 +23,11 @@ export default class extends Phaser.State {
       game: this,
       x: 0,
       y: 0,
-      width: 1024,
+      width: config.gameWidth,
       height: 512,
       asset: 'loaderBg',
     });
-
+    this.background.scale.setTo(config.gameHeight/this.background.height);
     this.game.add.existing(this.background);
 
     const textScore = this.add.text(this.world.centerX, 80, `Score  `, { font: '32px Bangers', fill: '#dddddd' });
@@ -44,6 +45,13 @@ export default class extends Phaser.State {
   }
 
   update() {
+    //---------------------------scale block-----------------------------------
+    config.gameWidth = document.documentElement.clientWidth;
+    config.gameHeight = document.documentElement.clientHeight;
+    this.game.width = config.gameWidth;
+    this.game.height = config.gameHeight;
+    //-------------------------------------------------------------------------
+
     if (this.fireButton.isDown) {
       this.state.start('mainMenu');
     }

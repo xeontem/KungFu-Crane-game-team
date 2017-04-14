@@ -29,10 +29,11 @@ export default class extends Phaser.State {
       game: this,
       x: 0,
       y: 0,
-      width: 1024,
+      width: config.gameWidth,
       height: 512,
       asset: 'loaderBg',
     });
+    this.background.scale.setTo(config.gameHeight/this.background.height);
     this.game.add.existing(this.background);
 
     this.text = this.add.text(this.world.centerX, this.world.height - 16, `press space to start `, { font: 'Bangers', fontSize: '16px', fill: '#dddddd' });
@@ -56,6 +57,12 @@ export default class extends Phaser.State {
   }
 
   update() {
+  	//---------------------------scale block-----------------------------------
+		config.gameWidth = document.documentElement.clientWidth;
+        config.gameHeight = document.documentElement.clientHeight;
+        this.game.width = config.gameWidth;
+        this.game.height = config.gameHeight;
+	//-------------------------------------------------------------------------
     if (this.fireButton.isDown) {
       this.countdown = this.time.now;
       this.startGame = true;
