@@ -40,10 +40,14 @@ export function createAnimation() {
       game: this,
       x: 0,
       y: 0,
-      width: 1024,
-      height: 768,
+      width: config.gameWidth,
+      height: 512,
       asset: 'background',
     });
+    /*this.background.width = 1680;//config.gameWidth;
+    this.background.height = config.gameHeight;
+    */
+    this.background.scale.setTo(config.gameHeight/this.background.height);
     this.game.add.existing(this.background);
     //---------------------------particles----------------------------------------
     this.emitter = game.add.emitter(game.world.centerX, -1024, 600);
