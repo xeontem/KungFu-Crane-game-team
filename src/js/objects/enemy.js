@@ -6,6 +6,7 @@ import config from '../config';
 export default class extends Phaser.Group {
     constructor({ game, parent, name, addToStage, enableBody, physicsBodyType }) {
         super(game, parent, name, addToStage, enableBody, physicsBodyType);
+        //this.scale.setTo(1.2);
         this.countEnemies = game.rnd.integerInRange(5, 25);
         this.move = game.rnd.integerInRange(1, 4);
         this.a = 0;

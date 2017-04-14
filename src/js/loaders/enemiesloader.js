@@ -18,7 +18,7 @@ export default function () {
             // -----------------------------apply position enemies to its behavior----------------
             if (this.enemies.move === 3) this.enemies.pos = this.game.rnd.integerInRange(3, 8);// go down
             else if (this.enemies.move === 4) this.enemies.pos = this.game.rnd.integerInRange(1, 6);// go up
-            else this.enemies.pos = game.rnd.integerInRange(1, 8);
+            else this.enemies.pos = 1//game.rnd.integerInRange(1, 8);
             this.enemies[`position${this.enemies.pos}`]();// this works
         }
     }
