@@ -89,8 +89,8 @@ export function createAnimation() {
     this.exhaust2.angle = 90;
     this.exhaust1.animations.add('exh');
     this.exhaust2.animations.add('exh');
-    this.exhaust1.animations.play('exh', 5, true);
-    this.exhaust2.animations.play('exh', 5, true);
+    this.exhaust1.animations.play('exh', 25, true);
+    this.exhaust2.animations.play('exh', 25, true);
 
 
 
