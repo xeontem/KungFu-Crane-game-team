@@ -5,7 +5,7 @@ import config from '../config';
 export function weaponOn() {
     this.weapon = this.game.add.weapon(30, 'bullet');
     this.weapon.bulletSpeed = 600;
-    this.weapon.fireRate = 100;
+    this.weapon.fireRate = 150;
     this.weapon.fireAngle = 0;
     this.weapon.trackSprite(this.mainPlayer, 65, 0, false);
     this.weapon.onFire.add(invokeSoundOnFire, this);
@@ -49,7 +49,7 @@ export function spreadWeapon() {
     this.spreadWeapon.setBulletFrames(0, 1, true, true);
     this.spreadWeapon.addBulletAnimation('missile2', [0, 1], true, true);
     this.spreadWeapon.bulletSpeed = 600;
-    this.spreadWeapon.fireRate = 60;
+    this.spreadWeapon.fireRate = 100;
     this.spreadWeapon.fireAngle = 0;
     this.spreadWeapon.bulletAngleVariance = 10;
     this.spreadWeapon.trackSprite(this.mainPlayer, 65, 0, false);
@@ -65,6 +65,3 @@ export function spreadWeapon() {
 function invokeSoundOnFire() {
       shot.apply(this);
 }
-
-
-//-------

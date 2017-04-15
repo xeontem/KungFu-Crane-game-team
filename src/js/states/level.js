@@ -69,8 +69,8 @@ export default class extends Phaser.State {
 		this.currentWeapon = this[`weapon${currentGameState.mainPlayerWeapon}`];
 		// --------------------------countDown-------------------------------------
 
-		if (this.time.now < this.countdown + 500) {
-				this.mainPlayer.x += 8;
+		if (this.time.now < this.countdown + 2000) {
+				if(this.mainPlayer.x < 200)this.mainPlayer.x += 8;
 		} else {
 			this.levelName.text = '';
 

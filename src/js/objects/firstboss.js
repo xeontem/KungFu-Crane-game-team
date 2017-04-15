@@ -17,4 +17,8 @@ export default class extends Phaser.Sprite {
     this.HPinfo.anchor.setTo(0.5);
     game.physics.enable(this, Phaser.Physics.ARCADE);
   }
+
+  update (){
+  	if(this.x > config.gameWidth - 150) this.x--;
+  }
 }

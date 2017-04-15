@@ -9,9 +9,12 @@ import conf from '../levelsConfig';
 
 export function preloadAnimation() {
     this.load.image('background', conf[currentGameState.level].bg);
+    //------------------------------------bullets---------------------------
     this.load.image('bullet', './img/player/shot.png');
+    this.load.image('bossbullet', './img/player/bossShot.png');
     this.load.image('missile', './img/player/shot1.png');
     this.load.spritesheet('missile2', './img/player/missile.png', 40, 18);
+    //----------------------enemies-----------------------------------------
     this.load.image('enemy_1', './img/enemy/enemy_1.png');
     this.load.image('enemy_2', './img/enemy/enemy_2.png');
     this.load.image('enemy_3', './img/enemy/enemy_3.png');
@@ -44,9 +47,6 @@ export function createAnimation() {
       height: 512,
       asset: 'background',
     });
-    /*this.background.width = 1680;//config.gameWidth;
-    this.background.height = config.gameHeight;
-    */
     this.background.scale.setTo(config.gameHeight/this.background.height);
     this.game.add.existing(this.background);
     //---------------------------particles----------------------------------------

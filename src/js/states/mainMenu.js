@@ -69,9 +69,9 @@ export default class extends Phaser.State {
     }
     if(this.startGame || this.startScore){
       this.text.y += 7;
-      if(this.text.y > 520)this.scoreText.y += 7;
-      if(this.scoreText.y > 520)this.text2.y += 7;
-      if(this.text2.y > 520 && this.background.alpha > 0.02) this.background.alpha -= 0.01;
+      if(this.text.y > config.gameHeight+30)this.scoreText.y += 7;
+      if(this.scoreText.y > config.gameHeight+30)this.text2.y += 7;
+      if(this.text2.y > config.gameHeight+30 && this.background.alpha > 0.02) this.background.alpha -= 0.01;
       if(this.time.now > this.countdown + 4000){
         if(this.startGame) {
                     this.mainMenuMusic.pause();
