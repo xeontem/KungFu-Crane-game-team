@@ -12,8 +12,8 @@ export default class extends Phaser.Sprite {
     this.HPinfo = game.add.text(
       400,
       config.gameHeight - 50,
-      `BOSS HP: ${this.HP}`,
-      { font: '32px Arial', fill: '#dddddd' });
+      `BOSS HP: ${this.HP} `,
+      { font: '32px Bangers', fill: '#dddddd' });
     this.HPinfo.anchor.setTo(0.5);
     game.physics.enable(this, Phaser.Physics.ARCADE);
   }

@@ -36,6 +36,7 @@ export function preloadAnimation() {
     this.load.spritesheet('mainPlayer', './img/player/mainPlayer.png', 95, 58);
     this.load.spritesheet('exhaust', './img/player/exhaust.png', 23, 84);
     this.load.spritesheet('bang', './img/player/explode.png', 128, 128);
+    this.load.spritesheet('red', './img/player/redPlayer.png', 128, 128);
 }
 
 export function createAnimation() {
@@ -50,7 +51,7 @@ export function createAnimation() {
     this.background.scale.setTo(config.gameHeight/this.background.height);
     this.game.add.existing(this.background);
     //---------------------------particles----------------------------------------
-    this.emitter = game.add.emitter(game.world.centerX, -1024, 600);
+    this.emitter = game.add.emitter(game.world.centerX, -config.gameWidth, 600);
 
     this.emitter.width = game.world.width;
     this.emitter.height = game.world.height;
@@ -113,3 +114,4 @@ export function explode() {
         this.bang.animations.play('explode', 30, false, true);
     }
 }
+
