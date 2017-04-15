@@ -10,10 +10,17 @@ import resetter from '../loaders/resetter';
 import { keysOn, setKeys, mouseOn } from '../controls/controls';
 import { loadMusic, applyMusic } from '../sound/bgmusic';
 import conf from '../levelsConfig';
+import WebFont from 'webfontloader';
 
 export default class extends Phaser.State {
 
 	preload() {
+		WebFont.load({
+      		google: {
+        	families: ['Bangers'],
+      		},
+      		active: this.fontsLoaded,
+    	});
 		preloadAnimation.apply(this);
 		loadMusic.apply(this);
 	}
@@ -30,14 +37,13 @@ export default class extends Phaser.State {
 				config.gameWidth - 200,
 				config.gameHeight - 50,
 				`score: ${currentGameState.score}`,
-				{ font: '32px Arial', fill: '#dddddd' });
+				{ font: '32px Bangers', fill: '#dddddd' });
 		this.scoreText.anchor.setTo(0.5);
-
 		this.mainPlayerHP = this.add.text(
 										200,
 										config.gameHeight - 50,
 										`HP: ${config.mainPlayerHP}`,
-										{ font: '32px Arial', fill: '#dddddd' });
+										{ font: '32px Bangers', fill: '#dddddd' });
 		this.mainPlayerHP.anchor.setTo(0.5);
 
 				// -----------------------------input----------------------------------
@@ -49,14 +55,14 @@ export default class extends Phaser.State {
 										config.gameWidth / 2,
 										(config.gameHeight / 2) - 50,
 										conf[currentGameState.level].levelName,
-										{ font: '32px Arial', fill: '#dddddd' });
+										{ font: '32px Bangers', fill: '#dddddd' });
 		this.levelName.anchor.setTo(0.5);
 		//-----------------------------winCase-----------------------------------------
 		this.winText = this.add.text(
 									config.gameWidth / 2,
 									(config.gameHeight / 2) - 50,
 									'',
-									{ font: '32px Arial', fill: '#dddddd' });
+									{ font: '32px Bangers', fill: '#dddddd' });
 	}
 
 	update() {
@@ -76,8 +82,8 @@ export default class extends Phaser.State {
 
 			collisionloader.apply(this);
 				// --------------------------update statusBar------------------------------
-			this.mainPlayerHP.text = `HP: ${config.mainPlayerHP}`;
-			this.scoreText.text = `score: ${currentGameState.score}`;
+			this.mainPlayerHP.text = `HP: ${config.mainPlayerHP} `;
+			this.scoreText.text = `score: ${currentGameState.score} `;
 
 				// --------------------------if press nothing stop the ship------------
 			this.mainPlayer.body.velocity.x = 0;

@@ -1,7 +1,7 @@
 import Phaser from 'phaser-ce';
 
 import currentGameState from '../currentGameState';
-import Firstboss from '../objects/firstboss';
+import Boss from '../objects/boss';
 import config from '../config';
 
 export default function () {
@@ -10,7 +10,7 @@ export default function () {
             if(!this.bossWeapon11){
                 this.bossWeapon11 = this.game.add.weapon(10, 'bossbullet');
                 this.bossWeapon11.bulletSpeed = 600;
-                this.bossWeapon11.fireRate = 300;
+                this.bossWeapon11.fireRate = 200;
                 this.bossWeapon11.fireAngle = 180;
                 this.bossWeapon11.autofire = true;
                 this.bossWeapon11.bulletAngleVariance = 20;
@@ -40,10 +40,10 @@ export default function () {
         }
     }
     if (!this.boss && currentGameState.bosstime) {
-        this.boss = new Firstboss({
+        this.boss = new Boss({
             game: this,
             x: config.gameWidth + 200,
-            y: this.game.world.centerY,
+            y: config.gameHeight - 200,
             asset: 'boss',
         });
         this.game.add.existing(this.boss);

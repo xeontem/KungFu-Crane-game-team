@@ -14,4 +14,14 @@ export default [
         levelName: 'Level 3: Nebula',
         boss: './img/bosses/boss_2.png',
     },
+    {
+        bg: './img/states/bgLevel4.jpg',
+        levelName: 'Level 3: The MilkyWay',
+        boss: './img/bosses/boss_2.png',
+    },
+    {
+        bg: './img/states/bgLevel5.jpg',
+        levelName: 'Level 3: Nebula',
+        boss: './img/bosses/boss_2.png',
+    },
 ];
