@@ -10,7 +10,7 @@ export default class extends Phaser.State {
   preload() {
     WebFont.load({
       google: {
-        families: ['Bangers'],
+        families: ['Orbitron'],
       },
       active: this.fontsLoaded,
     });
@@ -27,7 +27,7 @@ export default class extends Phaser.State {
     this.text = this.add.text(this.world.centerX, this.world.centerY - 100, 'KungFu-Crane-Game-Team      ', { font: '32px Arial', fill: '#dddddd' });
     this.text.anchor.setTo(0.5);
     this.text.alpha = 0;
-    this.text.font = 'Bangers';
+    this.text.font = 'Orbitron';
 
     this.countdown = this.time.now;
     //---------------------------------------skip--------------------------
