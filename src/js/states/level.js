@@ -1,7 +1,7 @@
 import Phaser from 'phaser-ce';
 import config from '../config';
 import currentGameState from '../currentGameState';
-import { preloadAnimation, createAnimation } from '../loaders/animationsloader';
+import { preloadAnimation, createAnimation, paintInYellow } from '../loaders/animationsloader';
 import enemiesloader from '../loaders/enemiesloader';
 import gameOverloader from '../loaders/gameOverloader';
 import bossloader from '../loaders/bossloader';
@@ -26,7 +26,6 @@ export default class extends Phaser.State {
     }
 
     create() {
-        //this.particleStorm = this.plugins.add(Phaser.ParticleStorm);
         resetter.apply(this);
         // -----------------music-----------------------------------------
         applyMusic.apply(this);
@@ -48,9 +47,7 @@ export default class extends Phaser.State {
                 { font: `${config.gameHeight/32.8}px Orbitron`, fill: '#dddddd' });
         this.mainPlayerHP.anchor.setTo(0.5);
 
-                // -----------------------------input----------------------------------
-
-                // -----------------------------countdown---------------------------------
+        // -----------------------------countdown---------------------------------
         this.countdown = this.time.now;
         this.levelName = this.add.text(
                                         config.gameWidth / 2,
@@ -58,6 +55,7 @@ export default class extends Phaser.State {
                                         conf[currentGameState.level].levelName,
                                         { font: `${config.gameHeight/32.8}px Orbitron`, fill: '#dddddd' });
         this.levelName.anchor.setTo(0.5);
+
         //-----------------------------winCase-----------------------------------------
         this.winText = this.add.text(
                                     config.gameWidth / 2,
@@ -83,15 +81,15 @@ export default class extends Phaser.State {
             this.levelName.text = '';
 
             collisionloader.apply(this);
-                // --------------------------update statusBar------------------------------
+            // --------------------------update statusBar------------------------------
             this.mainPlayerHP.text = `HP: ${config.mainPlayerHP} `;
             this.scoreText.text = `score: ${currentGameState.score} `;
 
-                // --------------------------if press nothing stop the ship------------
+            // --------------------------if press nothing stop the ship------------
             this.mainPlayer.body.velocity.x = 0;
             this.mainPlayer.body.velocity.y = 0;
 
-                //------------------------changing states of main player----------------
+            //------------------------changing states of main player----------------
 
             if (config.mainPlayerHP == 1) {
                     this.mainPlayer.animations.add('up', [39, 40, 41, 42, 43, 44, 45, 46, 47]);
@@ -115,33 +113,36 @@ export default class extends Phaser.State {
                     this.mainPlayer.frame = 0;
             }
 
-                // -------------------------boss alive-------------------------------------------------
+            // -------------------------boss alive-------------------------------------------------
             if (!currentGameState.bosskilled) {
-                // ------------------------spawn enemies-------------------------------------
+            // ------------------------spawn enemies-------------------------------------
                 enemiesloader.apply(this);
-
-                // ---------------------spawn boss------------------------------------------
-                bossloader.apply(this);
+            // ---------------------spawn boss------------------------------------------
+            bossloader.apply(this);
             } else {
                 this.winText.text = 'Well done!';
-                //this.mainPlayer.x += 20; TODO!!!!
+                ///this.mainPlayer.x += 20; TODO!!!!
                 if (this.time.now > this.countdown + 4000) {
                     currentGameState.level += 1;
                     if (currentGameState.level > conf.length - 1) {
-                        gameOverloader.apply(this);
-                    } else {
-                        this.state.start('level');
-                    }
+                    gameOverloader.apply(this);
+                } else {
+                    this.state.start('level');
                 }
             }
-            //--------------------if mainPlayer dies-----------------------------------
-            if (currentGameState.mainPlayerKilled) {
-                    gameOverloader.apply(this);
-            }
-            // ---------------------controls----------------------------------------
-            keysOn.apply(this);
-            //-------------------------------------------------------------------------
-            mouseOn.apply(this);
         }
+        //--------------------if mainPlayer dies-----------------------------------
+        if (currentGameState.mainPlayerKilled) {
+            gameOverloader.apply(this);
+        }
+        // ---------------------controls----------------------------------------
+        keysOn.apply(this);
+        //-------------------------------------------------------------------------
+        mouseOn.apply(this);
+        }
+    }
+
+    render() {
+        paintInYellow.apply(this);
     }
 }
