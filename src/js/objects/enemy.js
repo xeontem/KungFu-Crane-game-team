@@ -6,10 +6,12 @@ import config from '../config';
 export default class extends Phaser.Group {
     constructor({ game, parent, name, addToStage, enableBody, physicsBodyType }) {
         super(game, parent, name, addToStage, enableBody, physicsBodyType);
+        //this.scale.setTo(1.2);
         this.countEnemies = game.rnd.integerInRange(5, 25);
-        this.move = game.rnd.integerInRange(1, 4);
+        this.move = game.rnd.integerInRange(1, 2);
         this.a = 0;
         this.b = 50;
+        this.again = 0;
         game.physics.enable(this, Phaser.Physics.ARCADE);
     }
 
@@ -17,148 +19,170 @@ export default class extends Phaser.Group {
         this[`move${this.move}`]();// this works
     }
 
+    boundsHandler(enemy, enemies){
+        enemy.kill();
+        enemies.countOutOfBoundsEnemies++;
+        if(enemy.last) {
+            enemies.again = 1;
+            enemies = null;
+        }    
+    }
+
+    onEnemyEnterBounds(enemy, enemies){
+        enemy.events.onOutOfBounds.add(this.boundsHandler.bind(this, enemy, enemies), game);
+    }
     //--------------------enemies position---------------------------------------------------
 
-    position1() { // bottomOneRow
-        const yPos = config.gameHeight - 50;
-        let xPos = config.gameWidth + 40;
-        const rndEnemy = `enemy_${game.rnd.integerInRange(1, 3)}`;
-        for (let y = 0; y < this.countEnemies + 5; y += 1) {
+    position1() { // rand one row
+        let randYpos = game.rnd.integerInRange(100, config.gameHeight-200)
+        let randAmplitude = game.rnd.integerInRange(10, 100);
+        let rndEnemy = `enemy_${game.rnd.integerInRange(1, 3)}`;
+        let yPos = randYpos;//config.gameHeight-200;
+        let xPos = config.gameWidth-1;
+        let tw;
+        for (let y = 0; y < this.countEnemies; y += 1) {
             xPos += 100;
-            const enemy = this.create(xPos, yPos, rndEnemy);
+            let enemy = this.create(xPos, yPos, rndEnemy);
             enemy.anchor.setTo(0.5);
             game.physics.enable(enemy, Phaser.Physics.ARCADE);
-            enemy.body.checkCollision.right = false;
             enemy.checkWorldBounds = true;
-            enemy.events.onOutOfBounds.add(this.boundsHandler, game);
+            enemy.events.onEnterBounds.add(this.onEnemyEnterBounds.bind(this, enemy, this), game);
+            if(y == this.countEnemies) enemy.last = true;
+            //-------------------behavior----------------------------
+            (y%2) ? tw = randYpos + randAmplitude : tw = randYpos - randAmplitude;// set tween within position
+            game.add.tween(enemy).to(
+                                    { y: tw },
+                                    1000,
+                                    Phaser.Easing.Linear.None,
+                                    true,
+                                    0,
+                                    100,
+                                    true);
         }
     }
 
-    position2() { // bottomTwoRows
-        let yPos = config.gameHeight - 50;
-        const tempY = yPos;
-        let xPos = config.gameWidth + 40;
-        const rndEnemy = `enemy_${game.rnd.integerInRange(1, 3)}`;
+    position2() { // rand Two rows
+        let randYpos = game.rnd.integerInRange(100, config.gameHeight-200)
+        let randAmplitude = game.rnd.integerInRange(10, 100);
+        let rndEnemy = `enemy_${game.rnd.integerInRange(1, 3)}`;
+        let yPos = randYpos;//config.gameHeight-200;
+        let xPos = config.gameWidth-1;
+        let tw;
         for (let y = 0; y < this.countEnemies; y += 1) {
             xPos += 100;
-            if (yPos === tempY)yPos -= 50;
-            else yPos = tempY;
-            const enemy = this.create(xPos, yPos, rndEnemy);
+            let enemy = this.create(xPos, yPos, rndEnemy);
             enemy.anchor.setTo(0.5);
             game.physics.enable(enemy, Phaser.Physics.ARCADE);
-            enemy.body.checkCollision.right = false;
             enemy.checkWorldBounds = true;
-            enemy.events.onOutOfBounds.add(this.boundsHandler, game);
+            enemy.events.onEnterBounds.add(this.onEnemyEnterBounds.bind(this, enemy, this), game);
+            if(y == this.countEnemies) enemy.last = true;
+            //-------------------behavior----------------------------
+            (y%2) ? tw = randYpos + randAmplitude : tw = randYpos - randAmplitude;// set tween within position
+            game.add.tween(enemy).to(
+                                    { y: tw },
+                                    1000,
+                                    Phaser.Easing.Linear.None,
+                                    true,
+                                    0,
+                                    100,
+                                    true);
+        }
+        if(randYpos > config.gameHeight/2) randYpos = randYpos - config.gameHeight/2;//config.gameHeight-200;
+        else randYpos = randYpos + config.gameHeight/2;
+        yPos = randYpos;
+        xPos = config.gameWidth-1;
+        for (let y = 0; y < this.countEnemies; y += 1) {
+            xPos += 100;
+            let enemy = this.create(xPos, yPos, rndEnemy);
+            enemy.anchor.setTo(0.5);
+            game.physics.enable(enemy, Phaser.Physics.ARCADE);
+            enemy.checkWorldBounds = true;
+            enemy.events.onEnterBounds.add(this.onEnemyEnterBounds.bind(this, enemy, this), game);
+            if(y == this.countEnemies) enemy.last = true;
+            //-------------------behavior----------------------------
+            (y%2) ? tw = randYpos + randAmplitude : tw = randYpos - randAmplitude;// set tween within position
+            game.add.tween(enemy).to(
+                                    { y: tw },
+                                    1000,
+                                    Phaser.Easing.Linear.None,
+                                    true,
+                                    0,
+                                    100,
+                                    true);
         }
     }
 
     position3() { // columnAndRows
-        let yPos = 50;
-        let xPos = config.gameWidth + 40;
-        const rndEnemy = `enemy_${game.rnd.integerInRange(1, 3)}`;
-        for (let y = 0; y < this.countEnemies; y += 1) {
-            if (yPos > config.gameHeight - 20) {
-                yPos = 50;
-                xPos += 100;
-            }
-            const enemy = this.create(xPos, yPos, rndEnemy);
+        let randYpos = game.rnd.integerInRange(100, config.gameHeight/2);
+        let rndEnemy = `enemy_${game.rnd.integerInRange(1, 3)}`;
+        let rndRows = game.rnd.integerInRange(1, 5);
+        let yPos = randYpos;//config.gameHeight-200;
+        let xPos = config.gameWidth+50;
+        for(let z = 0; z < rndRows; z++){
+        for (let y = 0; y < 7; y += 1) {
+            //xPos++;
+            let enemy = this.create(xPos, yPos, rndEnemy);
             enemy.anchor.setTo(0.5);
             game.physics.enable(enemy, Phaser.Physics.ARCADE);
-            enemy.body.checkCollision.right = false;
             enemy.checkWorldBounds = true;
-            enemy.events.onOutOfBounds.add(this.boundsHandler, game);
-            yPos += 50;
+            enemy.events.onEnterBounds.add(this.onEnemyEnterBounds.bind(this, enemy, this), game);
+            if(z == rndRows) enemy.last = true;
+            yPos += 60;
+        }
+            xPos += 120;
+            yPos = randYpos;
         }
     }
 
     position4() { // DiagonalRow
-        let yPos = 0;
-        let xPos = config.gameWidth + 40;
-        const rndEnemy = `enemy_${game.rnd.integerInRange(1, 3)}`;
-        for (let y = 0; y < 9; y += 1) {
-            yPos += 50;
-            xPos += 100;
-            const enemy = this.create(xPos, yPos, rndEnemy);
+        let randYpos = game.rnd.integerInRange(100, config.gameHeight/2)
+        let rndEnemy = `enemy_${game.rnd.integerInRange(1, 3)}`;
+        let yPos = randYpos;//config.gameHeight-200;
+        let xPos = config.gameWidth+50;
+        let rowCount = 0;
+        let tw;
+        for (let y = 0; y < this.countEnemies+10; y += 1) {
+            let enemy = this.create(xPos, yPos, rndEnemy);
             enemy.anchor.setTo(0.5);
             game.physics.enable(enemy, Phaser.Physics.ARCADE);
-            enemy.body.checkCollision.right = false;
             enemy.checkWorldBounds = true;
-            enemy.events.onOutOfBounds.add(this.boundsHandler, game);
+            enemy.events.onEnterBounds.add(this.onEnemyEnterBounds.bind(this, enemy, this), game);
+            if(y == this.countEnemies-1) enemy.last = true;
+            xPos += 60;
+            yPos += 60;
+            tw = xPos;
+            if(yPos > config.gameHeight - 200){
+                rowCount++;
+                xPos = config.gameWidth+50+120*rowCount;
+                yPos = randYpos;
+            }
         }
     }
-    // ----------------------not working correct-----------------------
-    position5() { // DiagonalRowReversed
-        let yPos = 0;
-        let xPos = config.gameWidth + 1000;
-        const rndEnemy = `enemy_${game.rnd.integerInRange(1, 3)}`;
-        for (let y = 0; y < 9; y += 1) {
-            // if(yPos > config.gameHeight-100)yPos = 50;
-            yPos += 50;
-            xPos -= 100;
-            const enemy = this.create(xPos, yPos, rndEnemy);
-            enemy.anchor.setTo(0.5);
-            game.physics.enable(enemy, Phaser.Physics.ARCADE);
-            enemy.body.checkCollision.right = false;
-            enemy.checkWorldBounds = true;
-            enemy.events.onOutOfBounds.add(this.boundsHandler, game);
-        }
-    }
-
-    position6() { // duckWedge
-        let yPos = 0;
-        let xPos = config.gameWidth + 800;
-        const rndEnemy = `enemy_${game.rnd.integerInRange(1, 3)}`;
-        for (let y = 0; y < 9; y += 1) {
-            yPos += 50;
-            if (yPos < config.gameHeight / 2)xPos -= 100;
-            else xPos += 100;
-            const enemy = this.create(xPos, yPos, rndEnemy);
-            enemy.anchor.setTo(0.5);
-            game.physics.enable(enemy, Phaser.Physics.ARCADE);
-            enemy.body.checkCollision.right = false;
-            enemy.checkWorldBounds = true;
-            enemy.events.onOutOfBounds.add(this.boundsHandler, game);
-        }
-    }
-
-    position7() { // topOneRow
-        const yPos = (config.gameHeight - config.gameHeight) + 50;
-        let xPos = config.gameWidth;
-        const rndEnemy = `enemy_${game.rnd.integerInRange(1, 3)}`;
-        for (let y = 0; y < this.countEnemies; y += 1) {
-            xPos += 100;
-            const enemy = this.create(xPos, yPos, rndEnemy);
-            enemy.anchor.setTo(0.5);
-            game.physics.enable(enemy, Phaser.Physics.ARCADE);
-            enemy.body.checkCollision.right = false;
-            enemy.checkWorldBounds = true;
-            enemy.events.onOutOfBounds.add(this.boundsHandler, game);
+   
+    position5() { // duckWedge
+        let randYpos = game.rnd.integerInRange(100, config.gameHeight/2 - 200);
+        let rndEnemy = `enemy_${game.rnd.integerInRange(1, 3)}`;
+        let rndRows = game.rnd.integerInRange(1, 3);
+        let yPos = randYpos;//config.gameHeight-200;
+        let xPos = config.gameWidth+600;
+        let rowCount = 0;
+        for(let z = 0; z < rndRows; z++){
+            for (let y = 0; y < 11; y += 1) {
+                let enemy = this.create(xPos, yPos, rndEnemy);
+                enemy.anchor.setTo(0.5);
+                game.physics.enable(enemy, Phaser.Physics.ARCADE);
+                enemy.checkWorldBounds = true;
+                enemy.events.onEnterBounds.add(this.onEnemyEnterBounds.bind(this, enemy, this), game);
+                if(y == this.countEnemies-1) enemy.last = true;
+                yPos += 60;
+                if(y < 5)xPos -= 60;
+                else xPos += 60;
+            }
+            xPos = config.gameWidth+600+120;
+            yPos = randYpos;
         }
     }
 
-
-    position8() { // topTwoRows
-        let yPos = (config.gameHeight - config.gameHeight) + 50;
-        const tempY = yPos;
-        let xPos = config.gameWidth + 40;
-        const rndEnemy = `enemy_${game.rnd.integerInRange(1, 3)}`;
-        for (let y = 0; y < this.countEnemies; y += 1) {
-            xPos += 100;
-            if (yPos === tempY)yPos += 50;
-            else yPos = tempY;
-            const enemy = this.create(xPos, yPos, rndEnemy);
-            enemy.anchor.setTo(0.5);
-            game.physics.enable(enemy, Phaser.Physics.ARCADE);
-            enemy.body.checkCollision.right = false;
-            enemy.checkWorldBounds = true;
-            enemy.events.onOutOfBounds.add(this.boundsHandler, game);
-        }
-    }
-
-    boundsHandler(enemies){
-        enemies.kill();
-        if (currentGameState.levelscore > currentGameState.limit) currentGameState.bosstime = true;
-    }
     // -----------------------enemies movement------------------------------------------------
 
     move1() { // linear
@@ -176,7 +200,7 @@ export default class extends Phaser.Group {
         }
     }
 
-    move3() { // parabulous
+    /*move3() { // parabulous
         this.x -= config.enemiesSpeed;
         this.y -= 0.003 * this.x;
     }
@@ -184,5 +208,5 @@ export default class extends Phaser.Group {
     move4() { // parabulous
         this.x -= config.enemiesSpeed;
         this.y += 0.003 * this.x;
-    }
+    }*/
 }

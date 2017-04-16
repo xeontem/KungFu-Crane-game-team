@@ -5,7 +5,8 @@ import enemy from '../objects/enemy';
 
 export default function () {
     if(!currentGameState.bosstime){
-        if (!this.enemies || !this.enemies.total) {
+        console.log(this.enemies);//if(this.enemies && this.enemies.total) console.log(`enemies x : ${this.enemies.x}`);
+        if (!this.enemies || this.enemies.again || !this.enemies.total || this.time.now > this.enemAgain + 5000) {
             this.enemies = new enemy({
                 game: this,
                 parent: null,
@@ -16,10 +17,11 @@ export default function () {
             });
             this.game.add.existing(this.enemies);
             // -----------------------------apply position enemies to its behavior----------------
-            if (this.enemies.move === 3) this.enemies.pos = this.game.rnd.integerInRange(3, 8);// go down
-            else if (this.enemies.move === 4) this.enemies.pos = this.game.rnd.integerInRange(1, 6);// go up
-            else this.enemies.pos = game.rnd.integerInRange(1, 8);
+            this.enemies.pos = game.rnd.integerInRange(1, 5);
             this.enemies[`position${this.enemies.pos}`]();// this works
+            //-----------------hard spawn enemies(just in cause)----------------------------
+            this.enemAgain = this.time.now+5000;
+            if(this.enemies.pos == 3)this.enemAgain = this.time.now;
         }
     }
 }

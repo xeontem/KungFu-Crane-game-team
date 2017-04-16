@@ -10,21 +10,24 @@ import score from './states/score';
 import config from './config';
 
 class Game extends Phaser.Game {
-  constructor() {
-    const docElement = document.documentElement;
-    config.gameWidth = docElement.clientWidth > config.gameWidth ? config.gameWidth : docElement.clientWidth;
-    config.gameHeight = docElement.clientHeight > config.gameHeight ? config.gameHeight : docElement.clientHeight;
+    constructor() {
+        //const docElement = document.documentElement;
+        config.gameWidth = document.documentElement.clientWidth;// > config.gameWidth ? config.gameWidth : docElement.clientWidth;
+        config.gameHeight = document.documentElement.clientHeight;// > config.gameHeight ? config.gameHeight : docElement.clientHeight;
+        console.log(config.gameWidth);
+        console.log(config.gameHeight);
 
-    super(config.gameWidth, config.gameHeight, Phaser.CANVAS, 'content', null);
+        super(config.gameWidth, config.gameHeight, Phaser.CANVAS, 'content', null);
 
-    this.state.add('intro', intro, false);
-    this.state.add('mainMenu', mainMenu, false);
-    this.state.add('level', level, false);
-    this.state.add('score', score, false);
-    this.state.add('createName', createName, false);
+        this.state.add('intro', intro, false);
+        this.state.add('mainMenu', mainMenu, false);
+        this.state.add('level', level, false);
+        this.state.add('score', score, false);
+        this.state.add('createName', createName, false);
 
-    this.state.start('intro');
-  }
+        this.state.start('intro');
+    }
 }
 
 window.game = new Game();
+//this.particleStorm = window.game.plugins.add(Phaser.ParticleStorm);

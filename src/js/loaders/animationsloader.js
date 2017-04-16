@@ -9,9 +9,12 @@ import conf from '../levelsConfig';
 
 export function preloadAnimation() {
     this.load.image('background', conf[currentGameState.level].bg);
+    //------------------------------------bullets---------------------------
     this.load.image('bullet', './img/player/shot.png');
+    this.load.image('bossbullet', './img/player/bossShot.png');
     this.load.image('missile', './img/player/shot1.png');
     this.load.spritesheet('missile2', './img/player/missile.png', 40, 18);
+    //----------------------enemies-----------------------------------------
     this.load.image('enemy_1', './img/enemy/enemy_1.png');
     this.load.image('enemy_2', './img/enemy/enemy_2.png');
     this.load.image('enemy_3', './img/enemy/enemy_3.png');
@@ -35,7 +38,6 @@ export function preloadAnimation() {
     this.load.spritesheet('mainPlayerRed', './img/player/mainPlayerRed.png', 95, 58);
     this.load.spritesheet('exhaust', './img/player/exhaust.png', 23, 84);
     this.load.spritesheet('bang', './img/player/explode.png', 128, 128);
-
 }
 
 export function createAnimation() {
@@ -43,13 +45,14 @@ export function createAnimation() {
       game: this,
       x: 0,
       y: 0,
-      width: 1024,
-      height: 768,
+      width: config.gameWidth,
+      height: 512,
       asset: 'background',
     });
+    this.background.scale.setTo(config.gameHeight/this.background.height);
     this.game.add.existing(this.background);
     //---------------------------particles----------------------------------------
-    this.emitter = game.add.emitter(game.world.centerX, -1024, 600);
+    this.emitter = game.add.emitter(game.world.centerX, -config.gameWidth, 600);
 
     this.emitter.width = game.world.width;
     this.emitter.height = game.world.height;
@@ -88,8 +91,8 @@ export function createAnimation() {
     this.exhaust2.angle = 90;
     this.exhaust1.animations.add('exh');
     this.exhaust2.animations.add('exh');
-    this.exhaust1.animations.play('exh', 5, true);
-    this.exhaust2.animations.play('exh', 5, true);
+    this.exhaust1.animations.play('exh', 25, true);
+    this.exhaust2.animations.play('exh', 25, true);
 
 
 

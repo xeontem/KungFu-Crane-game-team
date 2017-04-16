@@ -1,16 +1,16 @@
 import Phaser from 'phaser-ce';
 
 import currentGameState from '../currentGameState';
-import Firstboss from '../objects/firstboss';
+import Boss from '../objects/boss';
 import config from '../config';
 
 export default function () {
     if (this.boss) {
         if(currentGameState.level == 0){
             if(!this.bossWeapon11){
-                this.bossWeapon11 = this.game.add.weapon(10, 'bullet');
+                this.bossWeapon11 = this.game.add.weapon(10, 'bossbullet');
                 this.bossWeapon11.bulletSpeed = 600;
-                this.bossWeapon11.fireRate = 300;
+                this.bossWeapon11.fireRate = 200;
                 this.bossWeapon11.fireAngle = 180;
                 this.bossWeapon11.autofire = true;
                 this.bossWeapon11.bulletAngleVariance = 20;
@@ -18,10 +18,10 @@ export default function () {
                 this.game.physics.enable(this.bossWeapon11, Phaser.Physics.ARCADE);
             }
         }
-        if(currentGameState.level == 1 || currentGameState.level == 2){
+        if(currentGameState.level == 1 || currentGameState.level == 2 || currentGameState.level == 3 || currentGameState.level == 4){
             if(!this.bossWeapon21){
                 //----------------------------------first gun------------------------------
-                this.bossWeapon21 = this.game.add.weapon(5, 'bullet');
+                this.bossWeapon21 = this.game.add.weapon(5, 'bossbullet');
                 this.bossWeapon21.bulletSpeed = 600;
                 this.bossWeapon21.fireRate = 100;
                 this.bossWeapon21.fireAngle = 180;
@@ -29,7 +29,7 @@ export default function () {
                 this.bossWeapon21.trackSprite(this.boss, 80, -40, true);
                 this.game.physics.enable(this.bossWeapon21, Phaser.Physics.ARCADE);
                 //----------------------------------second gun-----------------------------
-                this.bossWeapon22 = this.game.add.weapon(5, 'bullet');
+                this.bossWeapon22 = this.game.add.weapon(5, 'bossbullet');
                 this.bossWeapon22.bulletSpeed = 600;
                 this.bossWeapon22.fireRate = 100;
                 this.bossWeapon22.fireAngle = 180;
@@ -40,10 +40,10 @@ export default function () {
         }
     }
     if (!this.boss && currentGameState.bosstime) {
-        this.boss = new Firstboss({
+        this.boss = new Boss({
             game: this,
-            x: config.gameWidth - 200,
-            y: this.game.world.centerY,
+            x: config.gameWidth + 200,
+            y: config.gameHeight - 200,
             asset: 'boss',
         });
         this.game.add.existing(this.boss);

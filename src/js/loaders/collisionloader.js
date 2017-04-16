@@ -10,11 +10,8 @@ function randBenefit(){
 }
 
 function invokeSound(that, target) {
-    if(target == 'enemy') {
-        enemyExplode.apply(that);
-    } else if(target == 'boss') {
-        bossExplode.apply(that);
-    }
+    if(target == 'enemy') enemyExplode.apply(that);
+    else if(target == 'boss') bossExplode.apply(that);
 }
 
 function killEnemies(bullet, enemy) {
@@ -25,6 +22,7 @@ function killEnemies(bullet, enemy) {
     if(bullet != this.mainPlayerShield) bullet.kill();
     currentGameState.score += 100;
     currentGameState.levelscore += 100;
+    if(currentGameState.levelscore > currentGameState.limit) currentGameState.bosstime = true;
     //------------------------benefit health----------------------------
     if(!this.benefitHealth && !this.benefitScore && !this.benefitShield && !this.benefitBurst && !this.benefitAmmo && randBenefit() == 1){
         this.benefitHealth = new Benefit({
