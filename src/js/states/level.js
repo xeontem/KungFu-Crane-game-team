@@ -32,6 +32,7 @@ export default class extends Phaser.State {
 		applyMusic.apply(this);
 		//---------------------------------------------------------------
 		createAnimation.apply(this);
+		setKeys.apply(this);
 		// -------------------------statusBar---------------------------------
 		this.scoreText = this.add.text(
 				config.gameWidth - 200,
@@ -47,7 +48,6 @@ export default class extends Phaser.State {
 		this.mainPlayerHP.anchor.setTo(0.5);
 
 				// -----------------------------input----------------------------------
-		setKeys.apply(this);
 
 				// -----------------------------countdown---------------------------------
 		this.countdown = this.time.now;

@@ -74,8 +74,6 @@ export default class extends Phaser.State {
                 if(this.startScore) this.state.start('score');
             }
         }
-
-
     }
 
     toStart() {
