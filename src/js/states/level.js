@@ -1,7 +1,7 @@
 import Phaser from 'phaser-ce';
 import config from '../config';
 import currentGameState from '../currentGameState';
-import { preloadAnimation, createAnimation, paintInYellow } from '../loaders/animationsloader';
+import { preloadAnimation, createAnimation, paintInYellow, normalPaintBoss } from '../loaders/animationsloader';
 import enemiesloader from '../loaders/enemiesloader';
 import gameOverloader from '../loaders/gameOverloader';
 import bossloader from '../loaders/bossloader';
@@ -143,5 +143,6 @@ export default class extends Phaser.State {
 
   render() {
       paintInYellow.apply(this);
+      normalPaintBoss.apply(this);
   }
 }

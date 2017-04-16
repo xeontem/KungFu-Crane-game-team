@@ -1,6 +1,4 @@
 import Phaser from 'phaser-ce';
-
-import mainPlayer from '../objects/mainPlayer';
 import currentGameState from '../currentGameState';
 import BackgroundMainGame from '../objects/backgroundFirstlevel';
 import { weaponOn, spreadWeapon, threeWayWeapon } from '../objects/weapon';
@@ -19,6 +17,7 @@ export function preloadAnimation() {
     this.load.image('enemy_2', './img/enemy/enemy_2.png');
     this.load.image('enemy_3', './img/enemy/enemy_3.png');
     this.load.image('boss', conf[currentGameState.level].boss);
+    this.load.image('bossRed', conf[currentGameState.level].bossRed);
     //-----------------------particle----------------------------------------
     game.load.spritesheet('stars', './img/states/rain.png', 17, 17);
     //-----------------------benefits image----------------------------------
@@ -32,7 +31,7 @@ export function preloadAnimation() {
     this.load.spritesheet('button', './img/pause/Buttons.png', 300, 80);
     this.load.spritesheet('menuButton', './img/pause/mainMenuButton.png', 300, 80);
     this.load.spritesheet('reload', './img/pause/reloadButton.png', 300, 80);
-    //-----------------------------------------------------------------------
+    //-------------------------------mainPlayer--------------------------------
     this.load.spritesheet('mainPlayer', './img/player/mainPlayer.png', 95, 58);
     this.load.spritesheet('mainPlayerGreen', './img/player/mainPlayerGreen.png', 95, 58);
     this.load.spritesheet('mainPlayerRed', './img/player/mainPlayerRed.png', 95, 58);
@@ -132,4 +131,18 @@ export function paintInGreen() {
     this.paintTimer = this.time.now;
     this.mainPlayer.key = 'mainPlayerGreen';
     this.mainPlayer.loadTexture('mainPlayerGreen');
+}
+
+export function paintBossInRed() {
+  this.paintBossTimer = this.time.now;
+  this.boss.key = 'bossRed';
+  this.boss.loadTexture('bossRed');
+}
+
+export function normalPaintBoss() {
+    if (this.paintBossTimer && this.time.now > this.paintBossTimer + 100) {
+        this.paintBossTimer = null;
+        this.boss.key = 'boss';
+        this.boss.loadTexture('boss');
+    }
 }
