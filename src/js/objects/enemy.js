@@ -22,6 +22,11 @@ export default class extends Phaser.Group {
     boundsHandler(enemy, enemies){
         enemy.kill();
         enemies.countOutOfBoundsEnemies++;
+    }
+
+    boundsHandlerFor3(enemy, enemies){
+        enemy.kill();
+        enemies.countOutOfBoundsEnemies++;
         if(enemy.last) {
             enemies.again = 1;
             enemies = null;
@@ -30,6 +35,10 @@ export default class extends Phaser.Group {
 
     onEnemyEnterBounds(enemy, enemies){
         enemy.events.onOutOfBounds.add(this.boundsHandler.bind(this, enemy, enemies), game);
+    }
+
+    onEnemyEnterBoundsFor3(enemy, enemies){
+        enemy.events.onOutOfBounds.add(this.boundsHandlerFor3.bind(this, enemy, enemies), game);
     }
     //--------------------enemies position---------------------------------------------------
 
@@ -41,8 +50,9 @@ export default class extends Phaser.Group {
         let xPos = config.gameWidth-1;
         let tw;
         for (let y = 0; y < this.countEnemies; y += 1) {
-            xPos += 100;
+            xPos += 100 + config.gameWidth/35;//scale -----------------------------------
             let enemy = this.create(xPos, yPos, rndEnemy);
+            enemy.scale.setTo(config.gameWidth/1424);// scale------------------------------------
             enemy.anchor.setTo(0.5);
             game.physics.enable(enemy, Phaser.Physics.ARCADE);
             enemy.checkWorldBounds = true;
@@ -69,8 +79,9 @@ export default class extends Phaser.Group {
         let xPos = config.gameWidth-1;
         let tw;
         for (let y = 0; y < this.countEnemies; y += 1) {
-            xPos += 100;
+            xPos += 100 + config.gameWidth/35;//scale -----------------------------------
             let enemy = this.create(xPos, yPos, rndEnemy);
+            enemy.scale.setTo(config.gameWidth/1424);// scale------------------------------------
             enemy.anchor.setTo(0.5);
             game.physics.enable(enemy, Phaser.Physics.ARCADE);
             enemy.checkWorldBounds = true;
@@ -92,8 +103,9 @@ export default class extends Phaser.Group {
         yPos = randYpos;
         xPos = config.gameWidth-1;
         for (let y = 0; y < this.countEnemies; y += 1) {
-            xPos += 100;
+            xPos += 100 + config.gameWidth/35;//scale -----------------------------------
             let enemy = this.create(xPos, yPos, rndEnemy);
+            enemy.scale.setTo(config.gameWidth/1424);// scale------------------------------------
             enemy.anchor.setTo(0.5);
             game.physics.enable(enemy, Phaser.Physics.ARCADE);
             enemy.checkWorldBounds = true;
@@ -122,14 +134,15 @@ export default class extends Phaser.Group {
         for (let y = 0; y < 7; y += 1) {
             //xPos++;
             let enemy = this.create(xPos, yPos, rndEnemy);
+            enemy.scale.setTo(config.gameWidth/1424);// scale------------------------------------
             enemy.anchor.setTo(0.5);
             game.physics.enable(enemy, Phaser.Physics.ARCADE);
             enemy.checkWorldBounds = true;
-            enemy.events.onEnterBounds.add(this.onEnemyEnterBounds.bind(this, enemy, this), game);
+            enemy.events.onEnterBounds.add(this.onEnemyEnterBoundsFor3.bind(this, enemy, this), game);
             if(z == rndRows) enemy.last = true;
-            yPos += 60;
+            yPos += 60 + config.gameHeight/26;//scale -----------------------------------
         }
-            xPos += 120;
+            xPos += 120 + config.gameWidth/35;//scale -----------------------------------
             yPos = randYpos;
         }
     }
@@ -143,17 +156,18 @@ export default class extends Phaser.Group {
         let tw;
         for (let y = 0; y < this.countEnemies+10; y += 1) {
             let enemy = this.create(xPos, yPos, rndEnemy);
+            enemy.scale.setTo(config.gameWidth/1424);// scale------------------------------------
             enemy.anchor.setTo(0.5);
             game.physics.enable(enemy, Phaser.Physics.ARCADE);
             enemy.checkWorldBounds = true;
             enemy.events.onEnterBounds.add(this.onEnemyEnterBounds.bind(this, enemy, this), game);
             if(y == this.countEnemies-1) enemy.last = true;
-            xPos += 60;
-            yPos += 60;
+            xPos += 60 + config.gameWidth/35;//scale -----------------------------------
+            yPos += 60 + config.gameHeight/26;//scale -----------------------------------
             tw = xPos;
             if(yPos > config.gameHeight - 200){
                 rowCount++;
-                xPos = config.gameWidth+50+120*rowCount;
+                xPos = config.gameWidth+50+120*rowCount + config.gameWidth/35;//scale -----------------------------------;
                 yPos = randYpos;
             }
         }
@@ -169,16 +183,17 @@ export default class extends Phaser.Group {
         for(let z = 0; z < rndRows; z++){
             for (let y = 0; y < 11; y += 1) {
                 let enemy = this.create(xPos, yPos, rndEnemy);
+                enemy.scale.setTo(config.gameWidth/1424);// scale------------------------------------
                 enemy.anchor.setTo(0.5);
                 game.physics.enable(enemy, Phaser.Physics.ARCADE);
                 enemy.checkWorldBounds = true;
                 enemy.events.onEnterBounds.add(this.onEnemyEnterBounds.bind(this, enemy, this), game);
                 if(y == this.countEnemies-1) enemy.last = true;
-                yPos += 60;
-                if(y < 5)xPos -= 60;
-                else xPos += 60;
+                yPos += 60 + config.gameHeight/26;//scale -----------------------------------
+                if(y < 5)xPos -= 60 + config.gameWidth/35;//scale -----------------------------------
+                else xPos += 60 + config.gameWidth/35;//scale -----------------------------------
             }
-            xPos = config.gameWidth+600+120;
+            xPos = config.gameWidth + 600 + 120 + config.gameWidth/35;//scale -----------------------------------;
             yPos = randYpos;
         }
     }
