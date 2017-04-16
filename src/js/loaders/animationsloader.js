@@ -44,7 +44,7 @@ export function createAnimation() {
       game: this,
       x: 0,
       y: 0,
-      width: config.gameWidth,
+      width: 1024,
       height: 512,
       asset: 'background',
     });
@@ -59,8 +59,8 @@ export function createAnimation() {
 
     this.emitter.makeParticles('stars');
 
-    this.emitter.minParticleScale = 0.1;
-    this.emitter.maxParticleScale = 0.5;
+    this.emitter.minParticleScale = 0.1// + config.gameWidth/1024 - 1;
+    this.emitter.maxParticleScale = 0.5// + config.gameWidth/1024 - 1;
 
     this.emitter.setYSpeed(300, 500);
     this.emitter.setXSpeed(-5, 5);
@@ -71,6 +71,7 @@ export function createAnimation() {
     this.emitter.start(false, 1600, 5, 0);
     //---------------------------MainPlayer---------------------------------------
     this.mainPlayer = this.game.add.sprite(-1800, this.game.world.centerY, 'mainPlayer');
+    this.mainPlayer.scale.setTo(config.gameWidth/1300);
     this.mainPlayer.anchor.setTo(0.5);
     this.game.add.existing(this.mainPlayer);
     this.game.physics.enable(this.mainPlayer, Phaser.Physics.ARCADE);
@@ -82,11 +83,11 @@ export function createAnimation() {
     this.mainPlayer.body.collideWorldBounds = true;
     this.exhaust1 = this.mainPlayer.addChild(this.game.make.sprite(-51.5, -19, 'exhaust'));
     this.exhaust1.anchor.setTo(0.5);
-    this.exhaust1.scale.setTo(0.2, 0.2);
+    this.exhaust1.scale.setTo(0.2);
     this.exhaust1.angle = 90;
     this.exhaust2 = this.mainPlayer.addChild(this.game.make.sprite(-51.5, 12, 'exhaust'));
     this.exhaust2.anchor.setTo(0.5);
-    this.exhaust2.scale.setTo(0.2, 0.2);
+    this.exhaust2.scale.setTo(0.2);
     this.exhaust2.angle = 90;
     this.exhaust1.animations.add('exh');
     this.exhaust2.animations.add('exh');

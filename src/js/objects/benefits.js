@@ -9,7 +9,7 @@ export class Benefit extends Phaser.Sprite {
         super(game, x, y, asset);
         this.anchor.setTo(0.5);
         this.outOfBoundsKill = true;
-        this.scale.setTo(0.4);// scale
+        this.scale.setTo(config.gameWidth/2800);// scale
         game.physics.enable(this, Phaser.Physics.ARCADE);
         this.events.onOutOfBounds.add(this.out, game);
     }
@@ -44,7 +44,7 @@ export class Benefit extends Phaser.Sprite {
         getCollectable.apply(this);
         this.mainPlayerShield = this.add.sprite(this.mainPlayer.x, this.mainPlayer.y, 'shieldOn');
         this.mainPlayerShield.anchor.setTo(0.5);
-        this.mainPlayerShield.scale.setTo(1.3);
+        this.mainPlayerShield.scale.setTo(1.3 + config.gameWidth/1324 - 1);
         this.mainPlayerShield.countdown = this.time.now;
         this.game.add.existing(this.mainPlayerShield);
         game.physics.enable(this.mainPlayerShield, Phaser.Physics.ARCADE);

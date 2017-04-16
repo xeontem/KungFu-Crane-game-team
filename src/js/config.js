@@ -11,8 +11,6 @@ export default {
     weapons: [],
     currentWeapon: 0,
     reset: function(){
-        //this.gameWidth = 1024,
-        //this.gameHeight = 512,
         this.enemiesSpeed = 7,
         this.mainPlayerSpeed = 350,
         this.mainPlayerHP = 3,

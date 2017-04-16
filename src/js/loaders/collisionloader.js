@@ -81,6 +81,7 @@ function killBoss(boss, bullet) {
     paintBossInRed.apply(this);
     if(boss.HP == 0){
         boss.kill();
+        boss.HPinfo.text = 'BOSS HP: 0';
         invokeSound(this, 'boss');
         this.countdown = this.time.now;
         currentGameState.bosskilled = true;
