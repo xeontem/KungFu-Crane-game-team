@@ -18,7 +18,7 @@ export default function () {
                 this.game.physics.enable(this.bossWeapon11, Phaser.Physics.ARCADE);
             }
         }
-        if(currentGameState.level == 1 || currentGameState.level == 2){
+        if(currentGameState.level == 1 || currentGameState.level == 2 || currentGameState.level == 3 || currentGameState.level == 4){
             if(!this.bossWeapon21){
                 //----------------------------------first gun------------------------------
                 this.bossWeapon21 = this.game.add.weapon(5, 'bossbullet');

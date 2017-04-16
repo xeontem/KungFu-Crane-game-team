@@ -16,12 +16,12 @@ export default [
     },
     {
         bg: './img/states/bgLevel4.jpg',
-        levelName: 'Level 3: The MilkyWay',
+        levelName: 'Level 4: The MilkyWay',
         boss: './img/bosses/boss_2.png',
     },
     {
         bg: './img/states/bgLevel5.jpg',
-        levelName: 'Level 3: Nebula',
+        levelName: 'Level 5: Deep Space',
         boss: './img/bosses/boss_2.png',
     },
 ];
