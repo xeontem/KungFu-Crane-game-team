@@ -34,9 +34,10 @@ export function preloadAnimation() {
     this.load.spritesheet('reload', './img/pause/reloadButton.png', 300, 80);
     //-----------------------------------------------------------------------
     this.load.spritesheet('mainPlayer', './img/player/mainPlayer.png', 95, 58);
+    this.load.spritesheet('mainPlayerGreen', './img/player/mainPlayerGreen.png', 95, 58);
+    this.load.spritesheet('mainPlayerRed', './img/player/mainPlayerRed.png', 95, 58);
     this.load.spritesheet('exhaust', './img/player/exhaust.png', 23, 84);
     this.load.spritesheet('bang', './img/player/explode.png', 128, 128);
-    this.load.spritesheet('red', './img/player/redPlayer.png', 128, 128);
 }
 
 export function createAnimation() {
@@ -107,11 +108,28 @@ export function createAnimation() {
 }
 
 export function explode() {
-    if(config.mainPlayerHP <= 2){
-        this.bang = this.game.add.sprite(this.mainPlayer.x, this.mainPlayer.y, 'bang');
-        this.bang.anchor.setTo(0.5);
-        this.bang.animations.add('explode');
-        this.bang.animations.play('explode', 30, false, true);
+    this.bang = this.game.add.sprite(this.mainPlayer.x, this.mainPlayer.y, 'bang');
+    this.bang.anchor.setTo(0.5);
+    this.bang.animations.add('explode');
+    this.bang.animations.play('explode', 30, false, true);
+}
+
+export function paintInRed() {
+    this.paintTimer = this.time.now;
+    this.mainPlayer.key = 'mainPlayerRed';
+    this.mainPlayer.loadTexture('mainPlayerRed');
+}
+
+export function paintInYellow() {
+    if (this.paintTimer && this.time.now > this.paintTimer + 100) {
+        this.paintTimer = null;
+        this.mainPlayer.key = 'mainPlayer';
+        this.mainPlayer.loadTexture('mainPlayer');
     }
 }
 
+export function paintInGreen() {
+    this.paintTimer = this.time.now;
+    this.mainPlayer.key = 'mainPlayerGreen';
+    this.mainPlayer.loadTexture('mainPlayerGreen');
+}

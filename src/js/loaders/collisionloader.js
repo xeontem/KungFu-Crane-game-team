@@ -2,7 +2,7 @@ import Phaser from 'phaser-ce';
 import currentGameState from '../currentGameState';
 import { enemyExplode, bossExplode } from '../sound/explosures';
 import { Benefit } from '../objects/benefits';
-import { explode } from '../loaders/animationsloader';
+import { explode, paintInRed } from '../loaders/animationsloader';
 import config from '../config';
 
 function randBenefit(){
@@ -104,8 +104,13 @@ function overlapEnemies(player, enemy) {
 
     enemy.kill();
     if(config.mainPlayerHP)config.mainPlayerHP--;
-    explode.apply(this);
 
+    this.paintTimer = this.time.now;
+    this.mainPlayer.key = 'mainPlayerRed';
+    this.mainPlayer.loadTexture('mainPlayerRed');
+    paintInRed.apply(this);
+    if(config.mainPlayerHP <= 2)
+        explode.apply(this);
     if(!config.mainPlayerHP){
         player.kill();
         currentGameState.mainPlayerKilled = true;
@@ -117,9 +122,12 @@ function overlapEnemies(player, enemy) {
 
 function overlapBoss(player, boss) {
     if(config.mainPlayerHP)config.mainPlayerHP--;
-    explode.apply(this);
-    if(!config.mainPlayerHP){
+    this.paintTimer = this.time.now;
+    this.mainPlayer.key = 'mainPlayerRed';
+    this.mainPlayer.loadTexture('mainPlayerRed');
+    if(config.mainPlayerHP <= 2)
         explode.apply(this);
+    if(!config.mainPlayerHP){
         player.kill();
         currentGameState.mainPlayerKilled = true;
         this.countdown = this.time.now;
@@ -131,9 +139,12 @@ function killPlayer(player, bullet) {
     invokeSound(this, 'enemy');
     if(player != this.mainPlayerShield){
         if(config.mainPlayerHP)config.mainPlayerHP--;
-        explode.apply(this);
-        if(!config.mainPlayerHP){
+        this.paintTimer = this.time.now;
+        this.mainPlayer.key = 'mainPlayerRed';
+        this.mainPlayer.loadTexture('mainPlayerRed');
+        if(config.mainPlayerHP <= 2)
             explode.apply(this);
+        if(!config.mainPlayerHP){
             player.kill();
             currentGameState.mainPlayerKilled = true;
             this.countdown = this.time.now;

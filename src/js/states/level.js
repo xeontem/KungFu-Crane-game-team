@@ -1,7 +1,7 @@
 import Phaser from 'phaser-ce';
 import config from '../config';
 import currentGameState from '../currentGameState';
-import { preloadAnimation, createAnimation } from '../loaders/animationsloader';
+import { preloadAnimation, createAnimation, paintInYellow } from '../loaders/animationsloader';
 import enemiesloader from '../loaders/enemiesloader';
 import gameOverloader from '../loaders/gameOverloader';
 import bossloader from '../loaders/bossloader';
@@ -14,15 +14,15 @@ import WebFont from 'webfontloader';
 
 export default class extends Phaser.State {
 
-	preload() {
-		WebFont.load({
-      		google: {
-        	families: ['Bangers'],
-      		},
-      		active: this.fontsLoaded,
-    	});
-		preloadAnimation.apply(this);
-		loadMusic.apply(this);
+  preload() {
+  		WebFont.load({
+        	google: {
+          families: ['Bangers'],
+        	},
+        	active: this.fontsLoaded,
+      });
+  		preloadAnimation.apply(this);
+  		loadMusic.apply(this);
 	}
 
 	create() {
@@ -47,23 +47,21 @@ export default class extends Phaser.State {
 										{ font: '32px Bangers', fill: '#dddddd' });
 		this.mainPlayerHP.anchor.setTo(0.5);
 
-				// -----------------------------input----------------------------------
-
-				// -----------------------------countdown---------------------------------
-		this.countdown = this.time.now;
-		this.levelName = this.add.text(
-										config.gameWidth / 2,
-										(config.gameHeight / 2) - 50,
-										conf[currentGameState.level].levelName,
-										{ font: '32px Bangers', fill: '#dddddd' });
-		this.levelName.anchor.setTo(0.5);
-		//-----------------------------winCase-----------------------------------------
-		this.winText = this.add.text(
-									config.gameWidth / 2,
-									(config.gameHeight / 2) - 50,
-									'',
-									{ font: '32px Bangers', fill: '#dddddd' });
-	}
+    // -----------------------------countdown-------------------------------
+    this.countdown = this.time.now;
+    this.levelName = this.add.text(
+                            config.gameWidth / 2,
+                            (config.gameHeight / 2) - 50,
+                            conf[currentGameState.level].levelName,
+                            { font: '32px Arial', fill: '#dddddd' });
+    this.levelName.anchor.setTo(0.5);
+    //-----------------------------winCase-----------------------------------------
+    this.winText = this.add.text(
+                            config.gameWidth / 2,
+                            (config.gameHeight / 2) - 50,
+                            '',
+                            { font: '32px Arial', fill: '#dddddd' });
+  }
 
 	update() {
 		//---------------------------scale block-----------------------------------
@@ -118,28 +116,32 @@ export default class extends Phaser.State {
 				// ------------------------spawn enemies-------------------------------------
 				enemiesloader.apply(this);
 
-				// ---------------------spawn boss------------------------------------------
-				bossloader.apply(this);
-			} else {
-				this.winText.text = 'Well done!';
-				///this.mainPlayer.x += 20; TODO!!!!
-				if (this.time.now > this.countdown + 4000) {
-					currentGameState.level += 1;
-					if (currentGameState.level > conf.length - 1) {
-						gameOverloader.apply(this);
-					} else {
-						this.state.start('level');
-					}
-				}
-			}
-			//--------------------if mainPlayer dies-----------------------------------
-			if (currentGameState.mainPlayerKilled) {
-					gameOverloader.apply(this);
-			}
-			// ---------------------controls----------------------------------------
-			keysOn.apply(this);
-			//-------------------------------------------------------------------------
-			mouseOn.apply(this);
-		}
-	}
+        // ---------------------spawn boss------------------------------------------
+        bossloader.apply(this);
+      } else {
+        this.winText.text = 'Well done!';
+        ///this.mainPlayer.x += 20; TODO!!!!
+        if (this.time.now > this.countdown + 4000) {
+          currentGameState.level += 1;
+          if (currentGameState.level > conf.length - 1) {
+            gameOverloader.apply(this);
+          } else {
+            this.state.start('level');
+          }
+        }
+      }
+      //--------------------if mainPlayer dies-----------------------------------
+      if (currentGameState.mainPlayerKilled) {
+          gameOverloader.apply(this);
+      }
+      // ---------------------controls----------------------------------------
+      keysOn.apply(this);
+      //-------------------------------------------------------------------------
+      mouseOn.apply(this);
+    }
+  }
+
+  render() {
+      paintInYellow.apply(this);
+  }
 }
