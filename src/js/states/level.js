@@ -1,7 +1,7 @@
 import Phaser from 'phaser-ce';
 import config from '../config';
 import currentGameState from '../currentGameState';
-import { preloadAnimation, createAnimation } from '../loaders/animationsloader';
+import { preloadAnimation, createAnimation, paintInYellow } from '../loaders/animationsloader';
 import enemiesloader from '../loaders/enemiesloader';
 import gameOverloader from '../loaders/gameOverloader';
 import bossloader from '../loaders/bossloader';
@@ -19,6 +19,7 @@ preload() {
 }
 
   create() {
+    //--------------------------------------------------------------------------
     resetter.apply(this);
     // -----------------music-----------------------------------------
     applyMusic.apply(this);
@@ -42,7 +43,7 @@ preload() {
         // -----------------------------input----------------------------------
     setKeys.apply(this);
 
-        // -----------------------------countdown---------------------------------
+        // -----------------------------countdown-------------------------------
     this.countdown = this.time.now;
     this.levelName = this.add.text(
                             config.gameWidth / 2,
@@ -128,5 +129,9 @@ preload() {
       //-------------------------------------------------------------------------
       mouseOn.apply(this);
     }
+  }
+
+  render() {
+      paintInYellow.apply(this);
   }
 }
