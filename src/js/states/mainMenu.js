@@ -9,82 +9,82 @@ import config from '../config';
 
 export default class extends Phaser.State {
 
-  preload() {
-    WebFont.load({
-      google: {
-        families: ['Bangers'],
-      },
-      active: this.fontsLoaded,
-    });
-
-    this.load.image('loaderBg', './img/states/bgMainMenu.jpg');
-    loadMusic.apply(this);
-  }
-
-  create() {
-    currentGameState.reset();
-    config.reset();
-
-    this.background = new BackgroundMainMenu({
-      game: this,
-      x: 0,
-      y: 0,
-      width: config.gameWidth,
-      height: 512,
-      asset: 'loaderBg',
-    });
-    this.background.scale.setTo(config.gameHeight/this.background.height);
-    this.game.add.existing(this.background);
-
-    this.text = this.add.text(this.world.centerX, this.world.height - 16, `press space to start `, { font: 'Bangers', fontSize: '16px', fill: '#dddddd' });
-    this.text.anchor.setTo(0.5);
-    this.text.font = 'Bangers';
-
-    this.text2 = this.add.text(this.world.centerX, this.world.centerY-100, `Hawking Revenge `, { font: '72px Arial', fill: '#ff0' });
-    this.text2.anchor.setTo(0.5);
-    this.text2.font = 'Bangers';
-
-    applyMusic.apply(this);
-
-    this.scoreText = this.add.text(this.world.centerX, this.world.height - 125, `Press Alt to Score `, { font: '16px Bangers', fill: '#ff0' });
-    this.scoreText.anchor.setTo(0.5);
-
-    this.startGame = false;
-    this.startScore = false;
-
-    this.fireButton = this.game.input.keyboard.addKey(Phaser.Keyboard.SPACEBAR);
-    this.score = this.game.input.keyboard.addKey(Phaser.Keyboard.ALT);
-  }
-
-  update() {
-  	//---------------------------scale block-----------------------------------
-		config.gameWidth = document.documentElement.clientWidth;
-        config.gameHeight = document.documentElement.clientHeight;
-        this.game.width = config.gameWidth;
-        this.game.height = config.gameHeight;
-	//-------------------------------------------------------------------------
-    if (this.fireButton.isDown) {
-      this.countdown = this.time.now;
-      this.startGame = true;
+    preload() {
+        WebFont.load({
+            google: {
+                families: ['Bangers'],
+            },
+            active: this.fontsLoaded,
+        });
+        this.load.spritesheet('start', './img/pause/start.png', 300, 80);
+        this.load.spritesheet('scores', './img/pause/scores.png', 300, 80);
+        this.load.image('loaderBg', './img/states/bgMainMenu.jpg');
+        loadMusic.apply(this);
     }
-    if(this.startGame || this.startScore){
-      this.text.y += 7;
-      if(this.text.y > config.gameHeight+30)this.scoreText.y += 7;
-      if(this.scoreText.y > config.gameHeight+30)this.text2.y += 7;
-      if(this.text2.y > config.gameHeight+30 && this.background.alpha > 0.02) this.background.alpha -= 0.01;
-      if(this.time.now > this.countdown + 4000){
-        if(this.startGame) {
+
+    create() {
+        currentGameState.reset();
+        config.reset();
+        applyMusic.apply(this);
+
+        this.background = new BackgroundMainMenu({
+            game: this,
+            x: 0,
+            y: 0,
+            width: config.gameWidth,
+            height: 512,
+            asset: 'loaderBg',
+        });
+        this.background.scale.setTo(config.gameHeight/this.background.height);
+        this.game.add.existing(this.background);
+
+
+        this.Hawks = this.add.text(this.world.centerX, this.world.centerY-100, `Hawking Revenge `, { font: '72px Bangers', fill: '#ff0' });
+        this.Hawks.anchor.setTo(0.5);
+        
+        //--------------------------------------BUTTONS------------------------------------------------------------------------
+        this.startButton = this.game.add.button(this.game.world.centerX, config.gameHeight - 250, 'start', this.toStart, this, 1, 0, 1);
+        this.startButton.anchor.setTo(0.5);
+        this.scoreButton = this.game.add.button(this.game.world.centerX, config.gameHeight - 100, 'scores', this.toScores, this, 1, 0, 1);
+        this.scoreButton.anchor.setTo(0.5);
+        //---------------------------------------------------------------------------------------------------------------------
+        this.startGame = false;
+        this.startScore = false;
+
+    }
+
+    update() {
+        //---------------------------scale block-----------------------------------
+            config.gameWidth = document.documentElement.clientWidth;
+            config.gameHeight = document.documentElement.clientHeight;
+            this.game.width = config.gameWidth;
+            this.game.height = config.gameHeight;
+        //-------------------------------------------------------------------------
+        if(this.startGame || this.startScore){
+            this.scoreButton.y += 7;
+            if(this.scoreButton.y > config.gameHeight+30) this.startButton.y += 7;
+            if(this.startButton.y > config.gameHeight+30) this.Hawks.y += 7;
+            if(this.Hawks.y > config.gameHeight+30 && this.background.alpha > 0.02) this.background.alpha -= 0.01;
+            if(this.background.alpha < 0.02){
+                if(this.startGame) {
                     this.mainMenuMusic.pause();
                     this.state.start('createName');
                 }
-        if(this.startScore) this.state.start('score');
-      }
+
+                if(this.startScore) this.state.start('score');
+            }
+        }
+
+
     }
 
-    if (this.score.isDown) {
-      this.countdown = this.time.now;
-      this.startScore = true;
+    toStart() {
+        this.countdown = this.time.now;
+        this.startGame = true;
     }
-
-  }
+    
+    toScores() {
+        this.countdown = this.time.now;
+        this.startScore = true;
+    }
 }
