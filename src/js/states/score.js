@@ -35,12 +35,9 @@ export default class extends Phaser.State {
         textScore.anchor.setTo(0.5, 0.5);
 
         score.forEach((el, i) => {
-            const player = this.add.text(this.world.centerX, (50 * i) + 140, `${el.name} : ${el.value}  `, { font: '32px Orbitron', fill: '#dddddd' });
+            const player = this.add.text(this.world.centerX, (50 * i) + 140, `${el.name} : ${el.value}  `, { font: '32px Orbitron', fill: `${el.color}` });
             player.anchor.setTo(0.5, 0.5);
         });
-
-        /*const text2 = this.add.text(this.world.centerX, this.world.height - 16, `press space to mainmenu  `, { font: '16px Orbitron', fill: '#dddddd' });
-        text2.anchor.setTo(0.5);*/
 
         this.backButton = this.game.add.button(this.game.world.centerX, config.gameHeight - 100, 'back', this.toStart, this, 1, 0, 1);
         this.backButton.scale.setTo(config.gameHeight/1050);
