@@ -49,7 +49,7 @@ export function createAnimation() {
       height: 512,
       asset: 'background',
     });
-    this.background.scale.setTo(config.gameHeight/this.background.height);
+    this.background.scale.setTo(config.gameWidth/this.background.width);
     this.game.add.existing(this.background);
     //---------------------------particles----------------------------------------
     this.emitter = game.add.emitter(game.world.centerX, -config.gameWidth, 600);
