@@ -120,6 +120,12 @@ export function explode() {
     this.bang.animations.add('explode');
     this.bang.animations.play('explode', 30, false, true);
 }
+export function explodeEnemy(coordX, coordY) {
+    this.bang = this.game.add.sprite(coordX, coordY, 'bang');
+    this.bang.anchor.setTo(0.5);
+    this.bang.animations.add('explode');
+    this.bang.animations.play('explode', 30, false, true);
+}
 
 export function smoke1Player() {
     this.smoke1.visible = true;
