@@ -94,11 +94,16 @@ export function createAnimation() {
     this.exhaust2.animations.add('exh');
     this.exhaust1.animations.play('exh', 25, true);
     this.exhaust2.animations.play('exh', 25, true);
-    this.smoke = this.game.make.sprite(-25, 0, 'smoke');
-    this.smoke.anchor.setTo(0.5);
-    this.smoke.visible = false;
-    this.smoke.animations.add('smoking');
-    this.mainPlayer.addChild(this.smoke);
+    this.smoke1 = this.game.make.sprite(-25, -20, 'smoke');
+    this.smoke2 = this.game.make.sprite(-25, 20, 'smoke');
+    this.smoke1.anchor.setTo(0.5);
+    this.smoke2.anchor.setTo(0.5);
+    this.smoke1.visible = false;
+    this.smoke2.visible = false;
+    this.smoke1.animations.add('smoking1');
+    this.smoke2.animations.add('smoking2');
+    this.mainPlayer.addChild(this.smoke1);
+    this.mainPlayer.addChild(this.smoke2);
 
     // ----------------------MainPlayerBullets-----------------------------------------
     this.weapon1 = weaponOn.apply(this);
@@ -116,14 +121,24 @@ export function explode() {
     this.bang.animations.play('explode', 30, false, true);
 }
 
-export function smokePlayer() {
-    this.smoke.visible = true;
-    this.smoke.anchor.setTo(0.5);
-    this.smoke.animations.play('smoking', 30, true);
+export function smoke1Player() {
+    this.smoke1.visible = true;
+    this.smoke1.anchor.setTo(0.5);
+    this.smoke1.animations.play('smoking1', 30, true);
 }
 
-export function doNotSmokePlayer() {
-    this.smoke.visible = false;
+export function doNotSmoke1Player() {
+    this.smoke1.visible = false;
+}
+
+export function smoke2Player() {
+    this.smoke2.visible = true;
+    this.smoke2.anchor.setTo(0.5);
+    this.smoke2.animations.play('smoking2', 30, true);
+}
+
+export function doNotSmoke2Player() {
+    this.smoke2.visible = false;
 }
 
 export function paintInRed() {
