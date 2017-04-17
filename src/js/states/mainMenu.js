@@ -36,14 +36,14 @@ export default class extends Phaser.State {
             height: 512,
             asset: 'loaderBg',
         });
-        this.background.scale.setTo(config.gameHeight/this.background.height);
+        this.background.scale.setTo(config.gameHeight / this.background.height);
         this.game.add.existing(this.background);
         this.playerBack = this.game.add.sprite(this.game.world.centerX - config.gameWidth/16, this.game.world.centerY, 'player');
         this.playerBack.anchor.setTo(0.5);
         this.playerBack.scale.setTo(config.gameHeight/1050);
         this.Hawks = this.add.text(this.world.centerX, this.world.centerY - config.gameHeight/10, `Hawking Revenge `, { font: `${config.gameHeight/15}px Orbitron`, fontWeight: 'bold', fill: '#ff0' });
         this.Hawks.anchor.setTo(0.5);
-        
+
         //--------------------------------------BUTTONS------------------------------------------------------------------------
         this.startButton = this.game.add.button(this.game.world.centerX, config.gameHeight - config.gameHeight/5, 'start', this.toStart, this, 1, 0, 1);
         this.startButton.scale.setTo(config.gameHeight/1050);
@@ -84,7 +84,7 @@ export default class extends Phaser.State {
         this.countdown = this.time.now;
         this.startGame = true;
     }
-    
+
     toScores() {
         this.countdown = this.time.now;
         this.startScore = true;
