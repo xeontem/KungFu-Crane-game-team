@@ -11,11 +11,8 @@ import config from './config';
 
 class Game extends Phaser.Game {
     constructor() {
-        //const docElement = document.documentElement;
-        config.gameWidth = document.documentElement.clientWidth;// > config.gameWidth ? config.gameWidth : docElement.clientWidth;
-        config.gameHeight = document.documentElement.clientHeight;// > config.gameHeight ? config.gameHeight : docElement.clientHeight;
-        console.log(config.gameWidth);
-        console.log(config.gameHeight);
+        config.gameWidth = document.documentElement.clientWidth;
+        config.gameHeight = document.documentElement.clientHeight;
 
         super(config.gameWidth, config.gameHeight, Phaser.CANVAS, 'content', null);
 
@@ -30,4 +27,3 @@ class Game extends Phaser.Game {
 }
 
 window.game = new Game();
-//this.particleStorm = window.game.plugins.add(Phaser.ParticleStorm);

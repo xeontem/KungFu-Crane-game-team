@@ -6,7 +6,6 @@ import config from '../config';
 export default class extends Phaser.Group {
     constructor({ game, parent, name, addToStage, enableBody, physicsBodyType }) {
         super(game, parent, name, addToStage, enableBody, physicsBodyType);
-        //this.scale.setTo(1.2);
         this.countEnemies = game.rnd.integerInRange(5, 25);
         this.move = game.rnd.integerInRange(1, 2);
         this.a = 0;
@@ -16,7 +15,7 @@ export default class extends Phaser.Group {
     }
 
     update() {
-        this[`move${this.move}`]();// this works
+        this[`move${this.move}`]();
     }
 
     boundsHandler(enemy, enemies){
@@ -30,7 +29,7 @@ export default class extends Phaser.Group {
         if(enemy.last) {
             enemies.again = 1;
             enemies = null;
-        }    
+        }
     }
 
     onEnemyEnterBounds(enemy, enemies){
@@ -46,7 +45,7 @@ export default class extends Phaser.Group {
         let randYpos = game.rnd.integerInRange(100, config.gameHeight-200)
         let randAmplitude = game.rnd.integerInRange(10, 100);
         let rndEnemy = `enemy_${game.rnd.integerInRange(1, 3)}`;
-        let yPos = randYpos;//config.gameHeight-200;
+        let yPos = randYpos;
         let xPos = config.gameWidth-1;
         let tw;
         for (let y = 0; y < this.countEnemies; y += 1) {
@@ -75,7 +74,7 @@ export default class extends Phaser.Group {
         let randYpos = game.rnd.integerInRange(100, config.gameHeight-200)
         let randAmplitude = game.rnd.integerInRange(10, 100);
         let rndEnemy = `enemy_${game.rnd.integerInRange(1, 3)}`;
-        let yPos = randYpos;//config.gameHeight-200;
+        let yPos = randYpos;
         let xPos = config.gameWidth-1;
         let tw;
         for (let y = 0; y < this.countEnemies; y += 1) {
@@ -172,7 +171,7 @@ export default class extends Phaser.Group {
             }
         }
     }
-   
+
     position5() { // duckWedge
         let randYpos = game.rnd.integerInRange(100, config.gameHeight/2 - 200);
         let rndEnemy = `enemy_${game.rnd.integerInRange(1, 3)}`;
@@ -214,14 +213,4 @@ export default class extends Phaser.Group {
             this.a == 51 ? this.a = 1 : this.a--;
         }
     }
-
-    /*move3() { // parabulous
-        this.x -= config.enemiesSpeed;
-        this.y -= 0.003 * this.x;
-    }
-
-    move4() { // parabulous
-        this.x -= config.enemiesSpeed;
-        this.y += 0.003 * this.x;
-    }*/
 }

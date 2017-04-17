@@ -6,8 +6,6 @@ import config from '../config';
 export default class extends Phaser.TileSprite {
     constructor({ game, x, y, width, height, asset }) {
         super(game, x, y, width, height, asset);
-        //this.width = config.gameWidth;
-        //this.height = config.gameHeight;
     }
 
     update() {

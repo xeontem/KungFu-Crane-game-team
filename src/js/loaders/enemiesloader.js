@@ -5,7 +5,6 @@ import enemy from '../objects/enemy';
 
 export default function () {
     if(!currentGameState.bosstime){
-        console.log(this.enemies);//if(this.enemies && this.enemies.total) console.log(`enemies x : ${this.enemies.x}`);
         if (!this.enemies || this.enemies.again || !this.enemies.total || this.time.now > this.enemAgain + 5000) {
             this.enemies = new enemy({
                 game: this,

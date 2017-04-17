@@ -98,6 +98,8 @@ export function createAnimation() {
     this.smoke2 = this.game.make.sprite(-25, 20, 'smoke');
     this.smoke1.anchor.setTo(0.5);
     this.smoke2.anchor.setTo(0.5);
+    this.smoke1.scale.setTo(0.5);
+    this.smoke2.scale.setTo(0.5);
     this.smoke1.visible = false;
     this.smoke2.visible = false;
     this.smoke1.animations.add('smoking1');
