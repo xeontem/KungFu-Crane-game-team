@@ -36,7 +36,7 @@ export default class extends Phaser.State {
             height: 512,
             asset: 'loaderBg',
         });
-        this.background.scale.setTo(config.gameWidth / this.background.width);
+        this.background.scale.setTo(config.gameWidth / this.background.width, config.gameHeight / this.background.height);
         this.game.add.existing(this.background);
         this.playerBack = this.game.add.sprite(this.game.world.centerX - config.gameWidth/16, this.game.world.centerY, 'player');
         this.playerBack.anchor.setTo(0.5);

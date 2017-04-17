@@ -28,7 +28,7 @@ export default class extends Phaser.State {
             height: 512,
             asset: 'loaderBg',
         });
-        this.background.scale.setTo(config.gameWidth / this.background.width);
+        this.background.scale.setTo(config.gameWidth / this.background.width, config.gameHeight / this.background.height);
         this.game.add.existing(this.background);
 
         const textScore = this.add.text(this.world.centerX, 80, `Score  `, { font: '32px Orbitron', fill: '#dddddd' });
