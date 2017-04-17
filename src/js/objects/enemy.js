@@ -20,17 +20,15 @@ export default class extends Phaser.Group {
     }
 
     boundsHandler(enemy, enemies){
-        enemy.kill();
-        enemies.countOutOfBoundsEnemies++;
+        enemy.kill()
     }
 
     boundsHandlerFor3(enemy, enemies){
         enemy.kill();
-        enemies.countOutOfBoundsEnemies++;
-        if(enemy.last) {
+        if(enemies.children[enemies.total] ===  enemy) {
             enemies.again = 1;
             enemies = null;
-        }    
+        }
     }
 
     onEnemyEnterBounds(enemy, enemies){
@@ -172,7 +170,7 @@ export default class extends Phaser.Group {
             }
         }
     }
-   
+
     position5() { // duckWedge
         let randYpos = game.rnd.integerInRange(100, config.gameHeight/2 - 200);
         let rndEnemy = `enemy_${game.rnd.integerInRange(1, 3)}`;
