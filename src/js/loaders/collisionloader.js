@@ -2,7 +2,7 @@ import Phaser from 'phaser-ce';
 import currentGameState from '../currentGameState';
 import { enemyExplode, bossExplode } from '../sound/explosures';
 import { Benefit } from '../objects/benefits';
-import { explode, paintInRed, paintBossInRed, smoke1Player, smoke2Player } from '../loaders/animationsloader';
+import { explode, paintInRed, paintBossInRed, smoke1Player, smoke2Player, explodeEnemy } from '../loaders/animationsloader';
 import config from '../config';
 
 function randBenefit(){
@@ -19,6 +19,7 @@ function killEnemies(bullet, enemy) {
     let enemY = enemy.body.center.y;
     enemy.kill();
     invokeSound(this, 'enemy');
+    explodeEnemy.call(this, enemX, enemY);
     if(bullet != this.mainPlayerShield) bullet.kill();
     currentGameState.score += 100;
     currentGameState.levelscore += 100;

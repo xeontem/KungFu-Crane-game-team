@@ -20,13 +20,15 @@ export default class extends Phaser.Group {
 
     boundsHandler(enemy, enemies){
         enemy.kill();
-        enemies.countOutOfBoundsEnemies++;
+        if(enemies.children[enemies.total] ===  enemy) {
+            enemies.again = 1;
+            enemies = null;
+        }
     }
 
     boundsHandlerFor3(enemy, enemies){
         enemy.kill();
-        enemies.countOutOfBoundsEnemies++;
-        if(enemy.last) {
+        if(enemies.children[enemies.total] ===  enemy) {
             enemies.again = 1;
             enemies = null;
         }
