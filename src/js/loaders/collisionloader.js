@@ -2,7 +2,7 @@ import Phaser from 'phaser-ce';
 import currentGameState from '../currentGameState';
 import { enemyExplode, bossExplode } from '../sound/explosures';
 import { Benefit } from '../objects/benefits';
-import { explode, paintInRed, paintBossInRed } from '../loaders/animationsloader';
+import { explode, paintInRed, paintBossInRed, smokePlayer } from '../loaders/animationsloader';
 import config from '../config';
 
 function randBenefit(){
@@ -106,13 +106,14 @@ function overlapEnemies(player, enemy) {
 
     enemy.kill();
     if(config.mainPlayerHP)config.mainPlayerHP--;
-
     this.paintTimer = this.time.now;
     this.mainPlayer.key = 'mainPlayerRed';
     this.mainPlayer.loadTexture('mainPlayerRed');
     paintInRed.apply(this);
-    if(config.mainPlayerHP <= 2)
+    if(config.mainPlayerHP <= 2) {
         explode.apply(this);
+        smokePlayer.apply(this);
+    }
     if(!config.mainPlayerHP){
         player.kill();
         currentGameState.mainPlayerKilled = true;
@@ -127,8 +128,10 @@ function overlapBoss(player, boss) {
     this.paintTimer = this.time.now;
     this.mainPlayer.key = 'mainPlayerRed';
     this.mainPlayer.loadTexture('mainPlayerRed');
-    if(config.mainPlayerHP <= 2)
+    if(config.mainPlayerHP <= 2) {
         explode.apply(this);
+        smokePlayer.apply(this);
+    }
     if(!config.mainPlayerHP){
         player.kill();
         currentGameState.mainPlayerKilled = true;
@@ -144,8 +147,10 @@ function killPlayer(player, bullet) {
         this.paintTimer = this.time.now;
         this.mainPlayer.key = 'mainPlayerRed';
         this.mainPlayer.loadTexture('mainPlayerRed');
-        if(config.mainPlayerHP <= 2)
+        if(config.mainPlayerHP <= 2) {
             explode.apply(this);
+            smokePlayer.apply(this);
+        }
         if(!config.mainPlayerHP){
             player.kill();
             currentGameState.mainPlayerKilled = true;

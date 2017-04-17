@@ -36,6 +36,7 @@ export function preloadAnimation() {
     this.load.spritesheet('mainPlayerGreen', './img/player/mainPlayerGreen.png', 95, 58);
     this.load.spritesheet('mainPlayerRed', './img/player/mainPlayerRed.png', 95, 58);
     this.load.spritesheet('exhaust', './img/player/exhaust.png', 23, 84);
+    this.load.spritesheet('smoke', './img/player/smoke.png', 64, 64);
     this.load.spritesheet('bang', './img/player/explode.png', 128, 128);
 }
 
@@ -93,12 +94,13 @@ export function createAnimation() {
     this.exhaust2.animations.add('exh');
     this.exhaust1.animations.play('exh', 25, true);
     this.exhaust2.animations.play('exh', 25, true);
-
-
-
+    this.smoke = this.game.make.sprite(-25, 0, 'smoke');
+    this.smoke.anchor.setTo(0.5);
+    this.smoke.visible = false;
+    this.smoke.animations.add('smoking');
+    this.mainPlayer.addChild(this.smoke);
 
     // ----------------------MainPlayerBullets-----------------------------------------
-
     this.weapon1 = weaponOn.apply(this);
     this.weapon2 = spreadWeapon.apply(this);
     this.weapon3 = threeWayWeapon.apply(this);
@@ -112,6 +114,16 @@ export function explode() {
     this.bang.anchor.setTo(0.5);
     this.bang.animations.add('explode');
     this.bang.animations.play('explode', 30, false, true);
+}
+
+export function smokePlayer() {
+    this.smoke.visible = true;
+    this.smoke.anchor.setTo(0.5);
+    this.smoke.animations.play('smoking', 30, true);
+}
+
+export function doNotSmokePlayer() {
+    this.smoke.visible = false;
 }
 
 export function paintInRed() {

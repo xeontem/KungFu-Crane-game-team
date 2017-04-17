@@ -2,7 +2,7 @@ import Phaser from 'phaser-ce';
 import config from '../config';
 import { getCollectable } from '../sound/explosures';
 import currentGameState from '../currentGameState';
-import { paintInGreen } from '../loaders/animationsloader';
+import { paintInGreen, doNotSmokePlayer } from '../loaders/animationsloader';
 
 export class Benefit extends Phaser.Sprite {
     constructor({ game, x, y, asset }) {
@@ -27,6 +27,9 @@ export class Benefit extends Phaser.Sprite {
         benefit.kill();
         getCollectable.apply(this);
         config.mainPlayerHP++;
+        if (config.mainPlayerHP > 2) {
+            doNotSmokePlayer.apply(this);
+        }
         this.benefitHealth = null;
         paintInGreen.apply(this);
     }
