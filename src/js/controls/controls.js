@@ -50,21 +50,21 @@ export function keysOn() {
             this.mainPlayer.frame = 0;
     }
     if (this.cursors.left.isDown) {
-        this.mainPlayer.body.velocity.x = -350;
+        this.mainPlayer.body.velocity.x = -config.mainPlayerSpeed;
         this.exhaust1.scale.setTo(0.1);
         this.exhaust2.scale.setTo(0.1);
         this.exhaust1.y = -17;
         this.exhaust2.y = 14;
     }
     if (this.cursors.right.isDown) {
-        this.mainPlayer.body.velocity.x = 350;
+        this.mainPlayer.body.velocity.x = config.mainPlayerSpeed;
         this.exhaust1.scale.setTo(0.3);
         this.exhaust2.scale.setTo(0.3);
         this.exhaust1.y = -17;
         this.exhaust2.y = 15;
     }
     if (this.cursors.up.isDown) {
-        this.mainPlayer.body.velocity.y = -350;
+        this.mainPlayer.body.velocity.y = -config.mainPlayerSpeed;
         this.mainPlayer.animations.play('up', 30, false);
         if (config.mainPlayerHP <= 1) {
             this.mainPlayer.frame = 47;
@@ -76,7 +76,7 @@ export function keysOn() {
             this.mainPlayer.frame = 9;
     }
     if (this.cursors.down.isDown) {
-        this.mainPlayer.body.velocity.y = 350;
+        this.mainPlayer.body.velocity.y = config.mainPlayerSpeed;
         this.mainPlayer.animations.play('down', 30, false);
         if (config.mainPlayerHP <= 1) {
             this.mainPlayer.frame = 56;
