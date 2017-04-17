@@ -1,7 +1,6 @@
 import Phaser from 'phaser';
 
 import currentGameState from '../currentGameState';
-import mainPlayer from '../objects/mainPlayer';
 import { invokePauseMenu, resume } from '../states/pauseMenu';
 import { fire } from '../sound/explosures';
 import config from '../config';

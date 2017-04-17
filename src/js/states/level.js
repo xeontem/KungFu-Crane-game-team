@@ -1,7 +1,7 @@
 import Phaser from 'phaser-ce';
 import config from '../config';
 import currentGameState from '../currentGameState';
-import { preloadAnimation, createAnimation, paintInYellow } from '../loaders/animationsloader';
+import { preloadAnimation, createAnimation, paintInYellow, normalPaintBoss } from '../loaders/animationsloader';
 import enemiesloader from '../loaders/enemiesloader';
 import gameOverloader from '../loaders/gameOverloader';
 import bossloader from '../loaders/bossloader';
@@ -39,7 +39,7 @@ export default class extends Phaser.State {
                 `score: ${currentGameState.score}`,
                 { font: `${config.gameHeight/32.8}px Orbitron`, fill: '#dddddd' });
         this.scoreText.anchor.setTo(0.5);
-        
+
         this.mainPlayerHP = this.add.text(
                 config.gameWidth/8.4,
                 config.gameHeight - config.gameHeight/21,
@@ -142,7 +142,8 @@ export default class extends Phaser.State {
         }
     }
 
-    render() {
-        paintInYellow.apply(this);
-    }
+  render() {
+      paintInYellow.apply(this);
+      normalPaintBoss.apply(this);
+  }
 }

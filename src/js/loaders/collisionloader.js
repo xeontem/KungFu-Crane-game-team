@@ -2,7 +2,7 @@ import Phaser from 'phaser-ce';
 import currentGameState from '../currentGameState';
 import { enemyExplode, bossExplode } from '../sound/explosures';
 import { Benefit } from '../objects/benefits';
-import { explode, paintInRed } from '../loaders/animationsloader';
+import { explode, paintInRed, paintBossInRed } from '../loaders/animationsloader';
 import config from '../config';
 
 function randBenefit(){
@@ -78,6 +78,7 @@ function killEnemies(bullet, enemy) {
 function killBoss(boss, bullet) {
     bullet.kill();
     if(boss.HP)boss.HP--;
+    paintBossInRed.apply(this);
     if(boss.HP == 0){
         boss.kill();
         boss.HPinfo.text = 'BOSS HP: 0';
