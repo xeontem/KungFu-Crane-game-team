@@ -1,0 +1,39 @@
+body {
+    margin: 0;
+}
+
+p {
+    padding: 50px 0;
+
+    font-family: 'Orbitron';
+    font-size: 30px;
+    text-align: center;
+
+    color: #fff;
+}
+
+input {
+    display: block;
+    width: 300px;
+    margin: 0 auto;
+
+    font-family: 'Orbitron';
+    font-size: 24px;
+    text-align: center;
+
+    color: #fff;
+    border: none;
+    border-bottom: 1px solid #fff;
+    outline: none;
+    background: transparent;
+}
+
+div {
+    position: absolute;
+    top: 8px;
+
+    /*width: 1024px;
+    height: 512px;*/
+
+    background-color: #000;
+}
