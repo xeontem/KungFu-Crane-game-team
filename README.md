@@ -5,8 +5,8 @@
 
 ## Overview
 This third person interactive simulation game places the player in the helm of the spaceship.
-In order to progress in the game, the player must crush and dodge from the enemy spaceships as long as he can. Also in the game present a useful items who increase players health. A spaceship could have two conditions: clear and damaged. 
-The player experiences represented as a score counter. 
+In order to progress in the game, the player must crush and dodge from the enemy spaceships as long as he can. Also in the game present a useful items who increase players health. A spaceship could have two conditions: clear and damaged.
+The player experiences represented as a score counter.
 The game takes place in a space and its enemies.
 ## Game Structure
 * Controls:
@@ -38,4 +38,4 @@ areas have specific textures.
 Game has an infinite wide level, who can over only if you are die.
 ## References
 
-Here the **[link](https://rolling-scopes-school.github.io/KungFu-Crane-game-team/)** to try our game.
+Here the **[link](https://xeontem.github.io/KungFu-Crane-game-team/)** to try our game.
