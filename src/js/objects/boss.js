@@ -19,6 +19,8 @@ export default class extends Phaser.Sprite {
   }
 
   update (){
-  	if(this.x > config.gameWidth - 150) this.x--;
+    if (this.x > config.gameWidth - 150) {
+      this.x--;
+    }
   }
 }
