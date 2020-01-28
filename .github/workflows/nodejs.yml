@@ -1,9 +1,12 @@
-name: Node CI
+name: Deploy to gh-pages
 
-on: [push]
+on:
+  push:
+    branches:
+    - dev
 
 jobs:
-  build:
+  deploy:
 
     runs-on: ubuntu-latest
 
@@ -17,10 +20,22 @@ jobs:
       uses: actions/setup-node@v1
       with:
         node-version: ${{ matrix.node-version }}
-    - name: npm install, build, and deploy
+    - name: npm install and build
       run: |
+        mkdir dist
+        cd ./dist
+        git config --global user.email "xeontem@gmail.com"
+        git config --global user.name "Artsiom Kukharev"
+        git init
+        git remote add origin "https://x-access-token:${{ secrets.PERSONAL_TOKEN }}@github.com/xeontem/KungFu-Crane-game-team"
+        git fetch
+        git checkout gh-pages
+        cd ../
         npm i
         npm run build
-        npm run deploy
+        cd ./dist
+        git add .
+        git commit -m "Github Actions Bot auto deploy"
+        git push origin gh-pages
       env:
         CI: true
