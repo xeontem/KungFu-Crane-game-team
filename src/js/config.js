@@ -3,7 +3,7 @@ export default {
   gameHeight: 512,
   enemiesSpeed: 7,
   mainPlayerSpeed: 350,
-  mainPlayerHP: 5,
+  mainPlayerHP: 10,
   firstBossHP: 100,
   shieldDuration: 5000,
   ammoDuration: 5000,
@@ -13,7 +13,7 @@ export default {
   reset: function(){
     this.enemiesSpeed = 7,
     this.mainPlayerSpeed = 350,
-    this.mainPlayerHP = 5,
+    this.mainPlayerHP = 10,
     this.firstBossHP = 100,
     this.shieldDuration = 5000,
     this.ammoDuration = 5000,
