@@ -7,9 +7,9 @@ export function invokePauseMenu() {
     this.game.paused = true;
     this.pauseMenuGroup = this.game.add.group();
 
-    this.resumeButton = this.game.add.button(this.game.world.centerX - 95, 100, 'button', resume, this, 1, 0, 1);
-    this.mainMenuButton = this.game.add.button(this.game.world.centerX - 95, 250, 'menuButton', toMainMenu, this, 1, 0, 1);
-    this.reloadButton = this.game.add.button(this.game.world.centerX - 95, 150, 'reload', reload, this, 1, 0, 1);
+    this.resumeButton = this.game.add.button(this.game.world.centerX - 95, 100, 'button', resume.bind(this), this, 1, 0, 1);
+    this.mainMenuButton = this.game.add.button(this.game.world.centerX - 95, 250, 'menuButton', toMainMenu.bind(this), this, 1, 0, 1);
+    this.reloadButton = this.game.add.button(this.game.world.centerX - 95, 150, 'reload', reload.bind(this), this, 1, 0, 1);
 
     this.resumeButton.scale.setTo(0.6);
     this.mainMenuButton.scale.setTo(0.6);
@@ -19,7 +19,7 @@ export function invokePauseMenu() {
     this.pauseMenuGroup.add(this.mainMenuButton);
     this.pauseMenuGroup.add(this.reloadButton);
   } else {
-    resume();
+    resume.apply(this);
   }
 }
 
