@@ -132,7 +132,8 @@ export default class extends Phaser.State {
       this.state.start('mainMenu');
     }
     //----------------------------skip------------------------------
-    if (this.fireButton.isDown) {
+    const gamepad = navigator.getGamepads()[0];
+    if (this.fireButton.isDown || (gamepad && gamepad.buttons.some(b => b.pressed))) {
       this.music.pause();
       this.state.start('mainMenu');
     }

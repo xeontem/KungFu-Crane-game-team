@@ -67,6 +67,11 @@ export default class extends Phaser.State {
     this.game.width = config.gameWidth;
     this.game.height = config.gameHeight;
     //-------------------------------------------------------------------------
+    const gamepad = navigator.getGamepads()[0];
+    if (gamepad && gamepad.buttons.some(b => b.pressed)) {
+      this.toStart();
+    }
+
     if (this.startGame || this.startScore) {
       this.scoreButton.y += 12;
       if (this.scoreButton.y > config.gameHeight+30) {

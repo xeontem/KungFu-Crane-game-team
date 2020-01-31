@@ -7,12 +7,16 @@ import gameOverloader from '../loaders/gameOverloader';
 import bossloader from '../loaders/bossloader';
 import collisionloader from '../loaders/collisionloader';
 import resetter from '../loaders/resetter';
-import { keysOn, setKeys, mouseOn } from '../controls/controls';
+import { keysOn, setKeys, keyboardButtonsAdapter, gamepadButtonsAdapter } from '../controls/controls';
 import { loadMusic, applyMusic } from '../sound/bgmusic';
 import conf from '../levelsConfig';
 import WebFont from 'webfontloader';
 
 export default class extends Phaser.State {
+  constructor(...args) {
+    super(...args);
+    this.gamepad = null;
+  }
 
   preload() {
     WebFont.load({
@@ -125,7 +129,7 @@ export default class extends Phaser.State {
         bossloader.apply(this);
       } else {
         this.winText.text = 'Well done!';
-        ///this.mainPlayer.x += 20; TODO!!!!
+        // /this.mainPlayer.x += 20; TODO!!!!
         if (this.time.now > this.countdown + 4000) {
           currentGameState.level += 1;
           if (currentGameState.level > conf.length - 1) {
@@ -135,14 +139,19 @@ export default class extends Phaser.State {
           }
         }
       }
-      //--------------------if mainPlayer dies-----------------------------------
+      // --------------------if mainPlayer dies-----------------------------------
       if (currentGameState.mainPlayerKilled) {
         gameOverloader.apply(this);
       }
+
       // ---------------------controls----------------------------------------
-      keysOn.apply(this);
-      //-------------------------------------------------------------------------
-      mouseOn.apply(this);
+      const gamepad = navigator.getGamepads()[0];
+      if (gamepad) {
+        keysOn.call(this, gamepadButtonsAdapter(gamepad, this));
+      } else {
+        const buttons = keyboardButtonsAdapter(this);
+        keysOn.call(this, buttons);
+      }
     }
   }
 

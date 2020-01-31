@@ -123,6 +123,15 @@ function overlapEnemies(player, enemy) {
 
   if (config.mainPlayerHP) {
     config.mainPlayerHP--;
+    const gamepad = navigator.getGamepads()[0];
+    if (gamepad) {
+      gamepad.vibrationActuator.playEffect('dual-rumble', {
+        startDelat: 0,
+        duration: 1000,
+        weakMagnitude: 1.0,
+        strongMagnitude: 1.0
+      });
+    }
   }
 
   this.paintTimer = this.time.now;
@@ -152,6 +161,15 @@ function overlapEnemies(player, enemy) {
 function overlapBoss(player, boss) {
   if (config.mainPlayerHP) {
     config.mainPlayerHP--;
+    const gamepad = navigator.getGamepads()[0];
+    if (gamepad) {
+      gamepad.vibrationActuator.playEffect('dual-rumble', {
+        startDelat: 0,
+        duration: 1000,
+        weakMagnitude: 1.0,
+        strongMagnitude: 1.0
+      });
+    }
   }
 
   this.paintTimer = this.time.now;
@@ -180,6 +198,15 @@ function killPlayer(player, bullet) {
   if (player != this.mainPlayerShield) {
     if (config.mainPlayerHP) {
       config.mainPlayerHP--;
+      const gamepad = navigator.getGamepads()[0];
+      if (gamepad) {
+        gamepad.vibrationActuator.playEffect('dual-rumble', {
+          startDelat: 0,
+          duration: 1000,
+          weakMagnitude: 1.0,
+          strongMagnitude: 1.0
+        });
+      }
     }
 
     this.paintTimer = this.time.now;
