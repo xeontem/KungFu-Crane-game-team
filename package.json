@@ -5,13 +5,13 @@
   "author": "kungfu-team",
   "main": "index.js",
   "scripts": {
-    "start": "webpack",
-    "build": "webpack --config webpack.production.config.js",
+    "start": "set NODE_ENV=development&& webpack",
+    "build": "webpack -p",
     "deploy": "gh-pages -d dist",
     "test": "eslint ./src/**/**.js --fix"
   },
   "license": "MIT",
-  "devDependencies": {
+  "dependencies": {
     "babel-core": "^6.21.0",
     "babel-eslint": "^6.1.2",
     "babel-loader": "^6.2.10",
@@ -29,9 +29,7 @@
     "eslint-plugin-react": "^6.10.3",
     "eslint-plugin-standard": "^2.0.1",
     "expose-loader": "^0.7.1",
-    "webpack": "^2.2.0"
-  },
-  "dependencies": {
+    "webpack": "^2.2.0",
     "gh-pages": "^2.2.0",
     "phaser-ce": "^2.7.3",
     "webfontloader": "^1.6.27"
