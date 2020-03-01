@@ -7,15 +7,15 @@ import gameOverloader from '../loaders/gameOverloader';
 import bossloader from '../loaders/bossloader';
 import collisionloader from '../loaders/collisionloader';
 import resetter from '../loaders/resetter';
-import { keysOn, setKeys, keyboardButtonsAdapter, gamepadButtonsAdapter } from '../controls/controls';
+import { keysOn, setKeys, keyboardButtonsAdapter, anyGamepadKeyPressed, gamepad, gamepadButtonsAdapter } from '../controls/controls';
 import { loadMusic, applyMusic } from '../sound/bgmusic';
 import conf from '../levelsConfig';
 import WebFont from 'webfontloader';
+import {  } from '../controls/controls';
 
 export default class extends Phaser.State {
   constructor(...args) {
     super(...args);
-    this.gamepad = null;
   }
 
   preload() {
@@ -145,9 +145,8 @@ export default class extends Phaser.State {
       }
 
       // ---------------------controls----------------------------------------
-      const gamepad = navigator.getGamepads()[0];
       if (gamepad) {
-        keysOn.call(this, gamepadButtonsAdapter(gamepad, this));
+        keysOn.call(this, gamepadButtonsAdapter(this));
       } else {
         const buttons = keyboardButtonsAdapter(this);
         keysOn.call(this, buttons);

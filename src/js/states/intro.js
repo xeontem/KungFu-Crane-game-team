@@ -4,6 +4,7 @@ import WebFont from 'webfontloader';
 import BackgroundMainMenu from '../objects/backgroundMainMenu';
 import { loadMusic, applyMusic } from '../sound/bgmusic';
 import localStorage from '../loaders/storageloader';
+import { anyGamepadKeyPressed } from '../controls/controls';
 
 export default class extends Phaser.State {
 
@@ -132,8 +133,7 @@ export default class extends Phaser.State {
       this.state.start('mainMenu');
     }
     //----------------------------skip------------------------------
-    const gamepad = navigator.getGamepads()[0];
-    if (this.fireButton.isDown || (gamepad && gamepad.buttons.some(b => b.pressed))) {
+    if (this.fireButton.isDown || anyGamepadKeyPressed()) {
       this.music.pause();
       this.state.start('mainMenu');
     }

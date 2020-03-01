@@ -3,7 +3,7 @@ import Phaser from 'phaser-ce';
 import WebFont from 'webfontloader';
 import BackgroundMainMenu from '../objects/backgroundMainMenu';
 import { loadMusic, applyMusic } from '../sound/bgmusic';
-
+import { anyGamepadKeyPressed } from '../controls/controls';
 import currentGameState from '../currentGameState';
 import config from '../config';
 
@@ -67,8 +67,7 @@ export default class extends Phaser.State {
     this.game.width = config.gameWidth;
     this.game.height = config.gameHeight;
     //-------------------------------------------------------------------------
-    const gamepad = navigator.getGamepads()[0];
-    if (gamepad && gamepad.buttons.some(b => b.pressed)) {
+    if (anyGamepadKeyPressed()) {
       this.toStart();
     }
 

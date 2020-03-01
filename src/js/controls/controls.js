@@ -39,7 +39,12 @@ export const keyboardButtonsAdapter = level => {
   };
 };
 
-export const gamepadButtonsAdapter = (gamepad, level) => {
+export let gamepad;
+window.addEventListener('gamepadconnected', e => {
+  gamepad = e.gamepad;
+});
+
+export const gamepadButtonsAdapter = level => {
   return {
     leftUp: level.cursors.left.isUp,
     rightUp: level.cursors.right.isUp,
@@ -52,6 +57,19 @@ export const gamepadButtonsAdapter = (gamepad, level) => {
     changeWeaponDown: gamepad.buttons[0].pressed,
     fireButtonDown: gamepad.buttons[2].pressed,
   };
+};
+
+export const anyGamepadKeyPressed = () => gamepad && gamepad.buttons.some(b => b.pressed);
+
+export const gamepadVibrate = () => {
+  if (gamepad && gamepad.vibrationActuator) {
+    gamepad.vibrationActuator.playEffect('dual-rumble', {
+      startDelat: 0,
+      duration: 1000,
+      weakMagnitude: 1.0,
+      strongMagnitude: 1.0,
+    });
+  }
 };
 
 export function setKeys() {
