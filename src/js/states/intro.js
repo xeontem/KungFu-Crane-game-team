@@ -1,21 +1,9 @@
 import Phaser from 'phaser-ce';
-
-import WebFont from 'webfontloader';
-import BackgroundMainMenu from '../objects/backgroundMainMenu';
-import { loadMusic, applyMusic } from '../sound/bgmusic';
 import localStorage from '../loaders/storageloader';
 import { anyGamepadKeyPressed } from '../controls/controls';
 
 export default class extends Phaser.State {
-
   preload() {
-    WebFont.load({
-      google: {
-        families: ['Orbitron'],
-      },
-      active: this.fontsLoaded,
-    });
-
     this.game.load.audio('intro', './sounds/intro.ogg');
     this.load.image('loaderBg', './img/states/bgMainMenu.jpg');
   }

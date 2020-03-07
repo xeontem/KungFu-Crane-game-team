@@ -1,18 +1,10 @@
 import Phaser from 'phaser-ce';
 import { anyGamepadKeyPressed } from '../controls/controls';
-import WebFont from 'webfontloader';
 import BackgroundScore from '../objects/backgroundScore';
 import config from '../config';
 
 export default class extends Phaser.State {
   preload() {
-    WebFont.load({
-      google: {
-        families: ['Orbitron'],
-      },
-      active: this.fontsLoaded,
-    });
-
     this.load.image('loaderBg', './img/states/bgScore.jpg');
     this.load.spritesheet('back', './img/pause/back.png', 300, 80);
   }

@@ -1,5 +1,6 @@
 import 'pixi';
 import 'p2';
+import WebFont from 'webfontloader';
 import Phaser from 'phaser-ce';
 
 import intro from './states/intro';
@@ -11,6 +12,13 @@ import config from './config';
 
 class Game extends Phaser.Game {
   constructor() {
+    WebFont.load({
+      google: {
+        families: ['Orbitron'],
+      },
+      active: true,
+    });
+
     config.gameWidth = document.documentElement.clientWidth;
     config.gameHeight = document.documentElement.clientHeight;
 

@@ -1,6 +1,4 @@
 import Phaser from 'phaser-ce';
-
-import WebFont from 'webfontloader';
 import BackgroundMainMenu from '../objects/backgroundMainMenu';
 import { loadMusic, applyMusic } from '../sound/bgmusic';
 import { anyGamepadKeyPressed } from '../controls/controls';
@@ -9,12 +7,6 @@ import config from '../config';
 
 export default class extends Phaser.State {
   preload() {
-    WebFont.load({
-      google: {
-        families: ['Orbitron'],
-      },
-      active: this.fontsLoaded,
-    });
     this.load.spritesheet('start', './img/pause/start.png', 300, 80);
     this.load.spritesheet('scores', './img/pause/scores.png', 300, 80);
     this.load.image('loaderBg', './img/states/bgMainMenu.jpg');

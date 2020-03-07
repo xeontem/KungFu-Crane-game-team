@@ -7,24 +7,12 @@ import gameOverloader from '../loaders/gameOverloader';
 import bossloader from '../loaders/bossloader';
 import collisionloader from '../loaders/collisionloader';
 import resetter from '../loaders/resetter';
-import { keysOn, setKeys, keyboardButtonsAdapter, anyGamepadKeyPressed, gamepad, gamepadButtonsAdapter } from '../controls/controls';
+import { keysOn, setKeys, keyboardButtonsAdapter, gamepad, gamepadButtonsAdapter } from '../controls/controls';
 import { loadMusic, applyMusic } from '../sound/bgmusic';
 import conf from '../levelsConfig';
-import WebFont from 'webfontloader';
-import {  } from '../controls/controls';
 
 export default class extends Phaser.State {
-  constructor(...args) {
-    super(...args);
-  }
-
   preload() {
-    WebFont.load({
-      google: {
-        families: ['Orbitron'],
-      },
-      active: this.fontsLoaded,
-    });
     preloadAnimation.apply(this);
     loadMusic.apply(this);
   }
@@ -38,17 +26,17 @@ export default class extends Phaser.State {
     setKeys.apply(this);
     // -------------------------statusBar---------------------------------
     this.scoreText = this.add.text(
-        config.gameWidth - config.gameWidth/8.4,
-        config.gameHeight - config.gameHeight/21,
+        config.gameWidth - config.gameWidth / 8.4,
+        config.gameHeight - config.gameHeight / 21,
         `score: ${currentGameState.score}`,
-        { font: `${config.gameHeight/32.8}px Orbitron`, fill: '#dddddd' });
+        { font: `${config.gameHeight / 32.8}px Orbitron`, fill: '#dddddd' });
     this.scoreText.anchor.setTo(0.5);
 
     this.mainPlayerHP = this.add.text(
-        config.gameWidth/8.4,
-        config.gameHeight - config.gameHeight/21,
+        config.gameWidth / 8.4,
+        config.gameHeight - config.gameHeight / 21,
         `HP: ${config.mainPlayerHP}`,
-        { font: `${config.gameHeight/32.8}px Orbitron`, fill: '#dddddd' });
+        { font: `${config.gameHeight / 32.8}px Orbitron`, fill: '#dddddd' });
     this.mainPlayerHP.anchor.setTo(0.5);
 
     // -----------------------------countdown---------------------------------
@@ -61,7 +49,7 @@ export default class extends Phaser.State {
     );
     this.levelName.anchor.setTo(0.5);
 
-    //-----------------------------winCase-----------------------------------------
+    // -----------------------------winCase-----------------------------------------
     this.winText = this.add.text(
       config.gameWidth / 2,
       (config.gameHeight / 2),
@@ -72,7 +60,7 @@ export default class extends Phaser.State {
   }
 
   update() {
-    //---------------------------scale block-----------------------------------
+    // ---------------------------scale block-----------------------------------
     config.gameWidth = document.documentElement.clientWidth;
     config.gameHeight = document.documentElement.clientHeight;
     this.game.width = config.gameWidth;
@@ -97,7 +85,7 @@ export default class extends Phaser.State {
       this.mainPlayer.body.velocity.x = 0;
       this.mainPlayer.body.velocity.y = 0;
 
-      //------------------------changing states of main player----------------
+      // ------------------------changing states of main player----------------
 
       if (config.mainPlayerHP == 1) {
         this.mainPlayer.animations.add('up', [39, 40, 41, 42, 43, 44, 45, 46, 47]);
