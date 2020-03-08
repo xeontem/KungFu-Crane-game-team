@@ -3,15 +3,9 @@ const webpack = require('webpack');
 const BrowserSyncPlugin = require('browser-sync-webpack-plugin');
 const CopyWebpackPlugin = require('copy-webpack-plugin');
 
-// Phaser webpack config
-const PHASER_PATH = path.join(__dirname, '/node_modules/phaser-ce/');
-const PHASER_SPLIT_PATH = path.join(PHASER_PATH, 'build/custom/phaser-split.js');
-const PIXI_PATH = path.join(PHASER_PATH, 'build/custom/pixi.js');
-const P2_PATH = path.join(PHASER_PATH, 'build/custom/p2.js');
-
-const isDevelopment = () => process.env.NODE_ENV === 'development';
-
 module.exports = () => {
+  const isDevelopment = process.env.NODE_ENV === 'development';
+
   // common plugins
   const plugins = [
     new CopyWebpackPlugin([
@@ -23,7 +17,7 @@ module.exports = () => {
   ];
 
   // mode specific plugins
-  if (isDevelopment()) {
+  if (isDevelopment) {
     const browserSyncPlugin = new BrowserSyncPlugin({
       host: process.env.IP || 'localhost',
       port: process.env.PORT || 8000,
@@ -56,7 +50,7 @@ module.exports = () => {
       publicPath: './',
       filename: 'js/bundle.js',
     },
-    watch: isDevelopment(),
+    watch: isDevelopment,
     plugins,
     module: {
       rules: [
@@ -65,13 +59,6 @@ module.exports = () => {
         { test: /phaser-split\.js$/, use: ['expose-loader?Phaser'] },
         { test: /p2\.js/, use: ['expose-loader?p2'] },
       ],
-    },
-    resolve: {
-      alias: {
-        phaser: PHASER_SPLIT_PATH,
-        pixi: PIXI_PATH,
-        p2: P2_PATH,
-      },
     },
   };
 };

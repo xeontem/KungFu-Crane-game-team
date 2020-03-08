@@ -1,5 +1,5 @@
-import 'pixi';
-import 'p2';
+import 'phaser-ce/build/custom/pixi';
+import 'phaser-ce/build/custom/p2';
 import WebFont from 'webfontloader';
 import Phaser from 'phaser-ce';
 
@@ -16,7 +16,7 @@ class Game extends Phaser.Game {
       google: {
         families: ['Orbitron'],
       },
-      active: true,
+      active: false,
     });
 
     config.gameWidth = document.documentElement.clientWidth;

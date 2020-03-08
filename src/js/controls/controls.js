@@ -1,4 +1,4 @@
-import Phaser from 'phaser';
+import Phaser from 'phaser-ce/build/custom/phaser-split';
 
 import currentGameState from '../currentGameState';
 import { invokePauseMenu, resume } from '../states/pauseMenu';
@@ -78,6 +78,12 @@ export function setKeys() {
   this.changeWeapon = game.input.keyboard.addKey(Phaser.Keyboard.SHIFT);
   this.openPauseMenu = game.input.keyboard.addKey(Phaser.Keyboard.ESC);
 
+  document.addEventListener('keydown', e => {
+    if (e.target.code === 'F5') {
+      e.preventDefault();
+      console.log('save game');
+    }
+  });
   game.canvas.addEventListener('click', mouseIn);
   game.canvas.addEventListener('pointermove', () => move(this));
 }
