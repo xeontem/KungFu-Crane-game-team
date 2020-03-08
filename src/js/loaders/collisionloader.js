@@ -1,4 +1,3 @@
-import Phaser from 'phaser-ce';
 import currentGameState from '../currentGameState';
 import { enemyExplode, bossExplode } from '../sound/explosures';
 import { Benefit } from '../objects/benefits';
@@ -7,20 +6,20 @@ import config from '../config';
 import { gamepadVibrate } from '../controls/controls';
 
 function randBenefit() {
-  return game.rnd.integerInRange(1, 5);
+  return window.game.rnd.integerInRange(1, 5);
 }
 
 function invokeSound(that, target) {
-  if (target == 'enemy') {
+  if (target === 'enemy') {
     enemyExplode.apply(that);
-  } else if (target == 'boss') {
+  } else if (target === 'boss') {
     bossExplode.apply(that);
   }
 }
 
 function killEnemies(bullet, enemy) {
-  let enemX = enemy.body.center.x;
-  let enemY = enemy.body.center.y;
+  const enemX = enemy.body.center.x;
+  const enemY = enemy.body.center.y;
   enemy.kill();
   invokeSound(this, 'enemy');
   explodeEnemy.call(this, enemX, enemY);
@@ -36,7 +35,7 @@ function killEnemies(bullet, enemy) {
     currentGameState.bosstime = true;
   }
 
-  //------------------------benefit health----------------------------
+  // ------------------------benefit health----------------------------
   if (!this.benefitHealth && !this.benefitScore && !this.benefitShield && !this.benefitBurst && !this.benefitAmmo && randBenefit() == 1) {
     this.benefitHealth = new Benefit({
       game,
