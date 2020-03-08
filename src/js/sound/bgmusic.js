@@ -1,5 +1,3 @@
-// import Phaser from 'phaser-ce';
-
 export function loadMusic() {
   this.game.load.audio('main2', './sounds/mainMenu.ogg');
   this.game.load.audio('level', './sounds/levels.ogg');
@@ -22,12 +20,12 @@ export function applyMusic() {
       if (!this.mainMenuMusic.isPlaying) {
         this.mainMenuMusic.play();
       }
-    break;
+      break;
 
     case 'level':
       if (!this.levelMusic.isPlaying) {
         this.levelMusic.play();
       }
-    break;
+      break;
   }
 }

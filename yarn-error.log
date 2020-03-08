@@ -1,0 +1,72 @@
+Arguments: 
+  C:\Program Files\nodejs\node.exe C:\Program Files\nodejs\node_modules\yarn\bin\yarn.js eslint
+
+PATH: 
+  C:\Python27\;C:\Python27\Scripts;C:\Program Files (x86)\Common Files\Oracle\Java\javapath;C:\ProgramData\DockerDesktop\version-bin;C:\Program Files\Docker\Docker\Resources\bin;C:\Program Files (x86)\Intel\iCLS Client\;C:\Program Files\Intel\iCLS Client\;C:\Windows\system32;C:\Windows;C:\Windows\System32\Wbem;C:\Windows\System32\WindowsPowerShell\v1.0\;C:\Windows\System32\OpenSSH\;C:\Program Files (x86)\NVIDIA Corporation\PhysX\Common;C:\Program Files (x86)\Intel\Intel(R) Management Engine Components\DAL;C:\Program Files\Intel\Intel(R) Management Engine Components\DAL;C:\Program Files (x86)\Intel\Intel(R) Management Engine Components\IPT;C:\Program Files\Intel\Intel(R) Management Engine Components\IPT;C:\Users\XeoNT\AppData\Roaming\nvm;C:\Program Files\nodejs;C:\Program Files\dotnet\;C:\Program Files\Microsoft SQL Server\130\Tools\Binn\;C:\Program Files\Microsoft SQL Server\Client SDK\ODBC\170\Tools\Binn\;C:\WINDOWS\system32;C:\WINDOWS;C:\WINDOWS\System32\Wbem;C:\WINDOWS\System32\WindowsPowerShell\v1.0\;C:\WINDOWS\System32\OpenSSH\;C:\Program Files\Git\cmd;C:\Users\XeoNT\AppData\Local\Programs\Python\Python38-32\Scripts\;C:\Users\XeoNT\AppData\Local\Programs\Python\Python38-32\;C:\Users\XeoNT\AppData\Local\Programs\Python\Python38-32\Scripts\switchedoff;C:\Users\XeoNT\AppData\Local\Programs\Python\Python38-32\switchedoff;C:\Users\XeoNT\.cargo\bin;C:\Users\XeoNT\AppData\Local\Microsoft\WindowsApps;C:\Users\XeoNT\AppData\Local\Programs\Microsoft VS Code\bin;C:\Users\XeoNT\AppData\Roaming\nvm;C:\Program Files\nodejs;D:\code\pngquant\target\release;C:\Program Files\heroku\bin;C:\Python27\Scripts;C:\Users\XeoNT\AppData\Local\Programs\Fiddler;C:\Users\XeoNT\AppData\Local\Microsoft\WindowsApps;C:\Program Files\JetBrains\PyCharm Community Edition 2019.3.1\bin;;
+
+Yarn version: 
+  1.19.1
+
+Node version: 
+  10.0.0
+
+Platform: 
+  win32 x64
+
+Trace: 
+  SyntaxError: D:\code\KungFu-Crane-game-team\package.json: Unexpected string in JSON at position 297
+      at JSON.parse (<anonymous>)
+      at C:\Users\XeoNT\AppData\Roaming\nvm\v10.0.0\node_modules\yarn\lib\cli.js:1625:59
+      at Generator.next (<anonymous>)
+      at step (C:\Users\XeoNT\AppData\Roaming\nvm\v10.0.0\node_modules\yarn\lib\cli.js:304:30)
+      at C:\Users\XeoNT\AppData\Roaming\nvm\v10.0.0\node_modules\yarn\lib\cli.js:315:13
+      at run (C:\Users\XeoNT\AppData\Roaming\nvm\v10.0.0\node_modules\yarn\lib\cli.js:105521:22)
+      at C:\Users\XeoNT\AppData\Roaming\nvm\v10.0.0\node_modules\yarn\lib\cli.js:105538:30
+      at flush (C:\Users\XeoNT\AppData\Roaming\nvm\v10.0.0\node_modules\yarn\lib\cli.js:105022:9)
+      at process._tickCallback (internal/process/next_tick.js:172:11)
+
+npm manifest: 
+  {
+    "name": "KungfuGame",
+    "version": "1.0.0",
+    "description": "",
+    "author": "kungfu-team",
+    "main": "index.js",
+    "scripts": {
+      "start": "set NODE_ENV=development&& webpack",
+      "build": "webpack -p",
+      "deploy": "gh-pages -d dist",
+      "eslint-fix": "eslint ./src/**/**.js --fix"
+      "eslint": "eslint ./src/**/**.js"
+    },
+    "license": "MIT",
+    "dependencies": {
+      "babel-core": "^6.21.0",
+      "babel-eslint": "^6.1.2",
+      "babel-loader": "^6.2.10",
+      "babel-polyfill": "^6.20.0",
+      "babel-preset-es2015": "^6.18.0",
+      "browser-sync": "^2.18.6",
+      "browser-sync-webpack-plugin": "^1.1.3",
+      "copy-webpack-plugin": "^4.0.1",
+      "eslint": "^3.19.0",
+      "eslint-config-airbnb": "^14.1.0",
+      "eslint-config-airbnb-base": "^11.1.3",
+      "eslint-plugin-import": "^2.2.0",
+      "eslint-plugin-jsx-a11y": "^4.0.0",
+      "eslint-plugin-promise": "^3.4.0",
+      "eslint-plugin-react": "^6.10.3",
+      "eslint-plugin-standard": "^2.0.1",
+      "expose-loader": "^0.7.1",
+      "webpack": "^2.2.0",
+      "gh-pages": "^2.2.0",
+      "phaser-ce": "^2.7.3",
+      "webfontloader": "^1.6.27"
+    }
+  }
+
+yarn manifest: 
+  No manifest
+
+Lockfile: 
+  No lockfile

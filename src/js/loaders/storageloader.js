@@ -4,12 +4,12 @@ export default (score, name) => {
   }
 
   const scores = JSON.parse(window.localStorage.getItem('score'));
-  scores.forEach(el => {
+  scores.forEach((el) => {
     el.color = '#fff';
   });
 
   if (score && name) {
-    scores.unshift({ name: name, value: score, color: '#ff0' });
+    scores.unshift({ name, value: score, color: '#ff0' });
     scores.sort((a, b) => b.value - a.value);
     if (scores.length === 6) {
       scores.pop();

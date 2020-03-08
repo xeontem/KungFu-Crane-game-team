@@ -1,51 +1,54 @@
 import Phaser from 'phaser-ce/build/custom/phaser-split';
 
-import currentGameState from '../currentGameState';
-import { invokePauseMenu, resume } from '../states/pauseMenu';
+import { gameState, resetGameState } from '../currentGameState';
+import { invokePauseMenu } from '../states/pauseMenu';
 import { fire } from '../sound/explosures';
-import config from '../config';
 
-const move = that => {
-  if (config.onOff) {
-    if (game.physics.arcade.distanceToPointer(that.mainPlayer) > 14) {
-      game.physics.arcade.moveToPointer(that.mainPlayer, config.mainPlayerSpeed);
-    } else {
-      that.mainPlayer.body.velocity.setTo(0, 0);
-    }
-  }
-};
-
-const mouseIn = () => {
-  document.body.style.cursor = config.onOff ? 'default' : 'none';
-  config.onOff = !config.onOff;
-};
-
-const invokeSound = that => {
+const invokeSound = (that) => {
   fire.apply(that);
 };
 
-export const keyboardButtonsAdapter = level => {
-  return {
-    leftUp: level.cursors.left.isUp,
-    rightUp: level.cursors.right.isUp,
-    upUp: level.cursors.up.isUp,
-    downUp: level.cursors.down.isUp,
-    leftDown: level.cursors.left.isDown,
-    rightDown: level.cursors.right.isDown,
-    upDown: level.cursors.up.isDown,
-    downDown: level.cursors.down.isDown,
-    changeWeaponDown: level.changeWeapon.isDown,
-    fireButtonDown: level.fireButton.isDown,
-  };
-};
+export function applyNextActiveBtnIndex(isUp) {
+  const currentActiveIndex = this.buttonInstances.reduce((activeInd, btn, index) => {
+    return btn.frame === 1 ? index : activeInd;
+  }, 0);
+  const nextActiveIndex = isUp ? currentActiveIndex - 1 : currentActiveIndex + 1;
+  this.loopedNextActiveIndex = (nextActiveIndex < 0)
+    ? this.buttonInstances.length - 1
+    : (nextActiveIndex > this.buttonInstances.length - 1)
+      ? 0
+      : nextActiveIndex;
+  this.buttonInstances.forEach((btn, i) => {
+    btn.frame = i === this.loopedNextActiveIndex ? 1 : 0;
+  });
+}
 
-export let gamepad;
-window.addEventListener('gamepadconnected', e => {
-  gamepad = e.gamepad;
+export const keyboardButtonsAdapter = level => ({
+  leftUp: level.cursors.left.isUp,
+  rightUp: level.cursors.right.isUp,
+  upUp: level.cursors.up.isUp,
+  downUp: level.cursors.down.isUp,
+  leftDown: level.cursors.left.isDown,
+  rightDown: level.cursors.right.isDown,
+  upDown: level.cursors.up.isDown,
+  downDown: level.cursors.down.isDown,
+  changeWeaponDown: level.changeWeapon.isDown,
+  fireButtonDown: level.fireButton.isDown,
+  saveGame: level.saveGame.repeats === 1,
+  loadGame: level.loadGame.repeats === 1,
+  pauseMenu: level.openPauseMenu.repeats === 1,
+});
+
+let gamepadIndex = null;
+export const getGamepad = () => navigator.getGamepads()[gamepadIndex];
+window.addEventListener('gamepadconnected', (e) => {
+  console.log('gamepad connected', e.gamepad);
+  gamepadIndex = e.gamepad.index;
 });
 
 export const gamepadButtonsAdapter = level => {
-  return {
+  const gamepad = getGamepad();
+  return ({
     leftUp: level.cursors.left.isUp,
     rightUp: level.cursors.right.isUp,
     upUp: level.cursors.up.isUp,
@@ -56,15 +59,22 @@ export const gamepadButtonsAdapter = level => {
     downDown: gamepad.buttons[13].pressed,
     changeWeaponDown: gamepad.buttons[0].pressed,
     fireButtonDown: gamepad.buttons[2].pressed,
-  };
+    saveGame: gamepad.buttons[4].pressed,
+    loadGame: gamepad.buttons[5].pressed,
+    pauseMenu: gamepad.buttons[9].pressed,
+  });
 };
 
-export const anyGamepadKeyPressed = () => gamepad && gamepad.buttons.some(b => b.pressed);
+export const anyGamepadKeyPressed = () => {
+  const gamepad = getGamepad();
+  return gamepad && gamepad.buttons.some(b => b.pressed);
+};
 
 export const gamepadVibrate = () => {
+  const gamepad = getGamepad();
   if (gamepad && gamepad.vibrationActuator) {
     gamepad.vibrationActuator.playEffect('dual-rumble', {
-      startDelat: 0,
+      startDelay: 0,
       duration: 1000,
       weakMagnitude: 1.0,
       strongMagnitude: 1.0,
@@ -72,23 +82,62 @@ export const gamepadVibrate = () => {
   }
 };
 
-export function setKeys() {
-  this.cursors = this.input.keyboard.createCursorKeys();
+export const toggleMouseControl = mouseState => {
+  if (!game.paused) {
+    gameState.mouseMoveEnabled = (mouseState === false || mouseState === false)
+      ? mouseState : !gameState.mouseMoveEnabled;
+    document.body.style.cursor = gameState.mouseMoveEnabled ? 'none' : 'default';
+  }
+};
+
+export function setLevelInput() {
+  this.cursors = game.input.keyboard.createCursorKeys();
   this.fireButton = game.input.keyboard.addKey(Phaser.Keyboard.SPACEBAR);
   this.changeWeapon = game.input.keyboard.addKey(Phaser.Keyboard.SHIFT);
   this.openPauseMenu = game.input.keyboard.addKey(Phaser.Keyboard.ESC);
+  this.saveGame = game.input.keyboard.addKey(Phaser.Keyboard.F5);
+  this.loadGame = game.input.keyboard.addKey(Phaser.Keyboard.F8);
 
-  document.addEventListener('keydown', e => {
-    if (e.target.code === 'F5') {
-      e.preventDefault();
-      console.log('save game');
+  const move = () => {
+    if (gameState.mouseMoveEnabled) {
+      if (this.mainPlayer && this.mainPlayer.body && this.key === 'level') {
+        if (game.physics.arcade.distanceToPointer(this.mainPlayer) > 14) {
+          game.physics.arcade.moveToPointer(this.mainPlayer, gameState.mainPlayerSpeed);
+        } else {
+          this.mainPlayer.body.velocity.setTo(0, 0);
+        }
+      } else {
+        toggleMouseControl(false);
+        game.canvas.removeEventListener('click', toggleMouseControl);
+        game.canvas.removeEventListener('pointermove', move);
+      }
     }
-  });
-  game.canvas.addEventListener('click', mouseIn);
-  game.canvas.addEventListener('pointermove', () => move(this));
+  };
+
+  game.canvas.addEventListener('click', toggleMouseControl);
+  game.canvas.addEventListener('pointermove', move);
 }
 
+export const loadAndStartSavedGame = context => {
+    resetGameState(JSON.parse(localStorage.getItem('GAME_STATE')));
+    context.state.start('level');
+    console.log('game loaded');
+};
+
+export const saveGame = () => {
+    localStorage.setItem('GAME_STATE', JSON.stringify(gameState));
+    console.log('game saved');
+};
+
 export function keysOn(buttons) {
+  if (buttons.saveGame) {
+    saveGame();
+  }
+
+  if (buttons.loadGame) {
+    loadAndStartSavedGame(this);
+  }
+
   if (buttons.leftUp) {
     this.exhaust1.scale.setTo(0.2);
     this.exhaust2.scale.setTo(0.2);
@@ -103,9 +152,9 @@ export function keysOn(buttons) {
   }
   if (buttons.upUp) {
     this.mainPlayer.animations.play('upBack', 30, false);
-    if (config.mainPlayerHP <= 1) {
+    if (gameState.mainPlayerHP <= 1) {
       this.mainPlayer.frame = 38;
-    } else if (config.mainPlayerHP <= 2) {
+    } else if (gameState.mainPlayerHP <= 2) {
       this.mainPlayer.frame = 19;
     } else {
       this.mainPlayer.frame = 0;
@@ -113,68 +162,69 @@ export function keysOn(buttons) {
   }
   if (buttons.downUp) {
     this.mainPlayer.animations.play('downBack', 30, false);
-    if (config.mainPlayerHP <= 1) {
+    if (gameState.mainPlayerHP <= 1) {
       this.mainPlayer.frame = 38;
-    } else if (config.mainPlayerHP <= 2) {
+    } else if (gameState.mainPlayerHP <= 2) {
       this.mainPlayer.frame = 19;
     } else {
       this.mainPlayer.frame = 0;
     }
   }
   if (buttons.leftDown) {
-    this.mainPlayer.body.velocity.x = -config.mainPlayerSpeed;
+    this.mainPlayer.body.velocity.x = -gameState.mainPlayerSpeed;
     this.exhaust1.scale.setTo(0.1);
     this.exhaust2.scale.setTo(0.1);
     this.exhaust1.y = -17;
     this.exhaust2.y = 14;
   }
   if (buttons.rightDown) {
-    this.mainPlayer.body.velocity.x = config.mainPlayerSpeed;
+    this.mainPlayer.body.velocity.x = gameState.mainPlayerSpeed;
     this.exhaust1.scale.setTo(0.3);
     this.exhaust2.scale.setTo(0.3);
     this.exhaust1.y = -17;
     this.exhaust2.y = 15;
   }
   if (buttons.upDown) {
-    this.mainPlayer.body.velocity.y = -config.mainPlayerSpeed;
+    this.mainPlayer.body.velocity.y = -gameState.mainPlayerSpeed;
     this.mainPlayer.animations.play('up', 30, false);
-    if (config.mainPlayerHP <= 1) {
+    if (gameState.mainPlayerHP <= 1) {
       this.mainPlayer.frame = 47;
-    } else if (config.mainPlayerHP <= 2) {
+    } else if (gameState.mainPlayerHP <= 2) {
       this.mainPlayer.frame = 28;
     } else {
       this.mainPlayer.frame = 9;
     }
   }
   if (buttons.downDown) {
-    this.mainPlayer.body.velocity.y = config.mainPlayerSpeed;
+    this.mainPlayer.body.velocity.y = gameState.mainPlayerSpeed;
     this.mainPlayer.animations.play('down', 30, false);
-    if (config.mainPlayerHP <= 1) {
+    if (gameState.mainPlayerHP <= 1) {
       this.mainPlayer.frame = 56;
-    } else if (config.mainPlayerHP <= 2) {
+    } else if (gameState.mainPlayerHP <= 2) {
       this.mainPlayer.frame = 37;
     } else {
       this.mainPlayer.frame = 18;
     }
   }
   if (buttons.changeWeaponDown) {
-    if (config.weapons) {
-      if (config.currentWeapon < config.weapons.length) {
-        this.currentWeapon = config.weapons[config.currentWeapon++];
-      } else {
-        config.currentWeapon = 0;
-        this.currentWeapon = config.weapons[config.currentWeapon];
-      }
+    if (gameState.currentWeapon < 3) {
+      gameState.currentWeapon += 1;
+    } else {
+      gameState.currentWeapon = 1;
     }
+    this.currentWeapon = this[`weapon${gameState.currentWeapon}`];
   }
-  if (buttons.fireButtonDown && !currentGameState.mainPlayerKilled) {
-    if (this.currentWeapon.multiple === false) {
-      this.currentWeapon.weapon.fire();
-    } else if (this.currentWeapon.multiple === true) {
-      this.currentWeapon.weapon.forEach(gun => {
+  if (buttons.fireButtonDown && !gameState.mainPlayerKilled) {
+    if (this.currentWeapon.multiple) {
+      this.currentWeapon.weapon.forEach((gun) => {
         gun.fire();
       });
+    } else {
+      this.currentWeapon.weapon.fire();
     }
   }
-  this.openPauseMenu.onDown.add(invokePauseMenu, this);
+
+  if (buttons.pauseMenu) {
+    invokePauseMenu.apply(this);
+  }
 }

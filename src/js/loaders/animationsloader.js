@@ -1,26 +1,25 @@
 import Phaser from 'phaser-ce';
-import currentGameState from '../currentGameState';
+import { gameState } from '../currentGameState';
 import BackgroundMainGame from '../objects/backgroundFirstlevel';
 import { weaponOn, spreadWeapon, threeWayWeapon } from '../objects/weapon';
-import config from '../config';
-import conf from '../levelsConfig';
+import levelsConfig from '../levelsConfig';
 
 export function preloadAnimation() {
-  this.load.image('background', conf[currentGameState.level].bg);
-  //------------------------------------bullets---------------------------
+  this.load.image('background', levelsConfig[gameState.level].bg);
+  // ------------------------------------bullets---------------------------
   this.load.image('bullet', './img/player/shot.png');
   this.load.image('bossbullet', './img/player/bossShot.png');
   this.load.image('missile', './img/player/shot1.png');
   this.load.spritesheet('missile2', './img/player/missile.png', 40, 18);
-  //----------------------enemies-----------------------------------------
+  // ----------------------enemies-----------------------------------------
   this.load.image('enemy_1', './img/enemy/enemy_1.png');
   this.load.image('enemy_2', './img/enemy/enemy_2.png');
   this.load.image('enemy_3', './img/enemy/enemy_3.png');
-  this.load.image('boss', conf[currentGameState.level].boss);
-  this.load.image('bossRed', conf[currentGameState.level].bossRed);
-  //-----------------------particle----------------------------------------
+  this.load.image('boss', levelsConfig[gameState.level].boss);
+  this.load.image('bossRed', levelsConfig[gameState.level].bossRed);
+  // -----------------------particle----------------------------------------
   this.load.spritesheet('stars', './img/states/rain.png', 17, 17);
-  //-----------------------benefits image----------------------------------
+  // -----------------------benefits image----------------------------------
   this.load.image('health', './img/player/health.png');
   this.load.image('score', './img/player/score.png');
   this.load.image('shield', './img/player/shield.png');
@@ -28,10 +27,11 @@ export function preloadAnimation() {
   this.load.image('burst', './img/player/burst.png');
   this.load.image('ammo', './img/player/ammo.png');
   //-----------------------------------------------------------------------
-  this.load.spritesheet('button', './img/pause/Buttons.png', 300, 80);
-  this.load.spritesheet('menuButton', './img/pause/mainMenuButton.png', 300, 80);
-  this.load.spritesheet('reload', './img/pause/reloadButton.png', 300, 80);
-  //-------------------------------mainPlayer--------------------------------
+  this.load.spritesheet('resumeBtnTexture', './img/pause/Buttons.png', 300, 80);
+  this.load.spritesheet('menuBtnTexture', './img/pause/mainMenuButton.png', 300, 80);
+  this.load.spritesheet('loadBtnTexture', './img/pause/load.png', 300, 80);
+  this.load.spritesheet('saveGameBtnTexture', './img/pause/saveButton.png', 300, 80);
+  // -------------------------------mainPlayer--------------------------------
   this.load.spritesheet('mainPlayer', './img/player/mainPlayer.png', 95, 58);
   this.load.spritesheet('mainPlayerGreen', './img/player/mainPlayerGreen.png', 95, 58);
   this.load.spritesheet('mainPlayerRed', './img/player/mainPlayerRed.png', 95, 58);
@@ -49,10 +49,10 @@ export function createAnimation() {
     height: 512,
     asset: 'background',
   });
-  this.background.scale.setTo(config.gameWidth / this.background.width, config.gameHeight / this.background.height);
+  this.background.scale.setTo(gameState.gameWidth / this.background.width, gameState.gameHeight / this.background.height);
   this.game.add.existing(this.background);
-  //---------------------------particles----------------------------------------
-  this.emitter = game.add.emitter(game.world.centerX, -config.gameWidth, 600);
+  // ---------------------------particles----------------------------------------
+  this.emitter = game.add.emitter(game.world.centerX, -gameState.gameWidth, 600);
 
   this.emitter.width = game.world.width;
   this.emitter.height = game.world.height;
@@ -60,8 +60,8 @@ export function createAnimation() {
 
   this.emitter.makeParticles('stars');
 
-  this.emitter.minParticleScale = 0.1// + config.gameWidth/1024 - 1;
-  this.emitter.maxParticleScale = 0.5// + config.gameWidth/1024 - 1;
+  this.emitter.minParticleScale = 0.1;// + gameState.gameWidth/1024 - 1;
+  this.emitter.maxParticleScale = 0.5;// + gameState.gameWidth/1024 - 1;
 
   this.emitter.setYSpeed(300, 500);
   this.emitter.setXSpeed(-5, 5);
@@ -70,9 +70,9 @@ export function createAnimation() {
   this.emitter.maxRotation = 0;
 
   this.emitter.start(false, 1600, 5, 0);
-  //---------------------------MainPlayer---------------------------------------
+  // ---------------------------MainPlayer---------------------------------------
   this.mainPlayer = this.game.add.sprite(-1800, this.game.world.centerY, 'mainPlayer');
-  this.mainPlayer.scale.setTo(config.gameWidth/1300);
+  this.mainPlayer.scale.setTo(gameState.gameWidth / 1300);
   this.mainPlayer.anchor.setTo(0.5);
   this.game.add.existing(this.mainPlayer);
   this.game.physics.enable(this.mainPlayer, Phaser.Physics.ARCADE);
@@ -111,9 +111,6 @@ export function createAnimation() {
   this.weapon1 = weaponOn.apply(this);
   this.weapon2 = spreadWeapon.apply(this);
   this.weapon3 = threeWayWeapon.apply(this);
-  config.weapons.push(this.weapon1);
-  config.weapons.push(this.weapon2);
-  config.weapons.push(this.weapon3);
 }
 
 export function explode() {

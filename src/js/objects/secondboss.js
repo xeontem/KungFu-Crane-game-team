@@ -1,25 +1,25 @@
 import Phaser from 'phaser-ce';
 
-import currentGameState from '../currentGameState';
-import config from '../config';
+import { gameState } from '../currentGameState';
+import { gameState } from '../currentGameState';
 
 export default class extends Phaser.Group {
   constructor({ game, parent, name, addToStage, enableBody, physicsBodyType }) {
-  super(game, parent, name, addToStage, enableBody, physicsBodyType);
+    super(game, parent, name, addToStage, enableBody, physicsBodyType);
     this.y = -200;
     this.HPinfo = game.add.text(
       400,
-      config.gameHeight - 50,
+      gameState.gameHeight - 50,
       `BOSS HP: ${this.HPinfo}`,
       { font: '32px Arial', fill: '#dddddd' });
     this.HPinfo.anchor.setTo(0.5);
-    this.HP = config.firstBossHP;
+    this.HP = gameState.firstBossHP;
   }
 
   spawn() {
-    const boss = this.create(config.gameWidth, config.gameHeight / 2, 'enemy');
+    const boss = this.create(gameState.gameWidth, gameState.gameHeight / 2, 'enemy');
     boss.anchor.setTo(0.5);
-    boss.scale.setTo(2 + config.gameWidth/1024 - 1, 5 + config.gameHeight/512 - 1);// scale
+    boss.scale.setTo(2 + gameState.gameWidth / 1024 - 1, 5 + gameState.gameHeight / 512 - 1);// scale
   }
 
   bossKiller(game, bullet, boss) {
@@ -28,10 +28,10 @@ export default class extends Phaser.Group {
       game.boss.HP--;
     } else {
       boss.kill();
-      currentGameState.score += 1000;
-      currentGameState.levelscore = 0;
-      currentGameState.bosstime = false;
-      currentGameState.bosskilled = true;
+      gameState.score += 1000;
+      gameState.levelscore = 0;
+      gameState.bosstime = false;
+      gameState.bosskilled = true;
       game.winText = game.add.text(
         game.world.centerX,
         game.world.centerY,

@@ -8,7 +8,7 @@ import mainMenu from './states/mainMenu';
 import level from './states/level';
 import createName from './states/createName';
 import score from './states/score';
-import config from './config';
+import { gameState } from './currentGameState';
 
 class Game extends Phaser.Game {
   constructor() {
@@ -19,10 +19,7 @@ class Game extends Phaser.Game {
       active: false,
     });
 
-    config.gameWidth = document.documentElement.clientWidth;
-    config.gameHeight = document.documentElement.clientHeight;
-
-    super(config.gameWidth, config.gameHeight, Phaser.CANVAS, 'content', null);
+    super(gameState.gameWidth, gameState.gameHeight, Phaser.CANVAS, 'content', null);
 
     this.state.add('intro', intro, false);
     this.state.add('mainMenu', mainMenu, false);

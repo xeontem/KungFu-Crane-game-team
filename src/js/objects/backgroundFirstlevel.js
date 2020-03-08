@@ -1,7 +1,6 @@
 import Phaser from 'phaser-ce';
 
-import currentGameState from '../currentGameState';
-import config from '../config';
+import { gameState } from '../currentGameState';
 
 export default class extends Phaser.TileSprite {
   constructor({ game, x, y, width, height, asset }) {
@@ -9,9 +8,9 @@ export default class extends Phaser.TileSprite {
   }
 
   update() {
-    if (currentGameState.bosstime) {
+    if (gameState.bosstime) {
       this.tilePosition.x -= 5;
-    } else if (currentGameState.bosskilled) {
+    } else if (gameState.bosskilled) {
       this.tilePosition.x -= 15;
     } else {
       this.tilePosition.x -= 1;

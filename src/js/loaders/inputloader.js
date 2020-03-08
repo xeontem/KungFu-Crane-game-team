@@ -1,6 +1,6 @@
-import config from '../config';
+import { gameState } from '../currentGameState';
 
-export default () => {
+export default (createName, playerName) => {
   const body = document.getElementById('game');
   const div = document.createElement('div');
   const title = document.createElement('p');
@@ -8,7 +8,8 @@ export default () => {
 
   title.innerHTML = 'ENTER YOUR NAME';
   input.setAttribute('autofocus', 'true');
-  div.style.cssText = `width: ${config.gameWidth-10}px; height: ${config.gameHeight-10}px;`;
+  input.value = playerName;
+  div.style.cssText = `width: ${gameState.gameWidth - 10}px; height: ${gameState.gameHeight - 10}px;`;
   div.appendChild(title);
   div.appendChild(input);
   body.appendChild(div);

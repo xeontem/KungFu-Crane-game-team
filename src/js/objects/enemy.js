@@ -1,7 +1,6 @@
 import Phaser from 'phaser-ce';
 
-import currentGameState from '../currentGameState';
-import config from '../config';
+import { gameState } from '../currentGameState';
 
 export default class extends Phaser.Group {
   constructor({ game, parent, name, addToStage, enableBody, physicsBodyType }) {
@@ -20,41 +19,41 @@ export default class extends Phaser.Group {
 
   boundsHandler(enemy, enemies) {
     enemy.kill();
-    if (enemies.children[enemies.total] ===  enemy) {
+    if (enemies.children[enemies.total] === enemy) {
       enemies.again = 1;
       enemies = null;
     }
   }
 
-  boundsHandlerFor3(enemy, enemies){
+  boundsHandlerFor3(enemy, enemies) {
     enemy.kill();
-    if (enemies.children[enemies.total] ===  enemy) {
+    if (enemies.children[enemies.total] === enemy) {
       enemies.again = 1;
       enemies = null;
     }
   }
 
-  onEnemyEnterBounds(enemy, enemies){
+  onEnemyEnterBounds(enemy, enemies) {
     enemy.events.onOutOfBounds.add(this.boundsHandler.bind(this, enemy, enemies), game);
   }
 
-  onEnemyEnterBoundsFor3(enemy, enemies){
+  onEnemyEnterBoundsFor3(enemy, enemies) {
     enemy.events.onOutOfBounds.add(this.boundsHandlerFor3.bind(this, enemy, enemies), game);
   }
-  //--------------------enemies position---------------------------------------------------
+  // --------------------enemies position---------------------------------------------------
 
   position1() { // rand one row
-    let randYpos = game.rnd.integerInRange(100, config.gameHeight-200)
-    let randAmplitude = game.rnd.integerInRange(10, 100);
-    let rndEnemy = `enemy_${game.rnd.integerInRange(1, 3)}`;
-    let yPos = randYpos;
-    let xPos = config.gameWidth-1;
+    const randYpos = game.rnd.integerInRange(100, gameState.gameHeight - 200);
+    const randAmplitude = game.rnd.integerInRange(10, 100);
+    const rndEnemy = `enemy_${game.rnd.integerInRange(1, 3)}`;
+    const yPos = randYpos;
+    let xPos = gameState.gameWidth - 1;
     let tw;
 
     for (let y = 0; y < this.countEnemies; y += 1) {
-      xPos += 100 + config.gameWidth / 35;//scale -----------------------------------
-      let enemy = this.create(xPos, yPos, rndEnemy);
-      enemy.scale.setTo(config.gameWidth / 1424);// scale------------------------------------
+      xPos += 100 + gameState.gameWidth / 35;// scale -----------------------------------
+      const enemy = this.create(xPos, yPos, rndEnemy);
+      enemy.scale.setTo(gameState.gameWidth / 1424);// scale------------------------------------
       enemy.anchor.setTo(0.5);
       game.physics.enable(enemy, Phaser.Physics.ARCADE);
       enemy.checkWorldBounds = true;
@@ -64,7 +63,7 @@ export default class extends Phaser.Group {
         enemy.last = true;
       }
 
-      //-------------------behavior----------------------------
+      // -------------------behavior----------------------------
       // set tween within position
       tw = y % 2 ? randYpos + randAmplitude : randYpos - randAmplitude;
       game.add.tween(enemy).to(
@@ -74,23 +73,23 @@ export default class extends Phaser.Group {
         true,
         0,
         100,
-        true
+        true,
       );
     }
   }
 
   position2() { // rand Two rows
-    let randYpos = game.rnd.integerInRange(100, config.gameHeight-200)
-    let randAmplitude = game.rnd.integerInRange(10, 100);
-    let rndEnemy = `enemy_${game.rnd.integerInRange(1, 3)}`;
+    let randYpos = game.rnd.integerInRange(100, gameState.gameHeight - 200);
+    const randAmplitude = game.rnd.integerInRange(10, 100);
+    const rndEnemy = `enemy_${game.rnd.integerInRange(1, 3)}`;
     let yPos = randYpos;
-    let xPos = config.gameWidth-1;
+    let xPos = gameState.gameWidth - 1;
     let tw;
 
     for (let y = 0; y < this.countEnemies; y += 1) {
-      xPos += 100 + config.gameWidth/35;//scale -----------------------------------
-      let enemy = this.create(xPos, yPos, rndEnemy);
-      enemy.scale.setTo(config.gameWidth / 1424);// scale------------------------------------
+      xPos += 100 + gameState.gameWidth / 35;// scale -----------------------------------
+      const enemy = this.create(xPos, yPos, rndEnemy);
+      enemy.scale.setTo(gameState.gameWidth / 1424);// scale------------------------------------
       enemy.anchor.setTo(0.5);
       game.physics.enable(enemy, Phaser.Physics.ARCADE);
       enemy.checkWorldBounds = true;
@@ -100,7 +99,7 @@ export default class extends Phaser.Group {
         enemy.last = true;
       }
 
-      //-------------------behavior----------------------------
+      // -------------------behavior----------------------------
       // set tween within position
       tw = y % 2 ? randYpos + randAmplitude : randYpos - randAmplitude;
       game.add.tween(enemy).to(
@@ -110,23 +109,23 @@ export default class extends Phaser.Group {
         true,
         0,
         100,
-        true
+        true,
       );
     }
 
-    if (randYpos > config.gameHeight / 2) {
-      randYpos = randYpos - config.gameHeight / 2;//config.gameHeight-200;
+    if (randYpos > gameState.gameHeight / 2) {
+      randYpos -= gameState.gameHeight / 2;// gameState.gameHeight-200;
     } else {
-      randYpos = randYpos + config.gameHeight / 2;
+      randYpos += gameState.gameHeight / 2;
     }
 
     yPos = randYpos;
-    xPos = config.gameWidth-1;
+    xPos = gameState.gameWidth - 1;
 
     for (let y = 0; y < this.countEnemies; y += 1) {
-      xPos += 100 + config.gameWidth/35;//scale -----------------------------------
-      let enemy = this.create(xPos, yPos, rndEnemy);
-      enemy.scale.setTo(config.gameWidth/1424);// scale------------------------------------
+      xPos += 100 + gameState.gameWidth / 35;// scale -----------------------------------
+      const enemy = this.create(xPos, yPos, rndEnemy);
+      enemy.scale.setTo(gameState.gameWidth / 1424);// scale------------------------------------
       enemy.anchor.setTo(0.5);
       game.physics.enable(enemy, Phaser.Physics.ARCADE);
       enemy.checkWorldBounds = true;
@@ -136,7 +135,7 @@ export default class extends Phaser.Group {
         enemy.last = true;
       }
 
-      //-------------------behavior----------------------------
+      // -------------------behavior----------------------------
       // set tween within position
       tw = y % 2 ? randYpos + randAmplitude : randYpos - randAmplitude;
       game.add.tween(enemy).to(
@@ -146,23 +145,23 @@ export default class extends Phaser.Group {
         true,
         0,
         100,
-        true
+        true,
       );
     }
   }
 
   position3() { // columnAndRows
-    let randYpos = game.rnd.integerInRange(100, config.gameHeight/2);
-    let rndEnemy = `enemy_${game.rnd.integerInRange(1, 3)}`;
-    let rndRows = game.rnd.integerInRange(1, 5);
-    let yPos = randYpos;//config.gameHeight-200;
-    let xPos = config.gameWidth+50;
+    const randYpos = game.rnd.integerInRange(100, gameState.gameHeight / 2);
+    const rndEnemy = `enemy_${game.rnd.integerInRange(1, 3)}`;
+    const rndRows = game.rnd.integerInRange(1, 5);
+    let yPos = randYpos;// gameState.gameHeight-200;
+    let xPos = gameState.gameWidth + 50;
 
     for (let z = 0; z < rndRows; z++) {
       for (let y = 0; y < 7; y += 1) {
-        //xPos++;
-        let enemy = this.create(xPos, yPos, rndEnemy);
-        enemy.scale.setTo(config.gameWidth/1424);// scale------------------------------------
+        // xPos++;
+        const enemy = this.create(xPos, yPos, rndEnemy);
+        enemy.scale.setTo(gameState.gameWidth / 1424);// scale------------------------------------
         enemy.anchor.setTo(0.5);
         game.physics.enable(enemy, Phaser.Physics.ARCADE);
         enemy.checkWorldBounds = true;
@@ -172,74 +171,74 @@ export default class extends Phaser.Group {
           enemy.last = true;
         }
 
-        yPos += 60 + config.gameHeight/26;//scale -----------------------------------
+        yPos += 60 + gameState.gameHeight / 26;// scale -----------------------------------
       }
 
-      xPos += 120 + config.gameWidth/35;//scale -----------------------------------
+      xPos += 120 + gameState.gameWidth / 35;// scale -----------------------------------
       yPos = randYpos;
     }
   }
 
   position4() { // DiagonalRow
-    let randYpos = game.rnd.integerInRange(100, config.gameHeight/2)
-    let rndEnemy = `enemy_${game.rnd.integerInRange(1, 3)}`;
-    let yPos = randYpos;//config.gameHeight-200;
-    let xPos = config.gameWidth+50;
+    const randYpos = game.rnd.integerInRange(100, gameState.gameHeight / 2);
+    const rndEnemy = `enemy_${game.rnd.integerInRange(1, 3)}`;
+    let yPos = randYpos;// gameState.gameHeight-200;
+    let xPos = gameState.gameWidth + 50;
     let rowCount = 0;
     let tw;
 
-    for (let y = 0; y < this.countEnemies+10; y += 1) {
-      let enemy = this.create(xPos, yPos, rndEnemy);
-      enemy.scale.setTo(config.gameWidth / 1424);// scale------------------------------------
+    for (let y = 0; y < this.countEnemies + 10; y += 1) {
+      const enemy = this.create(xPos, yPos, rndEnemy);
+      enemy.scale.setTo(gameState.gameWidth / 1424);// scale------------------------------------
       enemy.anchor.setTo(0.5);
       game.physics.enable(enemy, Phaser.Physics.ARCADE);
       enemy.checkWorldBounds = true;
       enemy.events.onEnterBounds.add(this.onEnemyEnterBounds.bind(this, enemy, this), game);
 
-      if (y == this.countEnemies-1) {
+      if (y == this.countEnemies - 1) {
         enemy.last = true;
       }
 
-      xPos += 60 + config.gameWidth / 35;//scale -----------------------------------
-      yPos += 60 + config.gameHeight / 26;//scale -----------------------------------
+      xPos += 60 + gameState.gameWidth / 35;// scale -----------------------------------
+      yPos += 60 + gameState.gameHeight / 26;// scale -----------------------------------
       tw = xPos;
 
-      if (yPos > config.gameHeight - 200) {
+      if (yPos > gameState.gameHeight - 200) {
         rowCount++;
-        xPos = config.gameWidth + 50 + 120 * rowCount + config.gameWidth / 35;//scale -----------------------------------;
+        xPos = gameState.gameWidth + 50 + 120 * rowCount + gameState.gameWidth / 35;// scale -----------------------------------;
         yPos = randYpos;
       }
     }
   }
 
   position5() { // duckWedge
-    let randYpos = game.rnd.integerInRange(100, config.gameHeight/2 - 200);
-    let rndEnemy = `enemy_${game.rnd.integerInRange(1, 3)}`;
-    let rndRows = game.rnd.integerInRange(1, 3);
-    let yPos = randYpos;//config.gameHeight-200;
-    let xPos = config.gameWidth+600;
-    let rowCount = 0;
+    const randYpos = game.rnd.integerInRange(100, gameState.gameHeight / 2 - 200);
+    const rndEnemy = `enemy_${game.rnd.integerInRange(1, 3)}`;
+    const rndRows = game.rnd.integerInRange(1, 3);
+    let yPos = randYpos;// gameState.gameHeight-200;
+    let xPos = gameState.gameWidth + 600;
+    const rowCount = 0;
 
     for (let z = 0; z < rndRows; z++) {
       for (let y = 0; y < 11; y += 1) {
-        let enemy = this.create(xPos, yPos, rndEnemy);
-        enemy.scale.setTo(config.gameWidth/1424);// scale------------------------------------
+        const enemy = this.create(xPos, yPos, rndEnemy);
+        enemy.scale.setTo(gameState.gameWidth / 1424);// scale------------------------------------
         enemy.anchor.setTo(0.5);
         game.physics.enable(enemy, Phaser.Physics.ARCADE);
         enemy.checkWorldBounds = true;
         enemy.events.onEnterBounds.add(this.onEnemyEnterBounds.bind(this, enemy, this), game);
-        if (y === this.countEnemies-1) {
+        if (y === this.countEnemies - 1) {
           enemy.last = true;
         }
 
-        yPos += 60 + config.gameHeight/26;//scale -----------------------------------
+        yPos += 60 + gameState.gameHeight / 26;// scale -----------------------------------
         if (y < 5) {
-          xPos -= 60 + config.gameWidth/35;//scale -----------------------------------
+          xPos -= 60 + gameState.gameWidth / 35;// scale -----------------------------------
         } else {
-          xPos += 60 + config.gameWidth/35;//scale -----------------------------------
+          xPos += 60 + gameState.gameWidth / 35;// scale -----------------------------------
         }
       }
-      xPos = config.gameWidth + 600 + 120 + config.gameWidth/35;//scale -----------------------------------;
+      xPos = gameState.gameWidth + 600 + 120 + gameState.gameWidth / 35;// scale -----------------------------------;
       yPos = randYpos;
     }
   }
@@ -247,11 +246,11 @@ export default class extends Phaser.Group {
   // -----------------------enemies movement------------------------------------------------
 
   move1() { // linear
-    this.x -= config.enemiesSpeed;
+    this.x -= gameState.enemiesSpeed;
   }
 
   move2() { // upanddown
-    this.x -= config.enemiesSpeed;
+    this.x -= gameState.enemiesSpeed;
     if (this.a < this.b) {
       this.y -= 1;
       this.a === 49 ? this.a = 100 : this.a++;

@@ -1,6 +1,6 @@
 import Phaser from 'phaser-ce';
 import { shot } from '../sound/explosures';
-import config from '../config';
+import { gameState } from '../currentGameState';
 
 export function weaponOn() {
   this.weapon = this.game.add.weapon(30, 'bullet');
@@ -10,7 +10,7 @@ export function weaponOn() {
   this.weapon.trackSprite(this.mainPlayer, 65, 0, false);
   this.weapon.onFire.add(invokeSoundOnFire, this);
   this.game.physics.enable(this.weapon, Phaser.Physics.ARCADE);
-  return { weapon : this.weapon, multiple: false };
+  return { weapon: this.weapon, multiple: false };
 }
 
 export function threeWayWeapon() {
@@ -38,7 +38,7 @@ export function threeWayWeapon() {
   this.gun3.onFire.add(invokeSoundOnFire, this);
   this.game.physics.enable(this.gun3, Phaser.Physics.ARCADE);
 
-  return { weapon : [ this.gun1, this.gun2, this.gun3 ], multiple: true };
+  return { weapon: [this.gun1, this.gun2, this.gun3], multiple: true };
 }
 
 export function spreadWeapon() {
@@ -53,7 +53,7 @@ export function spreadWeapon() {
   this.spreadWeapon.onFire.add(invokeSoundOnFire, this);
   this.game.physics.enable(this.spreadWeapon, Phaser.Physics.ARCADE);
 
-  return { weapon : this.spreadWeapon, multiple: false };
+  return { weapon: this.spreadWeapon, multiple: false };
 }
 
 

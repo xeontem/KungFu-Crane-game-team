@@ -1,23 +1,26 @@
 import Phaser from 'phaser-ce';
 import BackgroundMainMenu from '../objects/backgroundMainMenu';
 import { loadMusic, applyMusic } from '../sound/bgmusic';
-import { anyGamepadKeyPressed } from '../controls/controls';
-import currentGameState from '../currentGameState';
-import config from '../config';
+import { getGamepad, loadAndStartSavedGame, applyNextActiveBtnIndex } from '../controls/controls';
+import { gameState, resetGameState } from '../currentGameState';
 
 export default class extends Phaser.State {
   preload() {
-    this.load.spritesheet('start', './img/pause/start.png', 300, 80);
-    this.load.spritesheet('scores', './img/pause/scores.png', 300, 80);
+    this.load.spritesheet('startBtnTexture', './img/pause/start.png', 300, 80);
+    this.load.spritesheet('scoresBtnTexture', './img/pause/scores.png', 300, 80);
+    this.load.spritesheet('loadBtnTexture', './img/pause/load.png', 300, 80);
     this.load.image('loaderBg', './img/states/bgMainMenu.jpg');
     this.load.image('player', './img/player/player.png');
     loadMusic.apply(this);
   }
 
   create() {
-    currentGameState.reset();
-    config.reset();
+    resetGameState();
     applyMusic.apply(this);
+
+    // set input
+    this.enterBtn = game.input.keyboard.addKey(Phaser.Keyboard.ENTER);
+    this.cursors = game.input.keyboard.createCursorKeys();
 
     this.background = new BackgroundMainMenu({
       game,
@@ -27,72 +30,121 @@ export default class extends Phaser.State {
       height: 512,
       asset: 'loaderBg',
     });
-    this.background.scale.setTo(config.gameWidth / this.background.width, config.gameHeight / this.background.height);
+    this.background.scale.setTo(gameState.gameWidth / this.background.width, gameState.gameHeight / this.background.height);
     this.game.add.existing(this.background);
-    this.playerBack = this.game.add.sprite(this.game.world.centerX - config.gameWidth/16, this.game.world.centerY, 'player');
+    this.playerBack = this.game.add.sprite(this.game.world.centerX - gameState.gameWidth / 16, this.game.world.centerY, 'player');
     this.playerBack.anchor.setTo(0.5);
-    this.playerBack.scale.setTo(config.gameHeight/1050);
-    this.Hawks = this.add.text(
+    this.playerBack.scale.setTo(gameState.gameHeight / 1050);
+    this.gameTitle = this.add.text(
       this.world.centerX,
-      this.world.centerY - config.gameHeight/10,
-      `Hawking Revenge `,
-      { font: `${config.gameHeight/15}px Orbitron`, fontWeight: 'bold', fill: '#ff0' }
+      this.world.centerY - gameState.gameHeight / 10,
+      'Hawking Revenge ',
+      { font: `${gameState.gameHeight / 15}px Orbitron`, fontWeight: 'bold', fill: '#ff0' },
     );
-    this.Hawks.anchor.setTo(0.5);
+    this.gameTitle.anchor.setTo(0.5);
 
-    //--------------------------------------BUTTONS------------------------------------------------------------------------
-    this.startButton = this.game.add.button(this.game.world.centerX, config.gameHeight - config.gameHeight/5, 'start', this.toStart, this, 1, 0, 1);
-    this.startButton.scale.setTo(config.gameHeight/1050);
-    this.startButton.anchor.setTo(0.5);
-    this.scoreButton = this.game.add.button(this.game.world.centerX, config.gameHeight - config.gameHeight/10, 'scores', this.toScores, this, 1, 0, 1);
-    this.scoreButton.scale.setTo(config.gameHeight/1050);
-    this.scoreButton.anchor.setTo(0.5);
-    //---------------------------------------------------------------------------------------------------------------------
+    // --------------------------------------BUTTONS------------------------------------------------
+    this.loopedNextActiveIndex = 0;
+    this.buttonList = [
+      {
+        texture: 'startBtnTexture',
+        handler: this.toStart,
+      },
+      {
+        texture: 'loadBtnTexture',
+        handler: this.loadSavedGame,
+      },
+      {
+        texture: 'scoresBtnTexture',
+        handler: this.toScores,
+      },
+    ];
+
+    this.buttonInstances = this.buttonList.map((btnData, i) => {
+      const currentButton = this.game.add.button(
+        this.game.world.centerX,
+        gameState.gameHeight - (80 * (this.buttonList.length - i)),
+        btnData.texture,
+        btnData.handler,
+        this,
+        1,
+        0,
+        1,
+      );
+      currentButton.scale.setTo(gameState.gameHeight / 1050);
+      currentButton.anchor.setTo(0.5);
+      return currentButton;
+    });
+    this.buttonInstances[this.loopedNextActiveIndex].frame = 1;
+    // ---------------------------------------------------------------------------------------------
     this.startGame = false;
     this.startScore = false;
   }
 
   update() {
-    //---------------------------scale block-----------------------------------
-    config.gameWidth = document.documentElement.clientWidth;
-    config.gameHeight = document.documentElement.clientHeight;
-    this.game.width = config.gameWidth;
-    this.game.height = config.gameHeight;
+    // ---------------------------scale block-----------------------------------
+    gameState.gameWidth = document.documentElement.clientWidth;
+    gameState.gameHeight = document.documentElement.clientHeight;
+    this.game.width = gameState.gameWidth;
+    this.game.height = gameState.gameHeight;
     //-------------------------------------------------------------------------
-    if (anyGamepadKeyPressed()) {
-      this.toStart();
+    const gamepad = getGamepad();
+    if (((gamepad && gamepad.buttons[2].pressed) || this.enterBtn.repeats === 1) && !this.startGame) {
+      this.buttonList[this.loopedNextActiveIndex].handler.apply(this);
     }
 
-    if (this.startGame || this.startScore) {
-      this.scoreButton.y += 12;
-      if (this.scoreButton.y > config.gameHeight+30) {
-        this.startButton.y += 12;
+    if (this.cursors.up.repeats === 1 || (gamepad && gamepad.buttons[12].pressed)) {
+      applyNextActiveBtnIndex.call(this, true);
+    }
+
+    if (this.cursors.down.repeats === 1 || (gamepad && gamepad.buttons[13].pressed)) {
+      applyNextActiveBtnIndex.call(this, false);
+    }
+
+    const bottomScreenBound = gameState.gameHeight + 50;
+    if (this.startGame || this.startScore || this.startSavedGame) {
+      this.buttonInstances.forEach((btn, i) => {
+        if (btn.y < bottomScreenBound) {
+          if (i === 0 || this.buttonInstances[i - 1].y < bottomScreenBound) {
+            btn.y += 12;
+          }
+        }
+      });
+      if (
+        this.gameTitle.y < bottomScreenBound &&
+        this.buttonInstances[this.buttonInstances.length - 1].y >= bottomScreenBound
+      ) {
+        this.gameTitle.y += 12;
       }
-      if (this.startButton.y > config.gameHeight+30) {
-        this.Hawks.y += 12;
-      }
-      if (this.Hawks.y > config.gameHeight+30 && this.background.alpha > 0.03) {
+      if (this.gameTitle.y > bottomScreenBound && this.background.alpha > 0) {
         this.background.alpha -= 0.02;
       }
-      if (this.background.alpha < 0.03) {
+      if (this.background.alpha <= 0) {
         if (this.startGame) {
           this.mainMenuMusic.pause();
           this.state.start('createName');
-        }
-        if (this.startScore) {
+          this.startGame = false;
+        } else if (this.startScore) {
           this.state.start('score');
+          this.startScore = false;
+        } else if (this.startSavedGame) {
+          this.mainMenuMusic.pause();
+          loadAndStartSavedGame(this);
+          this.startSavedGame = false;
         }
       }
     }
   }
 
   toStart() {
-    this.countdown = this.time.now;
     this.startGame = true;
   }
 
   toScores() {
-    this.countdown = this.time.now;
     this.startScore = true;
+  }
+
+  loadSavedGame() {
+    this.startSavedGame = true;
   }
 }

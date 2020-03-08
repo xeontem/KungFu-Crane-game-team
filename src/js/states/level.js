@@ -1,15 +1,13 @@
 import Phaser from 'phaser-ce';
-import config from '../config';
-import currentGameState from '../currentGameState';
+import { gameState, resetLevelState } from '../currentGameState';
 import { preloadAnimation, createAnimation, paintInYellow, normalPaintBoss } from '../loaders/animationsloader';
 import enemiesloader from '../loaders/enemiesloader';
 import gameOverloader from '../loaders/gameOverloader';
 import bossloader from '../loaders/bossloader';
 import collisionloader from '../loaders/collisionloader';
-import resetter from '../loaders/resetter';
-import { keysOn, setKeys, keyboardButtonsAdapter, gamepad, gamepadButtonsAdapter } from '../controls/controls';
+import { keysOn, setLevelInput, keyboardButtonsAdapter, getGamepad, gamepadButtonsAdapter } from '../controls/controls';
 import { loadMusic, applyMusic } from '../sound/bgmusic';
-import conf from '../levelsConfig';
+import levelsConfig from '../levelsConfig';
 
 export default class extends Phaser.State {
   preload() {
@@ -18,55 +16,60 @@ export default class extends Phaser.State {
   }
 
   create() {
-    resetter.apply(this);
+    resetLevelState();
+    this.boss = null;
+    this.bossWeapon11 = null;
+    this.bossWeapon21 = null;
+    this.bossWeapon22 = null;
     // -----------------music-----------------------------------------
     applyMusic.apply(this);
     //---------------------------------------------------------------
     createAnimation.apply(this);
-    setKeys.apply(this);
+    setLevelInput.apply(this);
     // -------------------------statusBar---------------------------------
     this.scoreText = this.add.text(
-        config.gameWidth - config.gameWidth / 8.4,
-        config.gameHeight - config.gameHeight / 21,
-        `score: ${currentGameState.score}`,
-        { font: `${config.gameHeight / 32.8}px Orbitron`, fill: '#dddddd' });
+        gameState.gameWidth - gameState.gameWidth / 8.4,
+        gameState.gameHeight - gameState.gameHeight / 21,
+        `score: ${gameState.score}`,
+        { font: `${gameState.gameHeight / 32.8}px Orbitron`, fill: '#dddddd' });
     this.scoreText.anchor.setTo(0.5);
 
     this.mainPlayerHP = this.add.text(
-        config.gameWidth / 8.4,
-        config.gameHeight - config.gameHeight / 21,
-        `HP: ${config.mainPlayerHP}`,
-        { font: `${config.gameHeight / 32.8}px Orbitron`, fill: '#dddddd' });
+        gameState.gameWidth / 8.4,
+        gameState.gameHeight - gameState.gameHeight / 21,
+        `HP: ${gameState.mainPlayerHP}`,
+        { font: `${gameState.gameHeight / 32.8}px Orbitron`, fill: '#dddddd' });
     this.mainPlayerHP.anchor.setTo(0.5);
 
     // -----------------------------countdown---------------------------------
     this.countdown = this.time.now;
     this.levelName = this.add.text(
-      config.gameWidth / 2,
-      (config.gameHeight / 2) - 50,
-      conf[currentGameState.level].levelName,
-      { font: `${config.gameHeight/32.8}px Orbitron`, fill: '#dddddd' }
+      gameState.gameWidth / 2,
+      (gameState.gameHeight / 2) - 50,
+      levelsConfig[gameState.level].levelName,
+      { font: `${gameState.gameHeight/32.8}px Orbitron`, fill: '#dddddd' }
     );
     this.levelName.anchor.setTo(0.5);
 
     // -----------------------------winCase-----------------------------------------
     this.winText = this.add.text(
-      config.gameWidth / 2,
-      (config.gameHeight / 2),
+      gameState.gameWidth / 2,
+      (gameState.gameHeight / 2),
       '',
-      { font: `${config.gameHeight/32.8}px Orbitron`, fill: '#dddddd' }
+      { font: `${gameState.gameHeight/32.8}px Orbitron`, fill: '#dddddd' }
     );
     this.winText.anchor.setTo(0.5);
   }
 
   update() {
     // ---------------------------scale block-----------------------------------
-    config.gameWidth = document.documentElement.clientWidth;
-    config.gameHeight = document.documentElement.clientHeight;
-    this.game.width = config.gameWidth;
-    this.game.height = config.gameHeight;
-    //-------------------------------------------------------------------------
-    this.currentWeapon = this[`weapon${currentGameState.mainPlayerWeapon}`];
+    gameState.gameWidth = document.documentElement.clientWidth;
+    gameState.gameHeight = document.documentElement.clientHeight;
+    this.game.width = gameState.gameWidth;
+    this.game.height = gameState.gameHeight;
+
+    //-------------------------- weapon ------------------------------------
+    this.currentWeapon = this[`weapon${gameState.mainPlayerWeapon}`];
     // --------------------------countDown-------------------------------------
 
     if (this.time.now < this.countdown + 2000) {
@@ -78,8 +81,8 @@ export default class extends Phaser.State {
 
       collisionloader.apply(this);
       // --------------------------update statusBar------------------------------
-      this.mainPlayerHP.text = `HP: ${config.mainPlayerHP} `;
-      this.scoreText.text = `score: ${currentGameState.score} `;
+      this.mainPlayerHP.text = `HP: ${gameState.mainPlayerHP} `;
+      this.scoreText.text = `score: ${gameState.score} `;
 
       // --------------------------if press nothing stop the ship------------
       this.mainPlayer.body.velocity.x = 0;
@@ -87,21 +90,21 @@ export default class extends Phaser.State {
 
       // ------------------------changing states of main player----------------
 
-      if (config.mainPlayerHP == 1) {
+      if (gameState.mainPlayerHP == 1) {
         this.mainPlayer.animations.add('up', [39, 40, 41, 42, 43, 44, 45, 46, 47]);
         this.mainPlayer.animations.add('upBack', [47, 46, 45, 44, 43, 42, 41, 40, 39]);
         this.mainPlayer.animations.add('down', [48, 49, 50, 51, 52, 53, 54, 55, 56]);
         this.mainPlayer.animations.add('downBack', [56, 55, 54, 53, 52, 51, 50, 49, 48]);
         this.mainPlayer.frame = 38;
       }
-      else if (config.mainPlayerHP == 2) {
+      else if (gameState.mainPlayerHP == 2) {
         this.mainPlayer.animations.add('up', [20, 21, 22, 23, 24, 25, 26, 27, 28]);
         this.mainPlayer.animations.add('upBack', [28, 27, 26, 25, 24, 23, 22, 21, 20]);
         this.mainPlayer.animations.add('down', [29, 30, 31, 32, 33, 34, 35, 36, 37]);
         this.mainPlayer.animations.add('downBack', [37, 36, 35, 34, 33, 32, 31, 30, 29]);
         this.mainPlayer.frame = 19;
       }
-      else if (config.mainPlayerHP > 2) {
+      else if (gameState.mainPlayerHP > 2) {
         this.mainPlayer.animations.add('up', [1, 2, 3, 4, 5, 6, 7, 8, 9]);
         this.mainPlayer.animations.add('upBack', [9, 8, 7, 6, 5, 4, 3, 2, 1]);
         this.mainPlayer.animations.add('down', [10, 11, 12, 13, 14, 15, 16, 17, 18]);
@@ -110,7 +113,7 @@ export default class extends Phaser.State {
       }
 
       // -------------------------boss alive-------------------------------------------------
-      if (!currentGameState.bosskilled) {
+      if (!gameState.bosskilled) {
         // ------------------------spawn enemies-------------------------------------
         enemiesloader.apply(this);
         // ---------------------spawn boss------------------------------------------
@@ -119,8 +122,8 @@ export default class extends Phaser.State {
         this.winText.text = 'Well done!';
         // /this.mainPlayer.x += 20; TODO!!!!
         if (this.time.now > this.countdown + 4000) {
-          currentGameState.level += 1;
-          if (currentGameState.level > conf.length - 1) {
+          gameState.level += 1;
+          if (gameState.level > levelsConfig.length - 1) {
             gameOverloader.apply(this);
           } else {
             this.state.start('level');
@@ -128,17 +131,17 @@ export default class extends Phaser.State {
         }
       }
       // --------------------if mainPlayer dies-----------------------------------
-      if (currentGameState.mainPlayerKilled) {
+      if (gameState.mainPlayerKilled) {
         gameOverloader.apply(this);
       }
 
       // ---------------------controls----------------------------------------
+      const gamepad = getGamepad();
       if (gamepad) {
         keysOn.call(this, gamepadButtonsAdapter(this));
-      } else {
-        const buttons = keyboardButtonsAdapter(this);
-        keysOn.call(this, buttons);
       }
+      const buttons = keyboardButtonsAdapter(this);
+      keysOn.call(this, buttons);
     }
   }
 

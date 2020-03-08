@@ -1,11 +1,11 @@
 import Phaser from 'phaser-ce';
 import createInput from '../loaders/inputloader';
-import currentGameState from '../currentGameState';
+import { gameState, resetGameState } from '../currentGameState';
 import { anyGamepadKeyPressed } from '../controls/controls';
 
 export default class extends Phaser.State {
   preload() {
-    const { div, input } = createInput(this);
+    const { div, input } = createInput(this, gameState.name);
     this.div = div;
     this.input = input;
   }
@@ -15,9 +15,10 @@ export default class extends Phaser.State {
   }
 
   update() {
-    if (this.enterBtn.isDown || anyGamepadKeyPressed()) {
-      currentGameState.name = this.input.value || 'player';
+    if (this.enterBtn.repeats === 1 || anyGamepadKeyPressed()) {
+      gameState.name = this.input.value;
       document.body.removeChild(this.div);
+      resetGameState();
       this.state.start('level');
     }
   }

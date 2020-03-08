@@ -1,12 +1,11 @@
 import Phaser from 'phaser-ce';
 
-import currentGameState from '../currentGameState';
+import { gameState } from '../currentGameState';
 import Boss from '../objects/boss';
-import config from '../config';
 
 export default function () {
   if (this.boss) {
-    if (currentGameState.level == 0) {
+    if (gameState.level == 0) {
       if (!this.bossWeapon11) {
         this.bossWeapon11 = this.game.add.weapon(10, 'bossbullet');
         this.bossWeapon11.bulletSpeed = 600;
@@ -18,9 +17,9 @@ export default function () {
         this.game.physics.enable(this.bossWeapon11, Phaser.Physics.ARCADE);
       }
     }
-    if (currentGameState.level == 1 || currentGameState.level == 2 || currentGameState.level == 3 || currentGameState.level == 4) {
+    if (gameState.level == 1 || gameState.level == 2 || gameState.level == 3 || gameState.level == 4) {
       if (!this.bossWeapon21) {
-        //----------------------------------first gun------------------------------
+        // ----------------------------------first gun------------------------------
         this.bossWeapon21 = this.game.add.weapon(5, 'bossbullet');
         this.bossWeapon21.bulletSpeed = 600;
         this.bossWeapon21.fireRate = 100;
@@ -28,7 +27,7 @@ export default function () {
         this.bossWeapon21.autofire = true;
         this.bossWeapon21.trackSprite(this.boss, 80, -40, true);
         this.game.physics.enable(this.bossWeapon21, Phaser.Physics.ARCADE);
-        //----------------------------------second gun-----------------------------
+        // ----------------------------------second gun-----------------------------
         this.bossWeapon22 = this.game.add.weapon(5, 'bossbullet');
         this.bossWeapon22.bulletSpeed = 600;
         this.bossWeapon22.fireRate = 100;
@@ -39,11 +38,11 @@ export default function () {
       }
     }
   }
-  if (!this.boss && currentGameState.bosstime) {
+  if (!this.boss && gameState.bosstime) {
     this.boss = new Boss({
       game,
-      x: config.gameWidth + 200,
-      y: config.gameHeight - 200,
+      x: gameState.gameWidth + 200,
+      y: gameState.gameHeight - 200,
       asset: 'boss',
     });
     this.game.add.existing(this.boss);
@@ -54,10 +53,10 @@ export default function () {
       true,
       0,
       100,
-      true
+      true,
     );
   }
-  if(this.boss){
+  if (this.boss) {
     this.boss.HPinfo.text = `BOSS HP: ${this.boss.HP}`;
     this.boss.rotation = game.physics.arcade.angleBetween(this.boss, this.mainPlayer);
   }

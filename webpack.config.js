@@ -33,7 +33,8 @@ module.exports = () => {
         comments: false,
       },
     });
-    plugins.push(uglifyPlugin);
+    // TODO: uglify crash the build process
+    // plugins.push(uglifyPlugin);
   }
 
   return {
