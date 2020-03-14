@@ -1,21 +1,24 @@
-import Phaser from 'phaser-ce';
+import { WithControlls, KEYS } from '../core/withMenuControllsState';
 import { gameState, resetLevelState } from '../currentGameState';
 import { preloadAnimation, createAnimation, paintInYellow, normalPaintBoss } from '../loaders/animationsloader';
 import enemiesloader from '../loaders/enemiesloader';
 import gameOverloader from '../loaders/gameOverloader';
 import bossloader from '../loaders/bossloader';
 import collisionloader from '../loaders/collisionloader';
-import { keysOn, setLevelInput, keyboardButtonsAdapter, getGamepad, gamepadButtonsAdapter } from '../controls/controls';
+import { invokePauseMenu } from './pauseMenu';
+import { loadAndStartSavedGame, saveGame } from '../controls/controls';
 import { loadMusic, applyMusic } from '../sound/bgmusic';
 import levelsConfig from '../levelsConfig';
 
-export default class extends Phaser.State {
+export default class extends WithControlls {
   preload() {
+    super.preload();
     preloadAnimation.apply(this);
     loadMusic.apply(this);
   }
 
   create() {
+    super.create();
     resetLevelState();
     this.boss = null;
     this.bossWeapon11 = null;
@@ -25,7 +28,6 @@ export default class extends Phaser.State {
     applyMusic.apply(this);
     //---------------------------------------------------------------
     createAnimation.apply(this);
-    setLevelInput.apply(this);
     // -------------------------statusBar---------------------------------
     this.scoreText = this.add.text(
         gameState.gameWidth - gameState.gameWidth / 8.4,
@@ -62,6 +64,7 @@ export default class extends Phaser.State {
   }
 
   update() {
+    super.update();
     // ---------------------------scale block-----------------------------------
     gameState.gameWidth = document.documentElement.clientWidth;
     gameState.gameHeight = document.documentElement.clientHeight;
@@ -136,12 +139,112 @@ export default class extends Phaser.State {
       }
 
       // ---------------------controls----------------------------------------
-      const gamepad = getGamepad();
-      if (gamepad) {
-        keysOn.call(this, gamepadButtonsAdapter(this));
+      if (this[KEYS.LEFT.UP]) {
+        this.exhaust1.scale.setTo(0.2);
+        this.exhaust2.scale.setTo(0.2);
+        this.exhaust1.y = -15;
+        this.exhaust2.y = 16;
       }
-      const buttons = keyboardButtonsAdapter(this);
-      keysOn.call(this, buttons);
+
+      if (this[KEYS.RIGHT.UP]) {
+        this.exhaust1.scale.setTo(0.2);
+        this.exhaust2.scale.setTo(0.2);
+        this.exhaust1.y = -16;
+        this.exhaust2.y = 15;
+      }
+
+      if (this[KEYS.UP.UP]) {
+        this.mainPlayer.animations.play('upBack', 30, false);
+        if (gameState.mainPlayerHP <= 1) {
+          this.mainPlayer.frame = 38;
+        } else if (gameState.mainPlayerHP <= 2) {
+          this.mainPlayer.frame = 19;
+        } else {
+          this.mainPlayer.frame = 0;
+        }
+      }
+
+      if (this[KEYS.DOWN.UP]) {
+        this.mainPlayer.animations.play('downBack', 30, false);
+        if (gameState.mainPlayerHP <= 1) {
+          this.mainPlayer.frame = 38;
+        } else if (gameState.mainPlayerHP <= 2) {
+          this.mainPlayer.frame = 19;
+        } else {
+          this.mainPlayer.frame = 0;
+        }
+      }
+
+      if (this[KEYS.LEFT.DOWN]) {
+        this.mainPlayer.body.velocity.x = -gameState.mainPlayerSpeed;
+        this.exhaust1.scale.setTo(0.1);
+        this.exhaust2.scale.setTo(0.1);
+        this.exhaust1.y = -17;
+        this.exhaust2.y = 14;
+      }
+
+      if (this[KEYS.RIGHT.DOWN]) {
+        this.mainPlayer.body.velocity.x = gameState.mainPlayerSpeed;
+        this.exhaust1.scale.setTo(0.3);
+        this.exhaust2.scale.setTo(0.3);
+        this.exhaust1.y = -17;
+        this.exhaust2.y = 15;
+      }
+
+      if (this[KEYS.UP.DOWN]) {
+        this.mainPlayer.body.velocity.y = -gameState.mainPlayerSpeed;
+        this.mainPlayer.animations.play('up', 30, false);
+        if (gameState.mainPlayerHP <= 1) {
+          this.mainPlayer.frame = 47;
+        } else if (gameState.mainPlayerHP <= 2) {
+          this.mainPlayer.frame = 28;
+        } else {
+          this.mainPlayer.frame = 9;
+        }
+      }
+
+      if (this[KEYS.DOWN.DOWN]) {
+        this.mainPlayer.body.velocity.y = gameState.mainPlayerSpeed;
+        this.mainPlayer.animations.play('down', 30, false);
+        if (gameState.mainPlayerHP <= 1) {
+          this.mainPlayer.frame = 56;
+        } else if (gameState.mainPlayerHP <= 2) {
+          this.mainPlayer.frame = 37;
+        } else {
+          this.mainPlayer.frame = 18;
+        }
+      }
+
+      if (this[KEYS.CHANGE_WEAPON.ONCE]) {
+        if (gameState.mainPlayerWeapon < 3) {
+          gameState.mainPlayerWeapon += 1;
+        } else {
+          gameState.mainPlayerWeapon = 1;
+        }
+      }
+
+      if (this[KEYS.FIRE.DOWN] && !gameState.mainPlayerKilled) {
+        if (this.currentWeapon.multiple) {
+          this.currentWeapon.weapon.forEach((gun) => {
+            gun.fire();
+          });
+        } else {
+          this.currentWeapon.weapon.fire();
+        }
+      }
+
+      // once handlers
+      if (this[KEYS.MENU.ONCE]) {
+        invokePauseMenu.apply(this);
+      }
+
+      if (this[KEYS.SAVE.ONCE]) {
+        saveGame();
+      }
+
+      if (this[KEYS.LOAD.ONCE]) {
+        loadAndStartSavedGame(this);
+      }
     }
   }
 

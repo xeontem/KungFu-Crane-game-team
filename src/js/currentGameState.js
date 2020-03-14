@@ -18,7 +18,6 @@ const getInitialState = () => ({
   ammoDuration: 5000,
   mouseMoveEnabled: false,
   shouldEnableMouseMove: false,
-  currentWeapon: 1,
 });
 
 export const gameState = getInitialState();

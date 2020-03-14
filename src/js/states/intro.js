@@ -1,14 +1,15 @@
-import Phaser from 'phaser-ce';
+import { WithControlls, KEYS } from '../core/withMenuControllsState';
 import localStorage from '../loaders/storageloader';
-import { anyGamepadKeyPressed } from '../controls/controls';
 
-export default class extends Phaser.State {
+export default class extends WithControlls {
   preload() {
+    super.preload();
     this.game.load.audio('intro', './sounds/intro.ogg');
     this.load.image('loaderBg', './img/states/bgMainMenu.jpg');
   }
 
   create() {
+    super.create();
     localStorage();
     this.music = this.game.add.audio('intro', 1, false, true);
     this.music.play();
@@ -19,11 +20,10 @@ export default class extends Phaser.State {
     this.text.font = 'Orbitron';
 
     this.countdown = this.time.now;
-    // ---------------------------------------skip--------------------------
-    this.fireButton = this.game.input.keyboard.addKey(Phaser.Keyboard.ENTER);
   }
 
   update() {
+    super.update();
     // -------------------------------FIRST TEXT-----------------------------
     if (this.time.now > this.countdown + 2300 && this.time.now < this.countdown + 2500) {
       if (this.text.alpha < 0.95) {
@@ -121,7 +121,7 @@ export default class extends Phaser.State {
       this.state.start('mainMenu');
     }
     // ----------------------------skip------------------------------
-    if (this.fireButton.repeats === 1 || anyGamepadKeyPressed()) {
+    if (this[KEYS.CONFIRM.ONCE]) {
       this.music.pause();
       this.state.start('mainMenu');
     }

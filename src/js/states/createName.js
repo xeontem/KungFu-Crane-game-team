@@ -1,21 +1,22 @@
-import Phaser from 'phaser-ce';
+import { WithControlls, KEYS } from '../core/withMenuControllsState';
 import createInput from '../loaders/inputloader';
 import { gameState, resetGameState } from '../currentGameState';
-import { anyGamepadKeyPressed } from '../controls/controls';
 
-export default class extends Phaser.State {
+export default class extends WithControlls {
   preload() {
+    super.preload();
     const { div, input } = createInput(this, gameState.name);
     this.div = div;
     this.input = input;
   }
 
   create() {
-    this.enterBtn = this.game.input.keyboard.addKey(Phaser.Keyboard.ENTER);
+    super.create();
   }
 
   update() {
-    if (this.enterBtn.repeats === 1 || anyGamepadKeyPressed()) {
+    super.update();
+    if (this[KEYS.CONFIRM.ONCE]) {
       gameState.name = this.input.value;
       document.body.removeChild(this.div);
       resetGameState();

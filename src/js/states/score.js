@@ -1,15 +1,16 @@
-import Phaser from 'phaser-ce';
-import { anyGamepadKeyPressed } from '../controls/controls';
+import { WithControlls, KEYS } from '../core/withMenuControllsState';
 import BackgroundScore from '../objects/backgroundScore';
 import { gameState } from '../currentGameState';
 
-export default class extends Phaser.State {
+export default class extends WithControlls {
   preload() {
+    super.preload();
     this.load.image('loaderBg', './img/states/bgScore.jpg');
     this.load.spritesheet('back', './img/pause/back.png', 300, 80);
   }
 
   create() {
+    super.create();
     const score = JSON.parse(localStorage.getItem('score'));
 
     this.background = new BackgroundScore({
@@ -36,10 +37,10 @@ export default class extends Phaser.State {
     this.backButton.anchor.setTo(0.5);
     this.backButton.frame = 1;
     this.back = false;
-    this.fireButton = this.game.input.keyboard.addKey(Phaser.Keyboard.ENTER);
   }
 
   update() {
+    super.update();
     // ---------------------------scale block-----------------------------------
     gameState.gameWidth = document.documentElement.clientWidth;
     gameState.gameHeight = document.documentElement.clientHeight;
@@ -47,7 +48,7 @@ export default class extends Phaser.State {
     this.game.height = gameState.gameHeight;
     //-------------------------------------------------------------------------
 
-    if ((this.fireButton.repeats === 1 || anyGamepadKeyPressed()) && !this.back) {
+    if (this[KEYS.CONFIRM.ONCE]) {
       this.toStart();
     }
 

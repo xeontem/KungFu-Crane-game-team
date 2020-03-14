@@ -1,11 +1,12 @@
-import Phaser from 'phaser-ce';
+import { WithControlls, KEYS } from '../core/withMenuControllsState';
 import BackgroundMainMenu from '../objects/backgroundMainMenu';
 import { loadMusic, applyMusic } from '../sound/bgmusic';
-import { getGamepad, loadAndStartSavedGame, applyNextActiveBtnIndex } from '../controls/controls';
+import { loadAndStartSavedGame, applyNextActiveBtnIndex } from '../controls/controls';
 import { gameState, resetGameState } from '../currentGameState';
 
-export default class extends Phaser.State {
+export default class extends WithControlls {
   preload() {
+    super.preload();
     this.load.spritesheet('startBtnTexture', './img/pause/start.png', 300, 80);
     this.load.spritesheet('scoresBtnTexture', './img/pause/scores.png', 300, 80);
     this.load.spritesheet('loadBtnTexture', './img/pause/load.png', 300, 80);
@@ -15,12 +16,9 @@ export default class extends Phaser.State {
   }
 
   create() {
+    super.create();
     resetGameState();
     applyMusic.apply(this);
-
-    // set input
-    this.enterBtn = game.input.keyboard.addKey(Phaser.Keyboard.ENTER);
-    this.cursors = game.input.keyboard.createCursorKeys();
 
     this.background = new BackgroundMainMenu({
       game,
@@ -82,22 +80,22 @@ export default class extends Phaser.State {
   }
 
   update() {
+    super.update();
     // ---------------------------scale block-----------------------------------
     gameState.gameWidth = document.documentElement.clientWidth;
     gameState.gameHeight = document.documentElement.clientHeight;
     this.game.width = gameState.gameWidth;
     this.game.height = gameState.gameHeight;
     //-------------------------------------------------------------------------
-    const gamepad = getGamepad();
-    if (((gamepad && gamepad.buttons[2].pressed) || this.enterBtn.repeats === 1) && !this.startGame) {
+    if (this[KEYS.CONFIRM.ONCE]) {
       this.buttonList[this.loopedNextActiveIndex].handler.apply(this);
     }
 
-    if (this.cursors.up.repeats === 1 || (gamepad && gamepad.buttons[12].pressed)) {
+    if (this[KEYS.UP.ONCE]) {
       applyNextActiveBtnIndex.call(this, true);
     }
 
-    if (this.cursors.down.repeats === 1 || (gamepad && gamepad.buttons[13].pressed)) {
+    if (this[KEYS.DOWN.ONCE]) {
       applyNextActiveBtnIndex.call(this, false);
     }
 
