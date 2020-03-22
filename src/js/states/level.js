@@ -6,7 +6,7 @@ import gameOverloader from '../loaders/gameOverloader';
 import bossloader from '../loaders/bossloader';
 import collisionloader from '../loaders/collisionloader';
 import { invokePauseMenu } from './pauseMenu';
-import { loadAndStartSavedGame, saveGame } from '../controls/controls';
+import { loadAndStartSavedGame, saveGame, addMouseControll } from '../controls/controls';
 import { loadMusic, applyMusic } from '../sound/bgmusic';
 import levelsConfig from '../levelsConfig';
 
@@ -24,10 +24,11 @@ export default class extends WithControlls {
     this.bossWeapon11 = null;
     this.bossWeapon21 = null;
     this.bossWeapon22 = null;
-    // -----------------music-----------------------------------------
+
     applyMusic.apply(this);
-    //---------------------------------------------------------------
     createAnimation.apply(this);
+    addMouseControll.apply(this);
+
     // -------------------------statusBar---------------------------------
     this.scoreText = this.add.text(
         gameState.gameWidth - gameState.gameWidth / 8.4,

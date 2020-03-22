@@ -8,6 +8,7 @@ export default class extends WithControlls {
   preload() {
     super.preload();
     this.load.spritesheet('startBtnTexture', './img/pause/start.png', 300, 80);
+    this.load.spritesheet('loginBtnTexture', './img/pause/login.png', 300, 80);
     this.load.spritesheet('scoresBtnTexture', './img/pause/scores.png', 300, 80);
     this.load.spritesheet('loadBtnTexture', './img/pause/load.png', 300, 80);
     this.load.image('loaderBg', './img/states/bgMainMenu.jpg');
@@ -47,6 +48,10 @@ export default class extends WithControlls {
       {
         texture: 'startBtnTexture',
         handler: this.toStart,
+      },
+      {
+        texture: 'loginBtnTexture',
+        handler: this.login,
       },
       {
         texture: 'loadBtnTexture',

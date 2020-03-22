@@ -63,12 +63,7 @@ export const getDebouncedCheck = () => {
   };
 };
 
-export function setLevelInput() {
-  this.fireButton = game.input.keyboard.addKey(Phaser.Keyboard.SPACEBAR);
-  this.changeWeapon = game.input.keyboard.addKey(Phaser.Keyboard.SHIFT);
-  this.saveGame = game.input.keyboard.addKey(Phaser.Keyboard.F5);
-  this.loadGame = game.input.keyboard.addKey(Phaser.Keyboard.F8);
-
+export function addMouseControll() {
   const move = () => {
     if (gameState.mouseMoveEnabled) {
       if (this.mainPlayer && this.mainPlayer.body && this.key === 'level') {
