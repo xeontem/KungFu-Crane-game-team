@@ -7,6 +7,34 @@
   <title>Game</title>
 </head>
 <body id="game">
+  <style>
+    .button-wrapper {
+      display: none;
+      justify-content: center;
+    }
+
+    .button-constructor {
+      display: block;
+      font-family: orbitron;
+      margin: 50px 0;
+      height: 80px;
+      width: 300px;
+      font-size: 32px;
+      color: yellow;
+      background-color: #00365f;
+      border-radius: 5px;
+      border: none;
+    }
+
+    .button-constructor--hover {
+      color: #f2f704;
+      background-color: #004978;
+    }
+  </style>
+  <section class="button-wrapper">
+    <button class="button-constructor">Start</button>
+    <button class="button-constructor button-constructor--hover">Start</button>
+  </section>
   <script src="js/bundle.js" acync></script>
 </body>
 </html>
