@@ -1,4 +1,4 @@
-import Phaser from 'phaser-ce';
+import Phaser from 'phaser';
 
 export function shot() {
   const music = this.game.add.audio('fire', 0.09, false, true);

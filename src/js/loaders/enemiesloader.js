@@ -1,4 +1,4 @@
-import Phaser from 'phaser-ce';
+import Phaser from 'phaser';
 
 import { gameState } from '../currentGameState';
 import Enemy from '../objects/enemy';

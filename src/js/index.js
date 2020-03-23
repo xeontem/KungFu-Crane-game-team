@@ -1,7 +1,5 @@
-import 'phaser-ce/build/custom/pixi';
-import 'phaser-ce/build/custom/p2';
 import WebFont from 'webfontloader';
-import Phaser from 'phaser-ce';
+import Phaser from 'phaser';
 
 import intro from './states/intro';
 import mainMenu from './states/mainMenu';
@@ -20,15 +18,16 @@ class Game extends Phaser.Game {
     });
 
     super(gameState.gameWidth, gameState.gameHeight, Phaser.CANVAS, 'content', null);
+    this.scene.add('intro', intro, false);
+    this.scene.add('mainMenu', mainMenu, false);
+    this.scene.add('level', level, false);
+    this.scene.add('score', score, false);
+    this.scene.add('createName', createName, false);
 
-    this.state.add('intro', intro, false);
-    this.state.add('mainMenu', mainMenu, false);
-    this.state.add('level', level, false);
-    this.state.add('score', score, false);
-    this.state.add('createName', createName, false);
-
-    this.state.start('intro');
+    this.scene.start('intro');
   }
 }
 
 window.game = new Game();
+
+// firebaseInit();

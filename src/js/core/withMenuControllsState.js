@@ -1,5 +1,8 @@
-import Phaser from 'phaser-ce';
+import Phaser from 'phaser';
 import { getDebouncedCheck, getGamepad } from '../controls/controls';
+import { gameState } from '../currentGameState';
+import { applyNextActiveBtnIndex } from '../controls/controls';
+import { BUTTONS } from './buttons';
 
 export const KEYS = {
   UP: {
@@ -50,7 +53,7 @@ export const KEYS = {
     path: ['MENU_BTN'],
     gamepadKey: 9,
     constr: 'addKey',
-    arg: Phaser.Keyboard.ESC,
+    arg: Phaser.Input.Keyboard.KeyCodes.ESC,
   },
   CONFIRM: {
     ONCE: 'CONFIRM_ONCE',
@@ -60,7 +63,7 @@ export const KEYS = {
     path: ['CONFIRM_BTN'],
     gamepadKey: 2,
     constr: 'addKey',
-    arg: Phaser.Keyboard.ENTER,
+    arg: Phaser.Input.Keyboard.KeyCodes.ENTER,
   },
   FIRE: {
     ONCE: 'FIRE_ONCE',
@@ -70,7 +73,7 @@ export const KEYS = {
     path: ['FIRE_BTN'],
     gamepadKey: 2,
     constr: 'addKey',
-    arg: Phaser.Keyboard.SPACEBAR,
+    arg: Phaser.Input.Keyboard.KeyCodes.SPACEBAR,
   },
   SAVE: {
     ONCE: 'SAVE_ONCE',
@@ -80,7 +83,7 @@ export const KEYS = {
     path: ['SAVE_BTN'],
     gamepadKey: 4,
     constr: 'addKey',
-    arg: Phaser.Keyboard.F5,
+    arg: Phaser.Input.Keyboard.KeyCodes.F5,
   },
   LOAD: {
     ONCE: 'LOAD_ONCE',
@@ -90,7 +93,7 @@ export const KEYS = {
     path: ['LOAD_BTN'],
     gamepadKey: 5,
     constr: 'addKey',
-    arg: Phaser.Keyboard.F8,
+    arg: Phaser.Input.Keyboard.KeyCodes.F8,
   },
   CHANGE_WEAPON: {
     ONCE: 'CHANGE_WEAPON_ONCE',
@@ -100,7 +103,7 @@ export const KEYS = {
     path: ['CHANGE_WEAPON_BTN'],
     gamepadKey: 3,
     constr: 'addKey',
-    arg: Phaser.Keyboard.SHIFT,
+    arg: Phaser.Input.Keyboard.KeyCodes.SHIFT,
   },
 };
 
@@ -115,27 +118,84 @@ export const LIVE = {
   },
 };
 
-export class WithControlls extends Phaser.State {
+export class WithControlls extends Phaser.Scene {
   getKeyboardBtnState(key, state, once = false) {
     const btnState = KEYS[key].path.reduce((val, field) => val[field], this);
     return once ? btnState.repeats === 1 : btnState[state];
   }
 
+  preload(buttonList = []) {
+    this.buttonList = buttonList;
+    this.buttonList.forEach(btnData => {
+      console.log(this);
+      this.load.spritesheet(btnData.textureName, btnData.texture, { frameWidth: 300, frameHeight: 80 });
+    });
+  }
+
   create() {
-    super.create();
+    // -------------------------------------- BUTTONS ----------------------------------------------
+    this.loopedNextActiveIndex = 0;
+    this.isResumeAvailable = false;
+    this.buttonInstances = this.buttonList.map((btnData, i) => {
+      if (btnData.textureName === BUTTONS.RESUME.textureName) {
+        this.isResumeAvailable = true;
+      }
+      const currentButton = this.game.add.button(
+        this.game.world.centerX,
+        gameState.gameHeight - (80 * (this.buttonList.length - i)),
+        btnData.textureName,
+        btnData.handler,
+        this,
+        1,
+        0,
+        1,
+      );
+      currentButton.onInputOver.add(this.onInputOver, this);
+      currentButton.scale.setTo(gameState.gameHeight / 1050);
+      currentButton.anchor.setTo(0.5);
+      return currentButton;
+    });
+
+    // -------------------------------------- event handlers ---------------------------------------
     this.keydownHandler = null;
 
     Object.keys(KEYS).forEach(key => {
       this[`GAMEPAD_ONCE_${key}`] = getDebouncedCheck();
 
       if (!this[KEYS[key].path[0]]) {
-        this[KEYS[key].path[0]] = game.input.keyboard[KEYS[key].constr](KEYS[key].arg);
+        this[KEYS[key].path[0]] = this.input.keyboard[KEYS[key].constr](KEYS[key].arg);
       }
     });
   }
 
   update() {
     super.update();
+
+    // keep loopedNextActiveIndex synced with mouse and keyboard and gamepad
+    if (this.buttonInstances.length) {
+      this.buttonInstances[this.loopedNextActiveIndex].frame = 1;
+      this.buttonInstances.forEach((btn, i) => {
+        if (btn.frame && i !== this.loopedNextActiveIndex) {
+          btn.frame = 0;
+        }
+      });
+    }
+
+    if (this[KEYS.CONFIRM.ONCE]) {
+      this.buttonList[this.loopedNextActiveIndex].handler.apply(this);
+    }
+
+    if (this[KEYS.UP.ONCE]) {
+      applyNextActiveBtnIndex.call(this, true);
+    }
+
+    if (this[KEYS.DOWN.ONCE]) {
+      applyNextActiveBtnIndex.call(this, false);
+    }
+
+    if (this.isResumeAvailable && this[KEYS.MENU.ONCE]) {
+      resume.call(this);
+    }
 
     if (game.paused && !this.keydownHandler) {
       this.keydownHandler = e => {
@@ -172,11 +232,19 @@ export class WithControlls extends Phaser.State {
         },
       ].forEach(cfg => {
         this[cfg.key] =
-          (game.paused ? this[`EVENT_HANDLER_${key}`] : this.getKeyboardBtnState(key, cfg.state, cfg.once)) ||
+          (game.paused ? this[`EVENT_HANDLER_${key}`] : this.getKeyboardBtnState(key, cfg.scene, cfg.once)) ||
           (gamepad && cfg.handler(gamepad.buttons[KEYS[key].gamepadKey].pressed));
       });
 
       this[`EVENT_HANDLER_${key}`] = false;
+    });
+  }
+
+  onInputOver(curBtn, event) {
+    this.buttonInstances.forEach((btn, i) => {
+      if (btn.key === curBtn.key) {
+        this.loopedNextActiveIndex = i;
+      }
     });
   }
 

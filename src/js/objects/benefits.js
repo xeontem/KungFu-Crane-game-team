@@ -1,9 +1,9 @@
-import Phaser from 'phaser-ce';
+import Phaser from 'phaser';
 import { gameState } from '../currentGameState';
 import { getCollectable } from '../sound/explosures';
 import { paintInGreen, doNotSmoke1Player, doNotSmoke2Player } from '../loaders/animationsloader';
 
-export class Benefit extends Phaser.Sprite {
+export class Benefit extends Phaser.GameObjects.Sprite {
   constructor({ game, x, y, asset }) {
     super(game, x, y, asset);
     this.anchor.setTo(0.5);

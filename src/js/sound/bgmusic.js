@@ -1,10 +1,10 @@
 export function loadMusic() {
-  this.game.load.audio('main2', './sounds/mainMenu.ogg');
-  this.game.load.audio('level', './sounds/levels.ogg');
-  this.game.load.audio('fire', './sounds/fire.ogg');
-  this.game.load.audio('explode', './sounds/explode.ogg');
-  this.game.load.audio('explode2', './sounds/explode2.ogg');
-  this.game.load.audio('benefit', './sounds/benefit.ogg');
+  this.load.audio('main2', './sounds/mainMenu.ogg');
+  this.load.audio('level', './sounds/levels.ogg');
+  this.load.audio('fire', './sounds/fire.ogg');
+  this.load.audio('explode', './sounds/explode.ogg');
+  this.load.audio('explode2', './sounds/explode2.ogg');
+  this.load.audio('benefit', './sounds/benefit.ogg');
 }
 
 export function applyMusic() {
@@ -15,7 +15,7 @@ export function applyMusic() {
     this.levelMusic = this.game.add.audio('level', 0.3, true, true);
   }
 
-  switch (this.game.state.current) {
+  switch (this.game.scene.current) {
     case 'mainMenu':
       if (!this.mainMenuMusic.isPlaying) {
         this.mainMenuMusic.play();

@@ -130,7 +130,7 @@ export default class extends WithControlls {
           if (gameState.level > levelsConfig.length - 1) {
             gameOverloader.apply(this);
           } else {
-            this.state.start('level');
+            this.scene.start('level');
           }
         }
       }

@@ -1,8 +1,8 @@
-import Phaser from 'phaser-ce';
+import Phaser from 'phaser';
 
 import { gameState } from '../currentGameState';
 
-export default class extends Phaser.Group {
+export default class extends Phaser.GameObjects.Group {
   constructor({ game, parent, name, addToStage, enableBody, physicsBodyType }) {
     super(game, parent, name, addToStage, enableBody, physicsBodyType);
     this.countEnemies = game.rnd.integerInRange(5, 25);

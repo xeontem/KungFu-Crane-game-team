@@ -55,7 +55,7 @@ export default class extends WithControlls {
     if (this.back) {
       this.backButton.y += 7;
       if (this.backButton.y > gameState.gameHeight + 30) {
-        this.state.start('mainMenu');
+        this.scene.start('mainMenu');
       }
     }
   }

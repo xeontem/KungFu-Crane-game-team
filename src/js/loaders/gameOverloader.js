@@ -1,4 +1,4 @@
-import Phaser from 'phaser-ce';
+import Phaser from 'phaser';
 
 import { gameState } from '../currentGameState';
 import localStorage from './storageloader';
@@ -14,10 +14,10 @@ export default function () {
     if (flag) {
       localStorage(gameState.score, gameState.name);
       this.levelMusic.pause();
-      this.state.start('score');
+      this.scene.start('score');
     } else {
       this.levelMusic.pause();
-      this.state.start('mainMenu');
+      this.scene.start('mainMenu');
     }
   }
 }

@@ -1,8 +1,8 @@
-import Phaser from 'phaser-ce';
+import Phaser from 'phaser';
 
 import { gameState } from '../currentGameState';
 
-export default class extends Phaser.TileSprite {
+export default class extends Phaser.GameObjects.TileSprite {
   constructor({ game, x, y, width, height, asset }) {
     super(game, x, y, width, height, asset);
   }

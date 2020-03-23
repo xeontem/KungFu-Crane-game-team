@@ -1,11 +1,5 @@
-import Phaser from 'phaser-ce/build/custom/phaser-split';
-
 import { gameState, resetGameState } from '../currentGameState';
 import { fire } from '../sound/explosures';
-
-const invokeSound = (that) => {
-  fire.apply(that);
-};
 
 export function applyNextActiveBtnIndex(isUp) {
   const currentActiveIndex = this.buttonInstances.reduce((activeInd, btn, index) => {
@@ -86,7 +80,7 @@ export function addMouseControll() {
 
 export const loadAndStartSavedGame = context => {
     resetGameState(JSON.parse(localStorage.getItem('GAME_STATE')));
-    context.state.start('level');
+    context.scene.start('level');
     console.log('game loaded');
 };
 

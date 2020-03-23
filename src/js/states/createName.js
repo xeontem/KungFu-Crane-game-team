@@ -20,7 +20,7 @@ export default class extends WithControlls {
       gameState.name = this.input.value;
       document.body.removeChild(this.div);
       resetGameState();
-      this.state.start('level');
+      this.scene.start('level');
     }
   }
 }

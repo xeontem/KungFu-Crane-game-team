@@ -1,4 +1,4 @@
-import Phaser from 'phaser-ce';
+import Phaser from 'phaser';
 import { shot } from '../sound/explosures';
 import { gameState } from '../currentGameState';
 
