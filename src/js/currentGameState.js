@@ -11,7 +11,7 @@ const getInitialState = () => ({
   gameWidth: document.documentElement.clientWidth,
   gameHeight: document.documentElement.clientHeight,
   enemiesSpeed: 7,
-  mainPlayerSpeed: 350,
+  mainPlayerSpeed: 10,
   mainPlayerHP: 10,
   firstBossHP: 100,
   shieldDuration: 5000,

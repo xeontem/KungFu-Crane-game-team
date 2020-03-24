@@ -7,7 +7,7 @@ export default function () {
   if (this.boss) {
     if (gameState.level == 0) {
       if (!this.bossWeapon11) {
-        this.bossWeapon11 = this.game.add.weapon(10, 'bossbullet');
+        this.bossWeapon11 = this.add.weapon(10, 'bossbullet');
         this.bossWeapon11.bulletSpeed = 600;
         this.bossWeapon11.fireRate = 200;
         this.bossWeapon11.fireAngle = 180;
@@ -20,7 +20,7 @@ export default function () {
     if (gameState.level == 1 || gameState.level == 2 || gameState.level == 3 || gameState.level == 4) {
       if (!this.bossWeapon21) {
         // ----------------------------------first gun------------------------------
-        this.bossWeapon21 = this.game.add.weapon(5, 'bossbullet');
+        this.bossWeapon21 = this.add.weapon(5, 'bossbullet');
         this.bossWeapon21.bulletSpeed = 600;
         this.bossWeapon21.fireRate = 100;
         this.bossWeapon21.fireAngle = 180;
@@ -28,7 +28,7 @@ export default function () {
         this.bossWeapon21.trackSprite(this.boss, 80, -40, true);
         this.game.physics.enable(this.bossWeapon21, Phaser.Physics.ARCADE);
         // ----------------------------------second gun-----------------------------
-        this.bossWeapon22 = this.game.add.weapon(5, 'bossbullet');
+        this.bossWeapon22 = this.add.weapon(5, 'bossbullet');
         this.bossWeapon22.bulletSpeed = 600;
         this.bossWeapon22.fireRate = 100;
         this.bossWeapon22.fireAngle = 180;
@@ -45,7 +45,7 @@ export default function () {
       y: gameState.gameHeight - 200,
       asset: 'boss',
     });
-    this.game.add.existing(this.boss);
+    this.add.existing(this.boss);
     const tween = this.add.tween(this.boss).to(
       { y: 200 },
       2000,

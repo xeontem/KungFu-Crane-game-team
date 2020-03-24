@@ -53,8 +53,8 @@ export default class extends Phaser.GameObjects.Group {
     for (let y = 0; y < this.countEnemies; y += 1) {
       xPos += 100 + gameState.gameWidth / 35;// scale -----------------------------------
       const enemy = this.create(xPos, yPos, rndEnemy);
-      enemy.scale.setTo(gameState.gameWidth / 1424);// scale------------------------------------
-      enemy.anchor.setTo(0.5);
+      enemy.setScale(gameState.gameWidth / 1424);// scale------------------------------------
+      enemy.setOrigin(0.5);
       game.physics.enable(enemy, Phaser.Physics.ARCADE);
       enemy.checkWorldBounds = true;
       enemy.events.onEnterBounds.add(this.onEnemyEnterBounds.bind(this, enemy, this), game);
@@ -89,8 +89,8 @@ export default class extends Phaser.GameObjects.Group {
     for (let y = 0; y < this.countEnemies; y += 1) {
       xPos += 100 + gameState.gameWidth / 35;// scale -----------------------------------
       const enemy = this.create(xPos, yPos, rndEnemy);
-      enemy.scale.setTo(gameState.gameWidth / 1424);// scale------------------------------------
-      enemy.anchor.setTo(0.5);
+      enemy.setScale(gameState.gameWidth / 1424);// scale------------------------------------
+      enemy.setOrigin(0.5);
       game.physics.enable(enemy, Phaser.Physics.ARCADE);
       enemy.checkWorldBounds = true;
       enemy.events.onEnterBounds.add(this.onEnemyEnterBounds.bind(this, enemy, this), game);
@@ -125,8 +125,8 @@ export default class extends Phaser.GameObjects.Group {
     for (let y = 0; y < this.countEnemies; y += 1) {
       xPos += 100 + gameState.gameWidth / 35;// scale -----------------------------------
       const enemy = this.create(xPos, yPos, rndEnemy);
-      enemy.scale.setTo(gameState.gameWidth / 1424);// scale------------------------------------
-      enemy.anchor.setTo(0.5);
+      enemy.setScale(gameState.gameWidth / 1424);// scale------------------------------------
+      enemy.setOrigin(0.5);
       game.physics.enable(enemy, Phaser.Physics.ARCADE);
       enemy.checkWorldBounds = true;
       enemy.events.onEnterBounds.add(this.onEnemyEnterBounds.bind(this, enemy, this), game);
@@ -161,8 +161,8 @@ export default class extends Phaser.GameObjects.Group {
       for (let y = 0; y < 7; y += 1) {
         // xPos++;
         const enemy = this.create(xPos, yPos, rndEnemy);
-        enemy.scale.setTo(gameState.gameWidth / 1424);// scale------------------------------------
-        enemy.anchor.setTo(0.5);
+        enemy.setScale(gameState.gameWidth / 1424);// scale------------------------------------
+        enemy.setOrigin(0.5);
         game.physics.enable(enemy, Phaser.Physics.ARCADE);
         enemy.checkWorldBounds = true;
         enemy.events.onEnterBounds.add(this.onEnemyEnterBoundsFor3.bind(this, enemy, this), game);
@@ -189,8 +189,8 @@ export default class extends Phaser.GameObjects.Group {
 
     for (let y = 0; y < this.countEnemies + 10; y += 1) {
       const enemy = this.create(xPos, yPos, rndEnemy);
-      enemy.scale.setTo(gameState.gameWidth / 1424);// scale------------------------------------
-      enemy.anchor.setTo(0.5);
+      enemy.setScale(gameState.gameWidth / 1424);// scale------------------------------------
+      enemy.setOrigin(0.5);
       game.physics.enable(enemy, Phaser.Physics.ARCADE);
       enemy.checkWorldBounds = true;
       enemy.events.onEnterBounds.add(this.onEnemyEnterBounds.bind(this, enemy, this), game);
@@ -222,8 +222,8 @@ export default class extends Phaser.GameObjects.Group {
     for (let z = 0; z < rndRows; z++) {
       for (let y = 0; y < 11; y += 1) {
         const enemy = this.create(xPos, yPos, rndEnemy);
-        enemy.scale.setTo(gameState.gameWidth / 1424);// scale------------------------------------
-        enemy.anchor.setTo(0.5);
+        enemy.setScale(gameState.gameWidth / 1424);// scale------------------------------------
+        enemy.setOrigin(0.5);
         game.physics.enable(enemy, Phaser.Physics.ARCADE);
         enemy.checkWorldBounds = true;
         enemy.events.onEnterBounds.add(this.onEnemyEnterBounds.bind(this, enemy, this), game);

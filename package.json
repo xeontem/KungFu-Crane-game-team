@@ -5,10 +5,10 @@
   "author": "kungfu-team",
   "main": "index.js",
   "scripts": {
-    "start": "set NODE_ENV=development&& webpack",
+    "start": "set NODE_ENV=development&& webpack --mode=development",
     "build": "webpack -p",
-    "build-v3": "webpack --config webpack/prod.js ",
-    "start-v3": "webpack-dev-server --config webpack/base.js --open",
+    "build-v3": "webpack --config webpack/prod.js -p",
+    "start-v3": "webpack-dev-server --config webpack/base.js --open --mode=development",
     "deploy": "gh-pages -d dist",
     "eslint-fix": "eslint ./src/** --fix",
     "eslint": "eslint ./src/**"

@@ -1,45 +1,67 @@
 export const BUTTONS = {
   BACK: {
-    textureName: 'back_btn_texture',
-    texture: './img/buttons/back.png',
+    title: 'Back',
   },
   RESUME: {
-    textureName: 'resume_btn_texture',
-    texture: './img/buttons/resume.png',
+    title: 'Resume',
   },
   LOAD: {
-    textureName: 'load_btn_texture',
-    texture: './img/buttons/load.png',
+    title: 'Load',
   },
   LOGIN: {
-    textureName: 'login_btn_texture',
-    texture: './img/buttons/login.png',
+    title: 'Login',
   },
   MAIN_MENU: {
-    textureName: 'mmenu_btn_texture',
-    texture: './img/buttons/mmenu.png',
+    title: 'Main menu',
   },
   RELOAD: {
-    textureName: 'reload_btn_texture',
-    texture: './img/buttons/reload.png',
+    title: 'Reload',
   },
   SAVE: {
-    textureName: 'save_btn_texture',
-    texture: './img/buttons/save.png',
+    title: 'Save',
   },
   SCORES: {
-    textureName: 'scores_btn_texture',
-    texture: './img/buttons/scores.png',
+    title: 'Scores',
   },
   START: {
-    textureName: 'start_btn_texture',
-    texture: './img/buttons/start.png',
+    title: 'Start',
   },
 };
 
-export const withHandler = (btn, handler) => {
-  return ({
-    ...btn,
-    handler,
-  });
+const commonBtnStyle = {
+  fontSize: '32px',
+  fontFamily: 'orbitron',
+  fixedWidth: 300,
+  // fixedHeight: 80,
+  padding: 15,
+  align: 'center',
+  cursor: 'pointer',
+};
+
+export const inactiveBtnStyle = {
+  backgroundColor: '#00365f',
+  color: '#FFEB3B',
+};
+
+export const activeBtnStyle = {
+  backgroundColor: '#01497f',
+  color: '#ff0',
+}
+
+export const withHandler = (btn, handler) => ({ ...btn, handler });
+
+export const createButton = (title, x, y, pointerdown, pointerover, scene) => {
+  const clickButton = scene.add.text(x, y, title, { ...commonBtnStyle, ...inactiveBtnStyle })
+    .setInteractive({ useHandCursor: true  })
+    .on('pointerdown', (...args) => {
+      pointerdown.apply(scene, [clickButton, ...args]);
+    })
+    .on('pointerover', (...args) => {
+      pointerover.apply(scene, [clickButton, ...args]);
+    })
+    .on('pointerout', () => {
+
+    });
+
+  return clickButton;
 };

@@ -5,20 +5,24 @@ import { weaponOn, spreadWeapon, threeWayWeapon } from '../objects/weapon';
 import levelsConfig from '../levelsConfig';
 
 export function preloadAnimation() {
-  this.load.image('background', levelsConfig[gameState.level].bg);
+  this.load.image('level_background', levelsConfig[gameState.level].bg);
+
   // ------------------------------------bullets---------------------------
   this.load.image('bullet', './img/player/shot.png');
   this.load.image('bossbullet', './img/player/bossShot.png');
   this.load.image('missile', './img/player/shot1.png');
-  this.load.spritesheet('missile2', './img/player/missile.png', 40, 18);
+  this.load.spritesheet('missile2', './img/player/missile.png', { frameWidth: 40, frameHeight: 18 });
+
   // ----------------------enemies-----------------------------------------
   this.load.image('enemy_1', './img/enemy/enemy_1.png');
   this.load.image('enemy_2', './img/enemy/enemy_2.png');
   this.load.image('enemy_3', './img/enemy/enemy_3.png');
   this.load.image('boss', levelsConfig[gameState.level].boss);
   this.load.image('bossRed', levelsConfig[gameState.level].bossRed);
+
   // -----------------------particle----------------------------------------
-  this.load.spritesheet('stars', './img/states/rain.png', 17, 17);
+  this.load.spritesheet('stars', './img/states/rain.png', { frameWidth: 17, frameHeight: 17 });
+
   // -----------------------benefits image----------------------------------
   this.load.image('health', './img/player/health.png');
   this.load.image('score', './img/player/score.png');
@@ -26,109 +30,137 @@ export function preloadAnimation() {
   this.load.image('shieldOn', './img/player/shieldOn.png');
   this.load.image('burst', './img/player/burst.png');
   this.load.image('ammo', './img/player/ammo.png');
-  //-----------------------------------------------------------------------
-  this.load.spritesheet('resumeBtnTexture', './img/pause/Buttons.png', 300, 80);
-  this.load.spritesheet('menuBtnTexture', './img/pause/mainMenuButton.png', 300, 80);
-  this.load.spritesheet('loadBtnTexture', './img/pause/load.png', 300, 80);
-  this.load.spritesheet('saveGameBtnTexture', './img/pause/saveButton.png', 300, 80);
+
   // -------------------------------mainPlayer--------------------------------
-  this.load.spritesheet('mainPlayer', './img/player/mainPlayer.png', 95, 58);
-  this.load.spritesheet('mainPlayerGreen', './img/player/mainPlayerGreen.png', 95, 58);
-  this.load.spritesheet('mainPlayerRed', './img/player/mainPlayerRed.png', 95, 58);
-  this.load.spritesheet('exhaust', './img/player/exhaust.png', 23, 84);
-  this.load.spritesheet('smoke', './img/player/smoke.png', 64, 64);
-  this.load.spritesheet('bang', './img/player/explode.png', 128, 128);
+  this.load.spritesheet('mainPlayer', './img/player/mainPlayer.png', { frameWidth: 95, frameHeight: 58 });
+  this.load.spritesheet('mainPlayerGreen', './img/player/mainPlayerGreen.png', { frameWidth: 95, frameHeight: 58 });
+  this.load.spritesheet('mainPlayerRed', './img/player/mainPlayerRed.png', { frameWidth: 95, frameHeight: 58 });
+  this.load.spritesheet('exhaust', './img/player/exhaust.png', { frameWidth: 23, frameHeight: 84 });
+  this.load.spritesheet('smoke', './img/player/smoke.png', { frameWidth: 64, frameHeight: 64 });
+  this.load.spritesheet('bang', './img/player/explode.png', { frameWidth: 128, frameHeight: 128 });
 }
 
 export function createAnimation() {
-  this.background = new BackgroundMainGame({
-    game,
-    x: 0,
-    y: 0,
-    width: 1024,
-    height: 512,
-    asset: 'background',
-  });
-  this.background.scale.setTo(gameState.gameWidth / this.background.width, gameState.gameHeight / this.background.height);
-  this.game.add.existing(this.background);
+  this.background = this.add.image(0, 0, 'level_background').setOrigin(0.15, 0).setScale(1.5);
+
   // ---------------------------particles----------------------------------------
-  this.emitter = game.add.emitter(game.world.centerX, -gameState.gameWidth, 600);
+  // var particles = this.add.particles('stars');
 
-  this.emitter.width = game.world.width;
-  this.emitter.height = game.world.height;
-  this.emitter.angle = 90; // uncomment to set an angle for the stars.
+  // particles.createEmitter({
+  //     frame: 'blue',
+  //     x: 64,
+  //     y: { min: 100, max: 500 },
+  //     lifespan: 2000,
+  //     speedX: { min: 200, max: 400 },
+  //     scale: { start: 0.4, end: 0 },
+  //     quantity: 4,
+  //     blendMode: 'ADD'
+  // });
+  // this.emitter = this.add.emitter(this.scale.width / 2, -gameState.gameWidth, 600);
 
-  this.emitter.makeParticles('stars');
+  // this.emitter.width = gameState.gameWidth;
+  // this.emitter.height = gameState.gameHeight;
+  // this.emitter.angle = 90;
 
-  this.emitter.minParticleScale = 0.1;// + gameState.gameWidth/1024 - 1;
-  this.emitter.maxParticleScale = 0.5;// + gameState.gameWidth/1024 - 1;
+  // this.emitter.makeParticles('stars');
 
-  this.emitter.setYSpeed(300, 500);
-  this.emitter.setXSpeed(-5, 5);
+  // this.emitter.minParticleScale = 0.1;// + gameState.gameWidth/1024 - 1;
+  // this.emitter.maxParticleScale = 0.5;// + gameState.gameWidth/1024 - 1;
 
-  this.emitter.minRotation = 0;
-  this.emitter.maxRotation = 0;
+  // this.emitter.setYSpeed(300, 500);
+  // this.emitter.setXSpeed(-5, 5);
 
-  this.emitter.start(false, 1600, 5, 0);
+  // this.emitter.minRotation = 0;
+  // this.emitter.maxRotation = 0;
+
+  // this.emitter.start(false, 1600, 5, 0);
+
   // ---------------------------MainPlayer---------------------------------------
-  this.mainPlayer = this.game.add.sprite(-1800, this.game.world.centerY, 'mainPlayer');
-  this.mainPlayer.scale.setTo(gameState.gameWidth / 1300);
-  this.mainPlayer.anchor.setTo(0.5);
-  this.game.add.existing(this.mainPlayer);
-  this.game.physics.enable(this.mainPlayer, Phaser.Physics.ARCADE);
-  this.mainPlayer.frame = 0;
-  this.mainPlayer.animations.add('up', [1, 2, 3, 4, 5, 6, 7, 8, 9]);
-  this.mainPlayer.animations.add('upBack', [9, 8, 7, 6, 5, 4, 3, 2, 1]);
-  this.mainPlayer.animations.add('down', [10, 11, 12, 13, 14, 15, 16, 17, 18]);
-  this.mainPlayer.animations.add('downBack', [18, 17, 16, 15, 14, 13, 12, 11, 10]);
-  this.mainPlayer.body.collideWorldBounds = true;
-  this.exhaust1 = this.mainPlayer.addChild(this.game.make.sprite(-51.5, -19, 'exhaust'));
-  this.exhaust1.anchor.setTo(0.5);
-  this.exhaust1.scale.setTo(0.2);
-  this.exhaust1.angle = 90;
-  this.exhaust2 = this.mainPlayer.addChild(this.game.make.sprite(-51.5, 12, 'exhaust'));
-  this.exhaust2.anchor.setTo(0.5);
-  this.exhaust2.scale.setTo(0.2);
-  this.exhaust2.angle = 90;
-  this.exhaust1.animations.add('exh');
-  this.exhaust2.animations.add('exh');
-  this.exhaust1.animations.play('exh', 25, true);
-  this.exhaust2.animations.play('exh', 25, true);
-  this.smoke1 = this.game.make.sprite(-25, -20, 'smoke');
-  this.smoke2 = this.game.make.sprite(-25, 20, 'smoke');
-  this.smoke1.anchor.setTo(0.5);
-  this.smoke2.anchor.setTo(0.5);
-  this.smoke1.scale.setTo(0.5);
-  this.smoke2.scale.setTo(0.5);
-  this.smoke1.visible = false;
-  this.smoke2.visible = false;
-  this.smoke1.animations.add('smoking1');
-  this.smoke2.animations.add('smoking2');
-  this.mainPlayer.addChild(this.smoke1);
-  this.mainPlayer.addChild(this.smoke2);
+  this.mainPlayerContainer = this.add.container(100, this.scale.height / 2);
+  this.mainPlayer = this.physics.add.sprite(0, 0, 'mainPlayer');
+  this.mainPlayer.setCollideWorldBounds(true);
+
+  [
+    {
+      key: 'move_up_start',
+      frames: { start: 1, end: 9 }
+    },
+    {
+      key: 'move_up_end',
+      frames: { start: 9, end: 1 }
+    },
+    {
+      key: 'move_down_start',
+      frames: { start: 10, end: 18 }
+    },
+    {
+      key: 'move_down_end',
+      frames: { start: 18, end: 10 }
+    },
+  ].forEach(animData => {
+    this.anims.create({
+      key: animData.key,
+      frames: this.anims.generateFrameNumbers('mainPlayer', animData.frames),
+      frameRate: 10,
+      repeat: 0,
+    });
+  });
+
+  // this.exhaust1 = this.add.sprite(150, -15, 'exhaust');
+  // this.exhaust1.setScale(0.3);
+  // this.exhaust1.setAngle(90);
+
+  // this.exhaust2 = this.add.sprite(150, 15, 'exhaust');
+  // this.exhaust2.setScale(0.3);
+  // this.exhaust2.setAngle(90);
+
+  // this.mainPlayerContainer.add(this.exhaust1);
+  // this.mainPlayerContainer.add(this.exhaust2);
+  // console.log(this.exhaust1);
+  // this.exhaust1.setOrigin(0.5);
+  // this.exhaust2 = this.mainPlayer.addChild(this.game.make.sprite(-51.5, 12, 'exhaust'));
+  // this.exhaust2.setOrigin(0.5);
+  // this.exhaust2.setScale(0.2);
+  // this.exhaust2.angle = 90;
+  // this.exhaust1.animations.add('exh');
+  // this.exhaust2.animations.add('exh');
+  // this.exhaust1.animations.play('exh', 25, true);
+  // this.exhaust2.animations.play('exh', 25, true);
+  // this.smoke1 = this.game.make.sprite(-25, -20, 'smoke');
+  // this.smoke2 = this.game.make.sprite(-25, 20, 'smoke');
+  // this.smoke1.setOrigin(0.5);
+  // this.smoke2.setOrigin(0.5);
+  // this.smoke1.setScale(0.5);
+  // this.smoke2.setScale(0.5);
+  // this.smoke1.visible = false;
+  // this.smoke2.visible = false;
+  // this.smoke1.animations.add('smoking1');
+  // this.smoke2.animations.add('smoking2');
+  // this.mainPlayer.addChild(this.smoke1);
+  // this.mainPlayer.addChild(this.smoke2);
 
   // ----------------------MainPlayerBullets-----------------------------------------
-  this.weapon1 = weaponOn.apply(this);
-  this.weapon2 = spreadWeapon.apply(this);
-  this.weapon3 = threeWayWeapon.apply(this);
+  // this.weapon1 = weaponOn.apply(this);
+  // this.weapon2 = spreadWeapon.apply(this);
+  // this.weapon3 = threeWayWeapon.apply(this);
 }
 
 export function explode() {
-  this.bang = this.game.add.sprite(this.mainPlayer.x, this.mainPlayer.y, 'bang');
-  this.bang.anchor.setTo(0.5);
+  this.bang = this.add.sprite(this.mainPlayer.x, this.mainPlayer.y, 'bang');
+  this.bang.setOrigin(0.5);
   this.bang.animations.add('explode');
   this.bang.animations.play('explode', 30, false, true);
 }
 export function explodeEnemy(coordX, coordY) {
-  this.bang = this.game.add.sprite(coordX, coordY, 'bang');
-  this.bang.anchor.setTo(0.5);
+  this.bang = this.add.sprite(coordX, coordY, 'bang');
+  this.bang.setOrigin(0.5);
   this.bang.animations.add('explode');
   this.bang.animations.play('explode', 30, false, true);
 }
 
 export function smoke1Player() {
   this.smoke1.visible = true;
-  this.smoke1.anchor.setTo(0.5);
+  this.smoke1.setOrigin(0.5);
   this.smoke1.animations.play('smoking1', 30, true);
 }
 
@@ -138,7 +170,7 @@ export function doNotSmoke1Player() {
 
 export function smoke2Player() {
   this.smoke2.visible = true;
-  this.smoke2.anchor.setTo(0.5);
+  this.smoke2.setOrigin(0.5);
   this.smoke2.animations.play('smoking2', 30, true);
 }
 

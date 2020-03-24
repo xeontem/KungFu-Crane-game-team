@@ -4,20 +4,19 @@ import localStorage from '../loaders/storageloader';
 export default class extends WithControlls {
   preload() {
     super.preload();
-    this.load.audio('intro', ['./sounds/intro.ogg', './sounds/intro.ogg']);
+    this.load.audio('intro', './sounds/intro.ogg');
     this.load.image('loaderBg', './img/states/bgMainMenu.jpg');
   }
 
   create() {
     super.create();
     localStorage();
-    this.music = this.sound.add('intro', { loop: true });
+    this.music = this.sound.add('intro');
     this.music.play();
 
-    this.text = this.add.text(this.scale.width / 2, this.scale.height / 2, 'KungFu-Crane-Game-Team', { font: '32px Arial', fill: '#dddddd' });
+    this.text = this.add.text(this.scale.width / 2, this.scale.height / 2, 'KungFu-Crane-Game-Team', { font: '32px Orbitron', fill: '#dddddd' });
     this.text.setOrigin(0.5);
     this.text.alpha = 0;
-    this.text.font = 'Orbitron';
 
     this.countdown = this.time.now;
   }
@@ -33,8 +32,6 @@ export default class extends WithControlls {
         this.text.alpha = 1;
       }
     }
-    // if (this.time.now > this.countdown + 2300) {
-    // }
     if (this.time.now > this.countdown + 6300 && this.time.now < this.countdown + 10000) {
       this.text.y += 1;
       if (this.text.alpha > 0.03) this.text.alpha -= 0.01;
@@ -116,12 +113,7 @@ export default class extends WithControlls {
         this.text.text = '';
       }
     }
-    if (this.time.now > this.countdown + 34011) {
-      this.music.pause();
-      this.scene.start('mainMenu');
-    }
-    // ----------------------------skip------------------------------
-    if (this[KEYS.CONFIRM.ONCE]) {
+    if ((this.time.now > this.countdown + 34011) || this[KEYS.CONFIRM.DOWN_ONCE]) {
       this.music.pause();
       this.scene.start('mainMenu');
     }

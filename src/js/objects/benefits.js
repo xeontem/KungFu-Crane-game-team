@@ -6,9 +6,9 @@ import { paintInGreen, doNotSmoke1Player, doNotSmoke2Player } from '../loaders/a
 export class Benefit extends Phaser.GameObjects.Sprite {
   constructor({ game, x, y, asset }) {
     super(game, x, y, asset);
-    this.anchor.setTo(0.5);
+    this.setOrigin(0.5);
     this.outOfBoundsKill = true;
-    this.scale.setTo(gameState.gameWidth / 2800);// scale
+    this.setScale(gameState.gameWidth / 2800);// scale
     game.physics.enable(this, Phaser.Physics.ARCADE);
     this.events.onOutOfBounds.add(this.out, game);
   }
@@ -49,10 +49,10 @@ export class Benefit extends Phaser.GameObjects.Sprite {
     benefit.kill();
     getCollectable.apply(this);
     this.mainPlayerShield = this.add.sprite(this.mainPlayer.x, this.mainPlayer.y, 'shieldOn');
-    this.mainPlayerShield.anchor.setTo(0.5);
-    this.mainPlayerShield.scale.setTo(1.3 + gameState.gameWidth / 1324 - 1);
+    this.mainPlayerShield.setOrigin(0.5);
+    this.mainPlayerShield.setScale(1.3 + gameState.gameWidth / 1324 - 1);
     this.mainPlayerShield.countdown = this.time.now;
-    this.game.add.existing(this.mainPlayerShield);
+    this.add.existing(this.mainPlayerShield);
     game.physics.enable(this.mainPlayerShield, Phaser.Physics.ARCADE);
     this.benefitShield = null;
   }

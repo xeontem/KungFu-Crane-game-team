@@ -2,15 +2,7 @@ import { gameState, resetGameState } from '../currentGameState';
 import { fire } from '../sound/explosures';
 
 export function applyNextActiveBtnIndex(isUp) {
-  const currentActiveIndex = this.buttonInstances.reduce((activeInd, btn, index) => {
-    return btn.frame === 1 ? index : activeInd;
-  }, 0);
-  const nextActiveIndex = isUp ? currentActiveIndex - 1 : currentActiveIndex + 1;
-  this.loopedNextActiveIndex = (nextActiveIndex < 0)
-    ? this.buttonInstances.length - 1
-    : (nextActiveIndex > this.buttonInstances.length - 1)
-      ? 0
-      : nextActiveIndex;
+
   this.buttonInstances.forEach((btn, i) => {
     btn.frame = i === this.loopedNextActiveIndex ? 1 : 0;
   });
@@ -40,6 +32,18 @@ export const gamepadVibrate = () => {
   }
 };
 
+export const bottomScreenBound = gameState.gameHeight + 50;
+export const btnSlideDown = buttonInstances => {
+  buttonInstances.forEach((btn, i) => {
+    if (btn.y < bottomScreenBound) {
+      if (i === 0 || buttonInstances[i - 1].y < bottomScreenBound) {
+        btn.y += 12;
+      }
+    }
+  });
+  return buttonInstances[buttonInstances.length - 1].y >= bottomScreenBound;
+};
+
 export const toggleMouseControl = mouseState => {
   if (!game.paused) {
     gameState.mouseMoveEnabled = (mouseState === false || mouseState === false)
@@ -48,10 +52,37 @@ export const toggleMouseControl = mouseState => {
   }
 };
 
-export const getDebouncedCheck = () => {
+export const getDebouncedKeyboardDownCheck = () => {
+  let prevIsDown = null;
+  return btnState => {
+    const currentCheck = [undefined, false].includes(prevIsDown) && btnState.isDown;
+    prevIsDown = btnState.isDown;
+    return currentCheck;
+  };
+};
+
+export const getDebouncedKeyboardUpCheck = () => {
+  let prevIsDown = null;
+  return btnState => {
+    const currentCheck = [undefined, false].includes(btnState.isDown) && prevIsDown;
+    prevIsDown = btnState.isDown;
+    return currentCheck;
+  };
+};
+
+export const getDebouncedGampedDownCheck = () => {
   let prevPressed = null;
   return nextPressed => {
     const currentCheck = [undefined, false].includes(prevPressed) && nextPressed;
+    prevPressed = nextPressed;
+    return currentCheck;
+  };
+};
+
+export const getDebouncedGampedUpCheck = () => {
+  let prevPressed = null;
+  return nextPressed => {
+    const currentCheck = [undefined, false].includes(nextPressed) && prevPressed;
     prevPressed = nextPressed;
     return currentCheck;
   };

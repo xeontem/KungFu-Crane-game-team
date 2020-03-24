@@ -12,14 +12,14 @@ export default class extends Phaser.GameObjects.Group {
       gameState.gameHeight - 50,
       `BOSS HP: ${this.HPinfo}`,
       { font: '32px Arial', fill: '#dddddd' });
-    this.HPinfo.anchor.setTo(0.5);
+    this.HPinfo.setOrigin(0.5);
     this.HP = gameState.firstBossHP;
   }
 
   spawn() {
     const boss = this.create(gameState.gameWidth, gameState.gameHeight / 2, 'enemy');
-    boss.anchor.setTo(0.5);
-    boss.scale.setTo(2 + gameState.gameWidth / 1024 - 1, 5 + gameState.gameHeight / 512 - 1);// scale
+    boss.setOrigin(0.5);
+    boss.setScale(2 + gameState.gameWidth / 1024 - 1, 5 + gameState.gameHeight / 512 - 1);// scale
   }
 
   bossKiller(game, bullet, boss) {
@@ -37,7 +37,7 @@ export default class extends Phaser.GameObjects.Group {
         game.world.centerY,
         'Well Done!',
         { font: '32px Arial', fill: '#dddddd' });
-      game.winText.anchor.setTo(0.5);
+      game.winText.setOrigin(0.5);
       game.boss.endLevel = game.time.now;
       game.winText.text = `${this.time.now}`;
     }

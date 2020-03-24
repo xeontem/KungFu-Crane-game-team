@@ -7,7 +7,7 @@ export default class extends WithControlls {
     super.preload();
     const { div, input } = createInput(this, gameState.name);
     this.div = div;
-    this.input = input;
+    this.inputEl = input;
   }
 
   create() {
@@ -16,8 +16,8 @@ export default class extends WithControlls {
 
   update() {
     super.update();
-    if (this[KEYS.CONFIRM.ONCE]) {
-      gameState.name = this.input.value;
+    if (this[KEYS.CONFIRM.DOWN_ONCE]) {
+      gameState.name = this.inputEl.value;
       document.body.removeChild(this.div);
       resetGameState();
       this.scene.start('level');

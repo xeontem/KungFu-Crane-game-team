@@ -42,7 +42,7 @@ function killEnemies(bullet, enemy) {
       y: enemY,
       asset: 'health',
     });
-    this.game.add.existing(this.benefitHealth);
+    this.add.existing(this.benefitHealth);
   }
   // ------------------------benefit score----------------------------
   if (!this.benefitHealth && !this.benefitScore && !this.benefitShield && !this.benefitBurst && !this.benefitAmmo && randBenefit() == 2) {
@@ -52,7 +52,7 @@ function killEnemies(bullet, enemy) {
       y: enemY,
       asset: 'score',
     });
-    this.game.add.existing(this.benefitScore);
+    this.add.existing(this.benefitScore);
   }
   // ------------------------benefit shield----------------------------
   if (!this.benefitHealth && !this.benefitScore && !this.benefitShield && !this.mainPlayerShield && !this.benefitBurst && !this.benefitAmmo && randBenefit() == 3) {
@@ -62,7 +62,7 @@ function killEnemies(bullet, enemy) {
       y: enemY,
       asset: 'shield',
     });
-    this.game.add.existing(this.benefitShield);
+    this.add.existing(this.benefitShield);
   }
   if (!this.benefitHealth && !this.benefitScore && !this.benefitShield && !this.mainPlayerShield && !this.benefitBurst && !this.ammoCountdown && randBenefit() == 4) {
     this.benefitBurst = new Benefit({
@@ -71,7 +71,7 @@ function killEnemies(bullet, enemy) {
       y: enemY,
       asset: 'burst',
     });
-    this.game.add.existing(this.benefitBurst);
+    this.add.existing(this.benefitBurst);
   }
   // ------------------------benefit ammo----------------------------
   if (!this.benefitHealth && !this.benefitScore && !this.benefitShield && !this.benefitAmmo && !this.benefitBurst && !this.ammoCountdown && randBenefit() == 5) {
@@ -81,7 +81,7 @@ function killEnemies(bullet, enemy) {
       y: enemY,
       asset: 'ammo',
     });
-    this.game.add.existing(this.benefitAmmo);
+    this.add.existing(this.benefitAmmo);
   }
 }
 

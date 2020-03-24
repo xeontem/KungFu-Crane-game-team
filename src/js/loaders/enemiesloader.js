@@ -14,7 +14,7 @@ export default function () {
         enableBody: true,
         physicsBodyType: Phaser.Physics.ARCADE,
       });
-      this.game.add.existing(this.enemies);
+      this.add.existing(this.enemies);
       // -----------------------------apply position enemies to its behavior----------------
       this.enemies.pos = game.rnd.integerInRange(1, 5);
       this.enemies[`position${this.enemies.pos}`]();// this works

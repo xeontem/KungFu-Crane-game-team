@@ -3,7 +3,7 @@ import { shot } from '../sound/explosures';
 import { gameState } from '../currentGameState';
 
 export function weaponOn() {
-  this.weapon = this.game.add.weapon(30, 'bullet');
+  this.weapon = this.add.weapon(30, 'bullet');
   this.weapon.bulletSpeed = 600;
   this.weapon.fireRate = 150;
   this.weapon.fireAngle = 0;
@@ -14,7 +14,7 @@ export function weaponOn() {
 }
 
 export function threeWayWeapon() {
-  this.gun1 = this.game.add.weapon(30, 'missile');
+  this.gun1 = this.add.weapon(30, 'missile');
   this.gun1.bulletSpeed = 600;
   this.gun1.fireRate = 200;
   this.gun1.fireAngle = 0;
@@ -22,7 +22,7 @@ export function threeWayWeapon() {
   this.gun1.onFire.add(invokeSoundOnFire, this);
   this.game.physics.enable(this.gun1, Phaser.Physics.ARCADE);
   //---------------------------------------------------------
-  this.gun2 = this.game.add.weapon(30, 'missile');
+  this.gun2 = this.add.weapon(30, 'missile');
   this.gun2.bulletSpeed = 600;
   this.gun2.fireRate = 200;
   this.gun2.fireAngle = 27;
@@ -30,7 +30,7 @@ export function threeWayWeapon() {
   this.gun2.onFire.add(invokeSoundOnFire, this);
   this.game.physics.enable(this.gun2, Phaser.Physics.ARCADE);
   //---------------------------------------------------------
-  this.gun3 = this.game.add.weapon(30, 'missile');
+  this.gun3 = this.add.weapon(30, 'missile');
   this.gun3.bulletSpeed = 600;
   this.gun3.fireRate = 200;
   this.gun3.fireAngle = 333;
@@ -42,7 +42,7 @@ export function threeWayWeapon() {
 }
 
 export function spreadWeapon() {
-  this.spreadWeapon = this.game.add.weapon(30, 'missile2');
+  this.spreadWeapon = this.add.weapon(30, 'missile2');
   this.spreadWeapon.setBulletFrames(0, 1, true, true);
   this.spreadWeapon.addBulletAnimation('missile2', [0, 1], true, true);
   this.spreadWeapon.bulletSpeed = 600;

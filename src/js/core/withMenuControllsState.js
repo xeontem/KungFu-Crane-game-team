@@ -1,12 +1,12 @@
 import Phaser from 'phaser';
-import { getDebouncedCheck, getGamepad } from '../controls/controls';
+import { getDebouncedGampedUpCheck, getDebouncedGampedDownCheck, getDebouncedKeyboardDownCheck, getDebouncedKeyboardUpCheck, getGamepad } from '../controls/controls';
 import { gameState } from '../currentGameState';
-import { applyNextActiveBtnIndex } from '../controls/controls';
-import { BUTTONS } from './buttons';
+import { BUTTONS, createButton, activeBtnStyle, inactiveBtnStyle } from './buttons';
 
 export const KEYS = {
   UP: {
-    ONCE: 'UP_ONCE',
+    DOWN_ONCE: 'UP_ONCE',
+    UP_ONCE: 'UP_UP_ONCE',
     DOWN: 'UP_DOWN',
     UP: 'UP_UP',
     eventKey: 'ArrowUp',
@@ -16,7 +16,8 @@ export const KEYS = {
     arg: undefined,
   },
   DOWN: {
-    ONCE: 'DOWN_ONCE',
+    DOWN_ONCE: 'DOWN_ONCE',
+    UP_ONCE: 'DOWN_UP_ONCE',
     DOWN: 'DOWN_DOWN',
     UP: 'DOWN_UP',
     eventKey: 'ArrowDown',
@@ -26,7 +27,8 @@ export const KEYS = {
     arg: undefined,
   },
   LEFT: {
-    ONCE: 'LEFT_ONCE',
+    DOWN_ONCE: 'LEFT_ONCE',
+    UP_ONCE: 'LEFT_UP_ONCE',
     DOWN: 'LEFT_DOWN',
     UP: 'LEFT_UP',
     eventKey: 'ArrowLeft',
@@ -36,7 +38,8 @@ export const KEYS = {
     arg: undefined,
   },
   RIGHT: {
-    ONCE: 'RIGHT_ONCE',
+    DOWN_ONCE: 'RIGHT_ONCE',
+    UP_ONCE: 'RIGHT_UP_ONCE',
     DOWN: 'RIGHT_DOWN',
     UP: 'RIGHT_UP',
     eventKey: 'ArrowRight',
@@ -46,7 +49,8 @@ export const KEYS = {
     arg: undefined,
   },
   MENU: {
-    ONCE: 'MENU_ONCE',
+    DOWN_ONCE: 'MENU_ONCE',
+    UP_ONCE: 'MENU_UP_ONCE',
     DOWN: 'MENU_DOWN',
     UP: 'MENU_UP',
     eventKey: 'Escape',
@@ -56,7 +60,8 @@ export const KEYS = {
     arg: Phaser.Input.Keyboard.KeyCodes.ESC,
   },
   CONFIRM: {
-    ONCE: 'CONFIRM_ONCE',
+    DOWN_ONCE: 'CONFIRM_ONCE',
+    UP_ONCE: 'CONFIRM_UP_ONCE',
     DOWN: 'CONFIRM_DOWN',
     UP: 'CONFIRM_UP',
     eventKey: 'Enter',
@@ -66,7 +71,8 @@ export const KEYS = {
     arg: Phaser.Input.Keyboard.KeyCodes.ENTER,
   },
   FIRE: {
-    ONCE: 'FIRE_ONCE',
+    DOWN_ONCE: 'FIRE_ONCE',
+    UP_ONCE: 'FIRE_UP_ONCE',
     DOWN: 'FIRE_DOWN',
     UP: 'FIRE_UP',
     eventKey: 'Space',
@@ -76,7 +82,8 @@ export const KEYS = {
     arg: Phaser.Input.Keyboard.KeyCodes.SPACEBAR,
   },
   SAVE: {
-    ONCE: 'SAVE_ONCE',
+    DOWN_ONCE: 'SAVE_ONCE',
+    UP_ONCE: '',
     DOWN: 'SAVE_DOWN',
     UP: 'SAVE_UP',
     eventKey: 'F5',
@@ -86,7 +93,8 @@ export const KEYS = {
     arg: Phaser.Input.Keyboard.KeyCodes.F5,
   },
   LOAD: {
-    ONCE: 'LOAD_ONCE',
+    DOWN_ONCE: 'LOAD_ONCE',
+    UP_ONCE: 'LOAD_UP_ONCE',
     DOWN: 'LOAD_DOWN',
     UP: 'LOAD_UP',
     eventKey: 'F8',
@@ -96,7 +104,8 @@ export const KEYS = {
     arg: Phaser.Input.Keyboard.KeyCodes.F8,
   },
   CHANGE_WEAPON: {
-    ONCE: 'CHANGE_WEAPON_ONCE',
+    DOWN_ONCE: 'CHANGE_WEAPON_ONCE',
+    UP_ONCE: 'CHANGE_WEAPON_UP_ONCE',
     DOWN: 'CHANGE_WEAPON_DOWN',
     UP: 'CHANGE_WEAPON_UP',
     eventKey: 'Shift',
@@ -107,52 +116,42 @@ export const KEYS = {
   },
 };
 
-export const LIVE = {
-  UP: {
-    KEY: 'UP',
-    eventKey: 'ArrowUp',
-    path: ['CURSORS', 'up'],
-    gamepadKey: 12,
-    constr: 'createCursorKeys',
-    arg: undefined,
-  },
-};
-
 export class WithControlls extends Phaser.Scene {
-  getKeyboardBtnState(key, state, once = false) {
-    const btnState = KEYS[key].path.reduce((val, field) => val[field], this);
-    return once ? btnState.repeats === 1 : btnState[state];
+  getGamepadBtnState(key, cfg) {
+    const gamepad = getGamepad();
+    return gamepad && (cfg.once
+      ? this[`GAMEPAD_${cfg.dorection}_ONCE_${key}`](gamepad.buttons[KEYS[key].gamepadKey].pressed)
+      : gamepad.buttons[KEYS[key].gamepadKey].pressed);
   }
 
-  preload(buttonList = []) {
+  getKeyboardBtnState(key, cfg) {
+    const btnState = KEYS[key].path.reduce((val, field) => val[field], this);
+    return cfg.once ? this[`KEYBOARD_${cfg.direction}_ONCE_${key}`](btnState) : btnState[cfg.state];
+  }
+
+  preload(buttonList = [], y = gameState.gameHeight / 2) {
     this.buttonList = buttonList;
-    this.buttonList.forEach(btnData => {
-      console.log(this);
-      this.load.spritesheet(btnData.textureName, btnData.texture, { frameWidth: 300, frameHeight: 80 });
-    });
+    this.yPos = y;
   }
 
   create() {
     // -------------------------------------- BUTTONS ----------------------------------------------
-    this.loopedNextActiveIndex = 0;
+    this.activeBtnIndex = 0;
     this.isResumeAvailable = false;
     this.buttonInstances = this.buttonList.map((btnData, i) => {
-      if (btnData.textureName === BUTTONS.RESUME.textureName) {
+      if (btnData.title === BUTTONS.RESUME.title) {
         this.isResumeAvailable = true;
       }
-      const currentButton = this.game.add.button(
-        this.game.world.centerX,
-        gameState.gameHeight - (80 * (this.buttonList.length - i)),
-        btnData.textureName,
+      const currentButton = createButton(
+        btnData.title,
+        this.scale.width / 2,
+        this.yPos + (80 * i),
         btnData.handler,
+        this.pointerover,
         this,
-        1,
-        0,
-        1,
       );
-      currentButton.onInputOver.add(this.onInputOver, this);
-      currentButton.scale.setTo(gameState.gameHeight / 1050);
-      currentButton.anchor.setTo(0.5);
+      currentButton.setScale(gameState.gameHeight / 1080);
+      currentButton.setOrigin(0.5);
       return currentButton;
     });
 
@@ -160,7 +159,10 @@ export class WithControlls extends Phaser.Scene {
     this.keydownHandler = null;
 
     Object.keys(KEYS).forEach(key => {
-      this[`GAMEPAD_ONCE_${key}`] = getDebouncedCheck();
+      this[`GAMEPAD_UP_ONCE_${key}`] = getDebouncedGampedUpCheck();
+      this[`GAMEPAD_DOWN_ONCE_${key}`] = getDebouncedGampedDownCheck();
+      this[`KEYBOARD_DOWN_ONCE_${key}`] = getDebouncedKeyboardDownCheck();
+      this[`KEYBOARD_UP_ONCE_${key}`] = getDebouncedKeyboardUpCheck();
 
       if (!this[KEYS[key].path[0]]) {
         this[KEYS[key].path[0]] = this.input.keyboard[KEYS[key].constr](KEYS[key].arg);
@@ -171,29 +173,31 @@ export class WithControlls extends Phaser.Scene {
   update() {
     super.update();
 
-    // keep loopedNextActiveIndex synced with mouse and keyboard and gamepad
+    // keep activeBtnIndex synced with mouse and keyboard and gamepad
     if (this.buttonInstances.length) {
-      this.buttonInstances[this.loopedNextActiveIndex].frame = 1;
       this.buttonInstances.forEach((btn, i) => {
-        if (btn.frame && i !== this.loopedNextActiveIndex) {
-          btn.frame = 0;
+        if (i === this.activeBtnIndex) {
+          btn.setStyle(activeBtnStyle);
+        } else {
+          btn.setStyle(inactiveBtnStyle);
         }
       });
     }
 
-    if (this[KEYS.CONFIRM.ONCE]) {
-      this.buttonList[this.loopedNextActiveIndex].handler.apply(this);
+    if (this[KEYS.CONFIRM.DOWN_ONCE]) {
+      this.buttonList[this.activeBtnIndex].handler.apply(this);
     }
 
-    if (this[KEYS.UP.ONCE]) {
-      applyNextActiveBtnIndex.call(this, true);
+    if (this[KEYS.UP.DOWN_ONCE] || this[KEYS.DOWN.DOWN_ONCE]) {
+      const nextActiveIndex = this[KEYS.UP.DOWN_ONCE] ? this.activeBtnIndex - 1 : this.activeBtnIndex + 1;
+      this.activeBtnIndex = (nextActiveIndex < 0)
+        ? this.buttonInstances.length - 1
+        : (nextActiveIndex > this.buttonInstances.length - 1)
+          ? 0
+          : nextActiveIndex;
     }
 
-    if (this[KEYS.DOWN.ONCE]) {
-      applyNextActiveBtnIndex.call(this, false);
-    }
-
-    if (this.isResumeAvailable && this[KEYS.MENU.ONCE]) {
+    if (this.isResumeAvailable && this[KEYS.MENU.DOWN_ONCE]) {
       resume.call(this);
     }
 
@@ -207,43 +211,47 @@ export class WithControlls extends Phaser.Scene {
       this.removeHandlers();
     }
 
-    const gamepad = getGamepad();
-
     Object.keys(KEYS).forEach(key => {
-
       [
         {
-          key: KEYS[key].ONCE,
+          key: KEYS[key].DOWN_ONCE,
           once: true,
+          direction: 'DOWN',
           state: '',
-          handler: this[`GAMEPAD_ONCE_${key}`],
+        },
+        {
+          key: KEYS[key].UP_ONCE,
+          once: true,
+          direction: 'UP',
+          state: '',
         },
         {
           key: KEYS[key].DOWN,
+          direction: '',
           once: false,
           state: 'isDown',
-          handler: x => x,
         },
         {
           key: KEYS[key].UP,
           once: false,
+          direction: '',
           state: 'isUp',
-          handler: x => x,
         },
       ].forEach(cfg => {
-        this[cfg.key] =
-          (game.paused ? this[`EVENT_HANDLER_${key}`] : this.getKeyboardBtnState(key, cfg.scene, cfg.once)) ||
-          (gamepad && cfg.handler(gamepad.buttons[KEYS[key].gamepadKey].pressed));
+        const value = game.paused
+          ? this[`EVENT_HANDLER_${key}`]
+          : (this.getKeyboardBtnState(key, cfg) || this.getGamepadBtnState(key, cfg));
+        this[cfg.key] = value;
       });
 
       this[`EVENT_HANDLER_${key}`] = false;
     });
   }
 
-  onInputOver(curBtn, event) {
+  pointerover(curBtn) {
     this.buttonInstances.forEach((btn, i) => {
-      if (btn.key === curBtn.key) {
-        this.loopedNextActiveIndex = i;
+      if (btn.text === curBtn.text) {
+        this.activeBtnIndex = i;
       }
     });
   }

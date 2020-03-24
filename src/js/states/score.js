@@ -1,42 +1,33 @@
 import { WithControlls, KEYS } from '../core/withMenuControllsState';
 import BackgroundScore from '../objects/backgroundScore';
 import { gameState } from '../currentGameState';
+import { btnSlideDown } from '../controls/controls';
+import { BUTTONS, withHandler } from '../core/buttons';
 
 export default class extends WithControlls {
   preload() {
-    super.preload();
-    this.load.image('loaderBg', './img/states/bgScore.jpg');
-    this.load.spritesheet('back', './img/pause/back.png', 300, 80);
+    super.preload([
+      withHandler(BUTTONS.BACK, this.toStart),
+    ], gameState.gameHeight - 300);
+    this.load.image('scores_bg', './img/states/bgScore.jpg');
   }
 
   create() {
-    super.create();
+
     const score = JSON.parse(localStorage.getItem('score'));
 
-    this.background = new BackgroundScore({
-      game,
-      x: 0,
-      y: 0,
-      width: gameState.gameWidth,
-      height: gameState.gameheight,
-      asset: 'loaderBg',
-    });
-    this.background.scale.setTo(gameState.gameWidth / this.background.width, gameState.gameHeight / this.background.height);
-    this.game.add.existing(this.background);
+    this.background = this.add.image(0, 0, 'scores_bg').setOrigin(0.15, 0).setScale(1.5);
 
-    const textScore = this.add.text(this.world.centerX, 80, 'Score  ', { font: '32px Orbitron', fill: '#dddddd' });
-    textScore.anchor.setTo(0.5, 0.5);
+    const textScore = this.add.text(this.scale.width / 2, 80, 'Score', { font: '32px Orbitron', fill: '#dddddd' });
+    textScore.setOrigin(0.5, 0.5);
 
     score.forEach((el, i) => {
-      const player = this.add.text(this.world.centerX, (50 * i) + 140, `${el.name} : ${el.value}  `, { font: '32px Orbitron', fill: `${el.color}` });
-      player.anchor.setTo(0.5, 0.5);
+      const player = this.add.text(this.scale.width / 2, (50 * i) + 140, `${el.name} : ${el.value}  `, { font: '32px Orbitron', fill: `${el.color}` });
+      player.setOrigin(0.5, 0.5);
     });
 
-    this.backButton = this.game.add.button(this.game.world.centerX, gameState.gameHeight - 100, 'back', this.toStart, this, 1, 0, 1);
-    this.backButton.scale.setTo(gameState.gameHeight / 1050);
-    this.backButton.anchor.setTo(0.5);
-    this.backButton.frame = 1;
     this.back = false;
+    super.create();
   }
 
   update() {
@@ -48,13 +39,9 @@ export default class extends WithControlls {
     this.game.height = gameState.gameHeight;
     //-------------------------------------------------------------------------
 
-    if (this[KEYS.CONFIRM.ONCE]) {
-      this.toStart();
-    }
-
     if (this.back) {
-      this.backButton.y += 7;
-      if (this.backButton.y > gameState.gameHeight + 30) {
+      const isAllBtnsSlideDown = btnSlideDown(this.buttonInstances);
+      if (isAllBtnsSlideDown) {
         this.scene.start('mainMenu');
       }
     }
