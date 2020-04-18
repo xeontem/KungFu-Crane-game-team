@@ -3,12 +3,14 @@ import BackgroundMainMenu from '../objects/backgroundMainMenu';
 import { loadMusic, applyMusic } from '../sound/bgmusic';
 import { loadAndStartSavedGame, applyNextActiveBtnIndex } from '../controls/controls';
 import { gameState, resetGameState } from '../currentGameState';
+import { login, logout, userData, auth } from '../core/firebase.service';
 
 export default class extends WithControlls {
   preload() {
     super.preload();
     this.load.spritesheet('startBtnTexture', './img/pause/start.png', 300, 80);
     this.load.spritesheet('loginBtnTexture', './img/pause/login.png', 300, 80);
+    this.load.spritesheet('logoutBtnTexture', './img/pause/logout.png', 300, 80);
     this.load.spritesheet('scoresBtnTexture', './img/pause/scores.png', 300, 80);
     this.load.spritesheet('loadBtnTexture', './img/pause/load.png', 300, 80);
     this.load.image('loaderBg', './img/states/bgMainMenu.jpg');
@@ -21,6 +23,7 @@ export default class extends WithControlls {
     resetGameState();
     applyMusic.apply(this);
 
+    this.buttonInstances = [];
     this.background = new BackgroundMainMenu({
       game,
       x: 0,
@@ -42,16 +45,29 @@ export default class extends WithControlls {
     );
     this.gameTitle.anchor.setTo(0.5);
 
+    this.renderButtons(userData.uid);
+    // ---------------------------------------------------------------------------------------------
+    this.startGame = false;
+    this.startScore = false;
+
+    auth.onAuthStateChanged(user => {
+      if (this.state.current === 'mainMenu') {
+        this.renderButtons(user);
+      }
+    });
+  }
+
+  renderButtons(isLoggedIn) {
     // --------------------------------------BUTTONS------------------------------------------------
     this.loopedNextActiveIndex = 0;
     this.buttonList = [
       {
-        texture: 'startBtnTexture',
-        handler: this.toStart,
+        texture: isLoggedIn ? 'logoutBtnTexture' : 'loginBtnTexture',
+        handler: isLoggedIn ? logout : login,
       },
       {
-        texture: 'loginBtnTexture',
-        handler: this.login,
+        texture: 'startBtnTexture',
+        handler: this.toStart,
       },
       {
         texture: 'loadBtnTexture',
@@ -62,6 +78,8 @@ export default class extends WithControlls {
         handler: this.toScores,
       },
     ];
+    this.buttonInstances.forEach(b => b.destroy());
+    this.buttonInstances = null;
 
     this.buttonInstances = this.buttonList.map((btnData, i) => {
       const currentButton = this.game.add.button(
@@ -79,10 +97,8 @@ export default class extends WithControlls {
       return currentButton;
     });
     this.buttonInstances[this.loopedNextActiveIndex].frame = 1;
-    // ---------------------------------------------------------------------------------------------
-    this.startGame = false;
-    this.startScore = false;
   }
+
 
   update() {
     super.update();
