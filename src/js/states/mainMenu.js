@@ -164,6 +164,10 @@ export default class extends WithControlls {
   }
 
   loadSavedGame() {
-    this.startSavedGame = true;
+    if (userData.savedState) {
+      this.startSavedGame = true;
+    } else {
+      alert('No saved games found!');
+    }
   }
 }
