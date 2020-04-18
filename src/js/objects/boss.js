@@ -7,7 +7,7 @@ export default class extends Phaser.Sprite {
     this.anchor.setTo(0.5);
     this.outOfBoundsKill = true;
     this.scale.setTo(1 + gameState.gameWidth / 1024 - 1);// scale
-    this.HP = gameState.firstBossHP;
+    this.HP = gameState.firstBossHP + (gameState.level * 25);
     this.HPinfo = game.add.text(
       gameState.gameWidth / 4.2,
       gameState.gameHeight - gameState.gameHeight / 21,

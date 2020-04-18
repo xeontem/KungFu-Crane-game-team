@@ -17,19 +17,20 @@ export default function () {
         this.game.physics.enable(this.bossWeapon11, Phaser.Physics.ARCADE);
       }
     }
-    if (gameState.level == 1 || gameState.level == 2 || gameState.level == 3 || gameState.level == 4) {
+    if (gameState.level > 0) {
       if (!this.bossWeapon21) {
+        const bulletsPerLaunch = 5 + gameState.level;
         // ----------------------------------first gun------------------------------
-        this.bossWeapon21 = this.game.add.weapon(5, 'bossbullet');
-        this.bossWeapon21.bulletSpeed = 600;
+        this.bossWeapon21 = this.game.add.weapon(bulletsPerLaunch, 'bossbullet');
+        this.bossWeapon21.bulletSpeed = 600 + (10 * gameState.level);
         this.bossWeapon21.fireRate = 100;
         this.bossWeapon21.fireAngle = 180;
         this.bossWeapon21.autofire = true;
         this.bossWeapon21.trackSprite(this.boss, 80, -40, true);
         this.game.physics.enable(this.bossWeapon21, Phaser.Physics.ARCADE);
         // ----------------------------------second gun-----------------------------
-        this.bossWeapon22 = this.game.add.weapon(5, 'bossbullet');
-        this.bossWeapon22.bulletSpeed = 600;
+        this.bossWeapon22 = this.game.add.weapon(bulletsPerLaunch, 'bossbullet');
+        this.bossWeapon22.bulletSpeed = 600 + (10 * gameState.level);
         this.bossWeapon22.fireRate = 100;
         this.bossWeapon22.fireAngle = 180;
         this.bossWeapon22.autofire = true;
