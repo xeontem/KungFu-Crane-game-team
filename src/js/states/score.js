@@ -47,7 +47,7 @@ export default class extends WithControlls {
 
     this.scoreTexts.forEach(text => text.destroy());
     this.scoreTexts = null;
-    this.scoreTexts = scores.filter(score => score.nickName).sort((a, b) => +a.score > +b.score ? 1 : -1).map((score, i) => {
+    this.scoreTexts = scores.filter(score => score.nickName).sort((a, b) => +a.score > +b.score ? -1 : 1).map((score, i) => {
       const isCurrentUser = userData.uid ? score.uid === userData.uid : score.uid === userData.nickName;
       const scoreText = this.add.text(
         this.world.centerX,
