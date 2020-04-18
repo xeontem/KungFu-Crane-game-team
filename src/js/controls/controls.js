@@ -2,6 +2,7 @@ import Phaser from 'phaser-ce/build/custom/phaser-split';
 
 import { gameState, resetGameState } from '../currentGameState';
 import { fire } from '../sound/explosures';
+import { userData, setCloudSavedState } from '../core/firebase.service';
 
 const invokeSound = (that) => {
   fire.apply(that);
@@ -85,12 +86,21 @@ export function addMouseControll() {
 }
 
 export const loadAndStartSavedGame = context => {
-    resetGameState(JSON.parse(localStorage.getItem('GAME_STATE')));
+  if (userData.savedState) {
+    resetGameState(userData.savedState);
     context.state.start('level');
     console.log('game loaded');
+  } else {
+    alert('No saved games found!');
+  }
 };
 
 export const saveGame = () => {
+  if (userData.uid) {
+    setCloudSavedState(userData.uid, gameState);
+  } else {
     localStorage.setItem('GAME_STATE', JSON.stringify(gameState));
-    console.log('game saved');
+  }
+  userData.savedState = gameState;
+  console.log('game saved');
 };

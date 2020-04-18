@@ -1,5 +1,4 @@
 import { WithControlls, KEYS } from '../core/withMenuControllsState';
-import localStorage from '../loaders/storageloader';
 
 export default class extends WithControlls {
   preload() {
@@ -10,7 +9,6 @@ export default class extends WithControlls {
 
   create() {
     super.create();
-    localStorage();
     this.music = this.game.add.audio('intro', 1, false, true);
     this.music.play();
 

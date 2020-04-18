@@ -1,23 +1,36 @@
 import Phaser from 'phaser-ce';
 
 import { gameState } from '../currentGameState';
-import localStorage from './storageloader';
+import { userData, setLocalUsers, setCloudScore, getLocalUsers, getLocalUser } from '../core/firebase.service';
 
 export default function () {
   this.winText.text = 'Game Over';
 
   if (this.time.now > this.countdown + 4000) {
-    const nowScore = localStorage();
-
-    const flag = nowScore.some(el => gameState.score > el.value);
-
-    if (flag) {
-      localStorage(gameState.score, gameState.name);
-      this.levelMusic.pause();
-      this.state.start('score');
+    if (userData.uid) {
+      if (gameState.score > userData.score) {
+        setCloudScore(userData.uid, gameState.score);
+      }
     } else {
-      this.levelMusic.pause();
-      this.state.start('mainMenu');
+      const localUsers = getLocalUsers();
+      const localUser = getLocalUser(userData.nickName);
+      if (localUser) {
+        if (gameState.score > localUser.score) {
+          localUsers.forEach(user => {
+            if (user.nickName === userData.nickName) {
+              user.score = gameState.score;
+            }
+          });
+        }
+      } else {
+        localUsers.push({
+          nickName: userData.nickName,
+          score: gameState.score,
+        });
+      }
+      setLocalUsers(localUsers);
     }
+    this.levelMusic.pause();
+    this.state.start('score');
   }
 }
