@@ -19,7 +19,9 @@ const DB = firebase.firestore();
 
 export const getLocalUsers = () => JSON.parse(localStorage.getItem('LOCAL_USERS') || '[]');
 
-export const setLocalUsers = localUsers => localStorage.setItem('LOCAL_USERS', JSON.stringify(localUsers));
+export const setLocalUsers = localUsers => {
+  localStorage.setItem('LOCAL_USERS', JSON.stringify(localUsers));
+};
 
 export const getLocalUser = nickName => getLocalUsers().find(d => d.nickName === nickName);
 
@@ -28,7 +30,6 @@ export const auth = firebase.auth();
 
 const usersData = DB.collection('usersData');
 const provider = new firebase.auth.GoogleAuthProvider();
-provider.addScope('https://www.googleapis.com/auth/contacts.readonly');
 
 export const onScoresChange = cb => usersData.onSnapshot(snap =>
   cb(snap.docs.map(doc => Object.assign({}, { uid: doc.id }, doc.data()))));
@@ -39,6 +40,14 @@ export const setCloudNickName = (id, nickName) => {
 
 export const setCloudSavedState = (id, savedState) => {
   return usersData.doc(id).update({ savedState });
+};
+
+export const saveLocalState = state => {
+  localStorage.setItem('GAME_STATE', JSON.stringify(state));
+};
+
+export const getLocalState = () => {
+  return JSON.parse(localStorage.getItem('GAME_STATE')) || null;
 };
 
 export const setCloudScore = (id, score) => {
@@ -57,7 +66,7 @@ export const userData = {
   uid: null,
   nickName: localStorage.getItem('USER_NICKNAME') || '',
   score: localStorage.getItem('USER_SCORE') || '0',
-  savedState: localStorage.getItem('GAME_STATE') || null,
+  savedState: getLocalState(),
 };
 
 auth.onAuthStateChanged(user => {
@@ -69,11 +78,11 @@ auth.onAuthStateChanged(user => {
         userData.nickName = userDBData.nickName;
         userData.score = userDBData.score;
 
-        const savedState = JSON.parse(localStorage.getItem('GAME_STATE'));
+        const savedState = getLocalState();
         if (savedState) {
-            setCloudSavedState(userData.uid, savedState);
-            localStorage.setItem('GAME_STATE', null);
-            userData.savedState = savedState;
+          setCloudSavedState(userData.uid, savedState);
+          saveLocalState(null);
+          userData.savedState = savedState;
         } else {
           userData.savedState = userDBData.savedState;
         }
@@ -93,7 +102,7 @@ auth.onAuthStateChanged(user => {
     });
   } else {
     userData.uid = null;
-    localStorage.setItem('GAME_STATE', JSON.stringify(userData.savedState));
+    saveLocalState(userData.savedState);
   }
 });
 

@@ -2,7 +2,7 @@ import Phaser from 'phaser-ce/build/custom/phaser-split';
 
 import { gameState, resetGameState } from '../currentGameState';
 import { fire } from '../sound/explosures';
-import { userData, setCloudSavedState } from '../core/firebase.service';
+import { userData, setCloudSavedState, saveLocalState } from '../core/firebase.service';
 
 const invokeSound = (that) => {
   fire.apply(that);
@@ -99,7 +99,7 @@ export const saveGame = () => {
   if (userData.uid) {
     setCloudSavedState(userData.uid, gameState);
   } else {
-    localStorage.setItem('GAME_STATE', JSON.stringify(gameState));
+    saveLocalState(gameState);
   }
   userData.savedState = gameState;
   console.log('game saved');
