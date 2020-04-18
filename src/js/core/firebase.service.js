@@ -73,6 +73,14 @@ onScoresChange(scores => {
   const localUsers = getLocalUsers();
   const filteredLocalScores = localUsers.filter(ud => {
     const scoresUser = scores.find(cu => cu.uid === ud.nickName);
+
+    if (!scoresUser) {
+      setDefaultData(ud.nickName).then(() => {
+        setCloudNickName(ud.nickName, ud.nickName);
+        setCloudScore(ud.nickName, ud.score);
+      });
+    }
+
     return !scoresUser;
   });
   setLocalUsers(filteredLocalScores);
