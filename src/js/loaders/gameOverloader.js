@@ -1,7 +1,7 @@
 import Phaser from 'phaser-ce';
 
 import { gameState } from '../currentGameState';
-import { userData, setLocalUsers, setCloudScore, getLocalUsers, getLocalUser } from '../core/firebase.service';
+import { userData, setLocalUsers, setCloudScore, getLocalUsers, getLocalUser, setCloudNickName, setDefaultData } from '../core/firebase.service';
 
 export default function () {
   this.winText.text = 'Game Over';
@@ -19,6 +19,10 @@ export default function () {
           localUsers.forEach(user => {
             if (user.nickName === userData.nickName) {
               user.score = gameState.score;
+              setDefaultData(user.nickName).then(() => {
+                setCloudNickName(user.nickName, user.nickName);
+                setCloudScore(user.nickName, user.score);
+              });
             }
           });
         }
@@ -26,6 +30,10 @@ export default function () {
         localUsers.push({
           nickName: userData.nickName,
           score: gameState.score,
+        });
+        setDefaultData(userData.nickName).then(() => {
+          setCloudNickName(userData.nickName, userData.nickName);
+          setCloudScore(userData.nickName, gameState.score);
         });
       }
       setLocalUsers(localUsers);

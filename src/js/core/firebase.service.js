@@ -69,6 +69,15 @@ export const userData = {
   savedState: getLocalState(),
 };
 
+onScoresChange(scores => {
+  const localUsers = getLocalUsers();
+  const filteredLocalScores = localUsers.filter(ud => {
+    const scoresUser = scores.find(cu => cu.uid === ud.nickName);
+    return !scoresUser;
+  });
+  setLocalUsers(filteredLocalScores);
+});
+
 auth.onAuthStateChanged(user => {
   if (user) {
     usersData.doc(user.uid).get().then(rawData => {
